@@ -1,0 +1,422 @@
+2026-05-01T08:31:06.490Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:31:06.499Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <LoadingBoundary name="/" loading={null}>
+      <HTTPAccessFallbackBoundary notFound={{...}} forbidden={undefined} unauthorized={undefined}>
+        <HTTPAccessFallbackErrorBoundary pathname="/" notFound={{...}} forbidden={undefined} unauthorized={undefined} ...>
+          <RedirectBoundary>
+            <RedirectErrorBoundary router={{...}}>
+              <InnerLayoutRouter url="/" tree={[...]} params={{}} cacheNode={{rsc:{...}, ...}} segmentPath={[...]} ...>
+                <SegmentViewNode type="page" pagePath="page.tsx">
+                  <SegmentTrieNode>
+                  <Home>
+                    <CardDashboard>
+                      <main className="min-h-scre...">
+                        <div className="mx-auto gr...">
+                          <aside className="rounded-bo...">
+                            <div>
+                            <div className="mb-4 round...">
+                              <form className="space-y-3" onSubmit={function submitAuth}>
+                                <div>
+                                <input
+                                  className="input input-bordered input-sm w-full"
+                                  placeholder="Email"
+                                  type="email"
+                                  value=""
+                                  onChange={function onChange}
+-                                 style={{background-image:"url(\"data...",background-repeat:"no-repeat",background-size:"20px", ...}}
+-                                 data-temp-mail-org="0"
+                                >
+                                ...
+                            ...
+                          ...
+                            <form className="rounded-bo..." onSubmit={function submitCard}>
+                              <div>
+                              <div className="grid gap-4...">
+                                <label>
+                                <label className="form-control">
+                                  <span>
+                                  <input
+                                    className="input input-bordered"
+                                    type="email"
+                                    value=""
+                                    onChange={function onChange}
+                                    required={true}
+-                                   style={{background-image:"url(\"data...",background-repeat:"no-repeat",background-size:"20px", ...}}
+-                                   data-temp-mail-org="1"
+                                  >
+                                ...
+                ...
+              ...
+ 
+2026-05-01T08:31:19.283Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:31:19.285Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:31:43.776Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:31:43.779Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:31:53.846Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:31:53.849Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:32:07.659Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:32:07.663Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:32:26.668Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:32:26.670Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:32:42.679Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:32:42.682Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:33:02.779Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:33:02.782Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:33:34.366Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:33:34.368Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:33:51.271Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:33:51.274Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:34:10.022Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:34:10.025Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:34:16.421Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:34:16.423Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:34:18.023Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:34:18.026Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:34:21.383Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:34:21.386Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:35:09.094Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:35:09.099Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:35:09.314Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:35:09.333Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+⨯ Error: Failed query: select "id", "owner_id", "name", "email", "phone", "avatar", "description", "skills", "theme", "created_at", "updated_at" from "cards" where "cards"."id" = $1 limit $2
+params: aarav-mehta,1
+    at async getCard (lib\cards.ts:130:18)
+    at async PublicCardPage (app\[id]\page.tsx:13:16)
+  128 |
+  129 | export async function getCard(id: string) {
+> 130 |   const [card] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+      |                  ^
+  131 |   if (!card) return undefined;
+  132 |
+  133 |   const cardWorks = await db.select().from(works).where(eq(works.cardId, id)).orderBy(des... {
+  query: 'select "id", "owner_id", "name", "email", "phone", "avatar", "description", "skills", "theme", "created_at", "updated_at" from "cards" where "cards"."id" = $1 limit $2',
+  params: [ 'aarav-mehta', 1 ],
+  digest: '1146484956',
+  [cause]: Error [NeonDbError]: relation "cards" does not exist
+      at async getCard (lib\cards.ts:130:18)
+      at async PublicCardPage (app\[id]\page.tsx:13:16)
+    128 |
+    129 | export async function getCard(id: string) {
+  > 130 |   const [card] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+        |                  ^
+    131 |   if (!card) return undefined;
+    132 |
+    133 |   const cardWorks = await db.select().from(works).where(eq(works.cardId, id)).orderBy(des... {
+    severity: 'ERROR',
+    code: '42P01',
+    detail: undefined,
+    hint: undefined,
+    position: '128',
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'parse_relation.c',
+    line: '1449',
+    routine: 'parserOpenTable',
+    sourceError: undefined
+  }
+}
+2026-05-01T08:35:11.395Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:35:11.403Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+⨯ Error: Failed query: select "id", "owner_id", "name", "email", "phone", "avatar", "description", "skills", "theme", "created_at", "updated_at" from "cards" where "cards"."id" = $1 limit $2
+params: aarav-mehta,1
+    at async getCard (lib\cards.ts:130:18)
+    at async PublicCardPage (app\[id]\page.tsx:13:16)
+  128 |
+  129 | export async function getCard(id: string) {
+> 130 |   const [card] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+      |                  ^
+  131 |   if (!card) return undefined;
+  132 |
+  133 |   const cardWorks = await db.select().from(works).where(eq(works.cardId, id)).orderBy(des... {
+  query: 'select "id", "owner_id", "name", "email", "phone", "avatar", "description", "skills", "theme", "created_at", "updated_at" from "cards" where "cards"."id" = $1 limit $2',
+  params: [ 'aarav-mehta', 1 ],
+  digest: '1146484956',
+  [cause]: Error [NeonDbError]: relation "cards" does not exist
+      at async getCard (lib\cards.ts:130:18)
+      at async PublicCardPage (app\[id]\page.tsx:13:16)
+    128 |
+    129 | export async function getCard(id: string) {
+  > 130 |   const [card] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+        |                  ^
+    131 |   if (!card) return undefined;
+    132 |
+    133 |   const cardWorks = await db.select().from(works).where(eq(works.cardId, id)).orderBy(des... {
+    severity: 'ERROR',
+    code: '42P01',
+    detail: undefined,
+    hint: undefined,
+    position: '128',
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'parse_relation.c',
+    line: '1449',
+    routine: 'parserOpenTable',
+    sourceError: undefined
+  }
+}
+[browser] Uncaught Error: Failed query: select "id", "owner_id", "name", "email", "phone", "avatar", "description", "skills", "theme", "created_at", "updated_at" from "cards" where "cards"."id" = $1 limit $2
+params: aarav-mehta,1
+    at  getCard (lib\cards.ts:130:18)
+    at  PublicCardPage (app\[id]\page.tsx:13:16)
+  128 |
+  129 | export async function getCard(id: string) {
+> 130 |   const [card] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+      |                  ^
+  131 |   if (!card) return undefined;
+  132 |
+  133 |   const cardWorks = await db.select().from(works).where(eq(works.cardId, id)).orderBy(des...
+⨯ Error: Failed query: select "id", "owner_id", "name", "email", "phone", "avatar", "description", "skills", "theme", "created_at", "updated_at" from "cards" where "cards"."id" = $1 limit $2
+params: aarav-mehta,1
+    at async getCard (lib\cards.ts:130:18)
+    at async PublicCardPage (app\[id]\page.tsx:13:16)
+  128 |
+  129 | export async function getCard(id: string) {
+> 130 |   const [card] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+      |                  ^
+  131 |   if (!card) return undefined;
+  132 |
+  133 |   const cardWorks = await db.select().from(works).where(eq(works.cardId, id)).orderBy(des... {
+  query: 'select "id", "owner_id", "name", "email", "phone", "avatar", "description", "skills", "theme", "created_at", "updated_at" from "cards" where "cards"."id" = $1 limit $2',
+  params: [ 'aarav-mehta', 1 ],
+  digest: '1146484956',
+  [cause]: Error [NeonDbError]: relation "cards" does not exist
+      at async getCard (lib\cards.ts:130:18)
+      at async PublicCardPage (app\[id]\page.tsx:13:16)
+    128 |
+    129 | export async function getCard(id: string) {
+  > 130 |   const [card] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+        |                  ^
+    131 |   if (!card) return undefined;
+    132 |
+    133 |   const cardWorks = await db.select().from(works).where(eq(works.cardId, id)).orderBy(des... {
+    severity: 'ERROR',
+    code: '42P01',
+    detail: undefined,
+    hint: undefined,
+    position: '128',
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'parse_relation.c',
+    line: '1449',
+    routine: 'parserOpenTable',
+    sourceError: undefined
+  }
+}
+[browser] Uncaught Error: Failed query: select "id", "owner_id", "name", "email", "phone", "avatar", "description", "skills", "theme", "created_at", "updated_at" from "cards" where "cards"."id" = $1 limit $2
+params: aarav-mehta,1
+    at  getCard (lib\cards.ts:130:18)
+    at  PublicCardPage (app\[id]\page.tsx:13:16)
+  128 |
+  129 | export async function getCard(id: string) {
+> 130 |   const [card] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+      |                  ^
+  131 |   if (!card) return undefined;
+  132 |
+  133 |   const cardWorks = await db.select().from(works).where(eq(works.cardId, id)).orderBy(des...
+2026-05-01T08:35:16.599Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:35:16.608Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+⨯ Error: Failed query: select "id", "owner_id", "name", "email", "phone", "avatar", "description", "skills", "theme", "created_at", "updated_at" from "cards" where "cards"."id" = $1 limit $2
+params: aarav-mehta,1
+    at async getCard (lib\cards.ts:130:18)
+    at async PublicCardPage (app\[id]\page.tsx:13:16)
+  128 |
+  129 | export async function getCard(id: string) {
+> 130 |   const [card] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+      |                  ^
+  131 |   if (!card) return undefined;
+  132 |
+  133 |   const cardWorks = await db.select().from(works).where(eq(works.cardId, id)).orderBy(des... {
+  query: 'select "id", "owner_id", "name", "email", "phone", "avatar", "description", "skills", "theme", "created_at", "updated_at" from "cards" where "cards"."id" = $1 limit $2',
+  params: [ 'aarav-mehta', 1 ],
+  digest: '1146484956',
+  [cause]: Error [NeonDbError]: relation "cards" does not exist
+      at async getCard (lib\cards.ts:130:18)
+      at async PublicCardPage (app\[id]\page.tsx:13:16)
+    128 |
+    129 | export async function getCard(id: string) {
+  > 130 |   const [card] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+        |                  ^
+    131 |   if (!card) return undefined;
+    132 |
+    133 |   const cardWorks = await db.select().from(works).where(eq(works.cardId, id)).orderBy(des... {
+    severity: 'ERROR',
+    code: '42P01',
+    detail: undefined,
+    hint: undefined,
+    position: '128',
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'parse_relation.c',
+    line: '1449',
+    routine: 'parserOpenTable',
+    sourceError: undefined
+  }
+}
+[browser] Uncaught Error: Failed query: select "id", "owner_id", "name", "email", "phone", "avatar", "description", "skills", "theme", "created_at", "updated_at" from "cards" where "cards"."id" = $1 limit $2
+params: aarav-mehta,1
+    at  getCard (lib\cards.ts:130:18)
+    at  PublicCardPage (app\[id]\page.tsx:13:16)
+  128 |
+  129 | export async function getCard(id: string) {
+> 130 |   const [card] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+      |                  ^
+  131 |   if (!card) return undefined;
+  132 |
+  133 |   const cardWorks = await db.select().from(works).where(eq(works.cardId, id)).orderBy(des...
+2026-05-01T08:35:23.045Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:35:23.106Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:37:12.565Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:37:12.568Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:37:15.466Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:37:15.469Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:37:16.518Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:37:16.521Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:39:32.278Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:39:32.281Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:39:34.598Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:39:34.605Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:41:27.977Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:41:27.981Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:41:29.535Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:41:29.538Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:42:00.566Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:42:00.569Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:42:03.613Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:42:03.808Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:42:50.189Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:42:50.191Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:43:03.559Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:43:03.563Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:43:52.969Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:43:52.971Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:44:35.178Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:44:35.194Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:47:09.022Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:47:09.026Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:47:11.730Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:47:11.803Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:48:23.065Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:48:23.068Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:48:39.162Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:48:39.165Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:48:45.966Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:48:45.968Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:48:47.054Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:48:47.056Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:48:49.400Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:48:49.402Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:48:57.638Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:48:57.641Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:49:00.214Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:49:00.218Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:49:24.871Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:49:24.873Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:50:17.786Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:50:17.792Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:50:19.439Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:50:19.443Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:50:53.499Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:50:53.501Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:50:55.858Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:50:55.861Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:50:56.639Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:50:56.641Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:50:59.675Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:50:59.677Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:53:20.307Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:53:20.318Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:53:23.525Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:53:23.530Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:53:23.077Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:53:23.104Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:53:25.341Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:53:25.347Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:53:45.071Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:53:45.075Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:53:51.199Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:53:51.203Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:53:53.165Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:53:53.175Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:53:55.856Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:53:55.861Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:53:57.900Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:53:57.903Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:54:00.167Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:54:00.171Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:54:07.998Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:54:08.002Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:54:12.995Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:54:12.998Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:55:24.553Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:55:24.556Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:55:40.402Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:55:40.404Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:56:12.004Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:56:12.007Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:56:17.544Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:56:17.546Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:56:24.128Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:56:24.130Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:56:32.562Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:56:32.564Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:56:37.797Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:56:37.799Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:56:42.835Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:56:42.838Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:56:50.434Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:56:50.436Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:56:56.129Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:56:56.131Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:57:08.437Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:57:08.439Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:57:27.504Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:57:27.506Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:57:51.833Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:57:51.850Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:58:13.045Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:58:13.047Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:58:59.586Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:58:59.588Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:59:01.120Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:59:01.122Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T08:59:47.920Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T08:59:47.923Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
+2026-05-01T09:01:07.616Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET should be at least 32 characters long for adequate security. Generate one with `npx auth secret` or `openssl rand -base64 32`.
+2026-05-01T09:01:07.619Z WARN [Better Auth]: [better-auth] Warning: your BETTER_AUTH_SECRET appears low-entropy. Use a randomly generated secret for production.
