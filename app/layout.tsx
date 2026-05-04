@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Andro Card",
+  title: "Cardfoi",
   description: "Shareable profile cards for developers, freelancers, and creators"
 };
 

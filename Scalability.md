@@ -1,4 +1,4 @@
-# Carder — Scalability Notes
+# Cardfoi — Scalability Notes
 
 A breakdown of what scales well in the current stack, where the bottlenecks will show up, and what to do about them.
 
@@ -84,5 +84,5 @@ Without server-side validation, users can upload large files that eat into your 
 
 ---
 
-> Written for: `androdotdev/carder` @ `main`
+> Written for: `androdotdev/cardfoi` @ `main`
 > Stack: Next.js 16 · Better Auth · Neon · Drizzle · Cloudinary · DaisyUI

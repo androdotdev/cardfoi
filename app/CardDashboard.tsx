@@ -37,6 +37,9 @@ export default function CardDashboard() {
   const [workForm, setWorkForm] = useState(blankWork);
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
   const [authForm, setAuthForm] = useState({ name: "", email: "", password: "" });
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [resetLoading, setResetLoading] = useState(false);
   const [passwordForm, setPasswordForm] = useState({
     currentPassword: "",
     newPassword: "",
@@ -184,11 +187,18 @@ export default function CardDashboard() {
     event.preventDefault();
     if (!selectedCard) return;
 
+    // URL validation - show error if missing http:// or https://
+    if (workForm.url && !/^https?:\/\//i.test(workForm.url)) {
+      setMessage("Please enter a valid URL starting with http:// or https://");
+      return;
+    }
+
     const response = await fetch(`/api/cards/${selectedCard.id}/works`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(workForm)
     });
+
     const data = await response.json();
 
     if (!response.ok) {
@@ -213,6 +223,124 @@ export default function CardDashboard() {
     if (updated) applyCard(updated);
   }
 
+  function renderAuthSection() {
+    if (session.data) {
+      return (
+        <div className="space-y-3">
+          <div>
+            <p className="font-medium">{session.data.user.name}</p>
+            <p className="truncate text-base-content/60">{session.data.user.email}</p>
+            <span className="badge badge-outline mt-2">{session.data.user.role ?? "user"}</span>
+          </div>
+          <button className="btn btn-sm btn-outline w-full" onClick={signOut}>
+            Sign out
+          </button>
+        </div>
+      );
+    }
+
+    if (showForgotPassword) {
+      return (
+        <div className="space-y-3">
+          <p className="text-sm">Enter your email to receive a password reset link.</p>
+          <input
+            className="input input-bordered input-sm w-full"
+            placeholder="Email"
+            type="email"
+            value={forgotEmail}
+            onChange={(event) => setForgotEmail(event.target.value)}
+          />
+          <button
+            className="btn btn-primary btn-sm w-full"
+            type="button"
+            disabled={resetLoading}
+            onClick={async () => {
+              if (!forgotEmail) {
+                setMessage("Please enter your email.");
+                return;
+              }
+              // Pre-check if email exists in DB
+              try {
+                setResetLoading(true);
+                const check = await fetch("/api/auth/check-email", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ email: forgotEmail })
+                });
+                const { exists } = await check.json();
+                if (!exists) {
+                  setMessage("Email not found.");
+                  setResetLoading(false);
+                  return;
+                }
+              } catch {
+                // If check fails, proceed anyway
+              }
+              const { error } = await authClient.requestPasswordReset({
+                email: forgotEmail,
+                redirectTo: "/reset-password"
+              });
+              setResetLoading(false);
+              if (error) {
+                setMessage(error.message ?? "Failed to send reset email.");
+              } else {
+                setMessage("Password reset email sent! Check your inbox.");
+                setShowForgotPassword(false);
+                setForgotEmail("");
+              }
+            }}
+          >
+            {resetLoading ? <span className="loading loading-spinner"></span> : "Send reset link"}
+          </button>
+          <button
+            className="btn btn-ghost btn-sm w-full"
+            type="button"
+            onClick={() => {
+              setShowForgotPassword(false);
+              setForgotEmail("");
+              setMessage("");
+            }}
+          >
+            Back to sign in
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <form className="space-y-3" onSubmit={submitAuth}>
+        <div className="join w-full">
+          <button className={`btn join-item btn-sm flex-1 ${authMode === "signin" ? "btn-active" : ""}`} type="button" onClick={() => setAuthMode("signin")}>
+            Sign in
+          </button>
+          <button className={`btn join-item btn-sm flex-1 ${authMode === "signup" ? "btn-active" : ""}`} type="button" onClick={() => setAuthMode("signup")}>
+            Sign up
+          </button>
+        </div>
+        {authMode === "signup" ? (
+          <input className="input input-bordered input-sm w-full" placeholder="Name" value={authForm.name} onChange={(event) => setAuthForm({ ...authForm, name: event.target.value })} />
+        ) : null}
+        <input className="input input-bordered input-sm w-full" placeholder="Email" type="email" value={authForm.email} onChange={(event) => setAuthForm({ ...authForm, email: event.target.value })} suppressHydrationWarning />
+        <input className="input input-bordered input-sm w-full" placeholder="Password" type="password" value={authForm.password} onChange={(event) => setAuthForm({ ...authForm, password: event.target.value })} />
+        <button className="btn btn-primary btn-sm w-full" type="submit" disabled={session.isPending}>
+          {authMode === "signup" ? "Create account" : "Sign in"}
+        </button>
+        {authMode === "signin" ? (
+          <button
+            className="btn btn-link btn-sm w-full"
+            type="button"
+            onClick={() => {
+              setShowForgotPassword(true);
+              setForgotEmail(authForm.email);
+            }}
+          >
+            Forgot password?
+          </button>
+        ) : null}
+      </form>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-base-200">
       {message ? (
@@ -226,10 +354,10 @@ export default function CardDashboard() {
         </div>
       ) : null}
 
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[280px_1fr]">
+      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 md:grid-cols-[240px_1fr] lg:grid-cols-[280px_1fr]">
         <aside className="rounded-box border border-base-300 bg-base-100 p-4">
           <div className="mb-4 flex items-center justify-between">
-            <h1 className="text-xl font-bold">Andro Card</h1>
+            <h1 className="text-xl font-bold"><a href="/">Cardfoi</a></h1>
             <button
               className="btn btn-sm btn-ghost"
               title="Create new card"
@@ -243,37 +371,7 @@ export default function CardDashboard() {
           </div>
 
           <div className="mb-4 rounded-box bg-base-200 p-3 text-sm">
-            {session.data ? (
-              <div className="space-y-3">
-                <div>
-                  <p className="font-medium">{session.data.user.name}</p>
-                  <p className="truncate text-base-content/60">{session.data.user.email}</p>
-                  <span className="badge badge-outline mt-2">{session.data.user.role ?? "user"}</span>
-                </div>
-                <button className="btn btn-sm btn-outline w-full" onClick={signOut}>
-                  Sign out
-                </button>
-              </div>
-            ) : (
-              <form className="space-y-3" onSubmit={submitAuth}>
-                <div className="join w-full">
-                  <button className={`btn join-item btn-sm flex-1 ${authMode === "signin" ? "btn-active" : ""}`} type="button" onClick={() => setAuthMode("signin")}>
-                    Sign in
-                  </button>
-                  <button className={`btn join-item btn-sm flex-1 ${authMode === "signup" ? "btn-active" : ""}`} type="button" onClick={() => setAuthMode("signup")}>
-                    Sign up
-                  </button>
-                </div>
-                {authMode === "signup" ? (
-                  <input className="input input-bordered input-sm w-full" placeholder="Name" value={authForm.name} onChange={(event) => setAuthForm({ ...authForm, name: event.target.value })} />
-                ) : null}
-                <input className="input input-bordered input-sm w-full" placeholder="Email" type="email" value={authForm.email} onChange={(event) => setAuthForm({ ...authForm, email: event.target.value })} suppressHydrationWarning />
-                <input className="input input-bordered input-sm w-full" placeholder="Password" type="password" value={authForm.password} onChange={(event) => setAuthForm({ ...authForm, password: event.target.value })} />
-                <button className="btn btn-primary btn-sm w-full" type="submit" disabled={session.isPending}>
-                  {authMode === "signup" ? "Create account" : "Sign in"}
-                </button>
-              </form>
-            )}
+            {renderAuthSection()}
           </div>
 
           <div className="space-y-2">
@@ -290,7 +388,7 @@ export default function CardDashboard() {
           </div>
         </aside>
 
-        <section className="grid gap-6 xl:grid-cols-[1fr_420px]">
+        <section className="grid gap-6 lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_420px]">
           <div className="space-y-6">
             <form className="rounded-box border border-base-300 bg-base-100 p-5" onSubmit={submitCard}>
               <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
@@ -324,7 +422,7 @@ export default function CardDashboard() {
                     {process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ? (
                       <CldUploadWidget
                         uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
-                        options={{ folder: "andro-card/avatars", resourceType: "image", sources: ["local"] }}
+                        options={{ folder: "cardfoi/avatars", resourceType: "image", sources: ["local"] }}
                         onSuccess={(result) => {
                           if (typeof result.info === "object" && "secure_url" in result.info) {
                             setCardForm({ ...cardForm, avatar: String(result.info.secure_url) });
@@ -383,12 +481,18 @@ export default function CardDashboard() {
                 <label className="form-control">
                   <span className="label-text">URL</span>
                   <div className="join w-full">
-                    <input className="input input-bordered join-item w-full" value={workForm.url} onChange={(event) => setWorkForm({ ...workForm, url: event.target.value })} />
-                    {process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ? (
+                    <input
+                      className="input input-bordered join-item w-full"
+                      value={workForm.url}
+                      onChange={(event) => setWorkForm({ ...workForm, url: event.target.value })}
+                      disabled={!!workForm.cloudinaryPublicId}
+                      placeholder={workForm.cloudinaryPublicId ? "URL auto-filled from upload" : "https://..."}
+                    />
+                    {workForm.type !== "link" && process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET ? (
                       <CldUploadWidget
                         uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
                         options={{
-                          folder: "andro-card/works",
+                          folder: "cardfoi/works",
                           resourceType: workForm.type === "video" ? "video" : "image",
                           sources: ["local"]
                         }}
@@ -442,11 +546,6 @@ export default function CardDashboard() {
                 <div className="mt-4 flex flex-wrap gap-2">
                   {selectedCard.skills.map((skill) => <span className="badge badge-outline" key={skill}>{skill}</span>)}
                 </div>
-                <button className="btn btn-sm btn-neutral mt-5" onClick={submitSettings}>
-                  <Save size={16} />
-                  Update name/avatar only
-                </button>
-
                 <form className="mt-6 border-t border-base-300 pt-5" onSubmit={updatePassword}>
                   <h3 className="mb-3 font-semibold">Password</h3>
                   <div className="space-y-3">

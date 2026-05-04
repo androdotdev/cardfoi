@@ -92,7 +92,7 @@ async function main() {
       id: "seed-andro-work",
       cardId,
       type: "link",
-      title: "Andro Card",
+      title: "Cardfoi",
       url: "https://github.com/androdotdev",
       description: "A shareable profile card app with auth, RBAC, Neon, and Cloudinary.",
       order: 0,

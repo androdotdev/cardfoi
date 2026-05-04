@@ -172,10 +172,6 @@ export async function updateCard(id: string, input: Partial<CardInput>) {
   return card ? getCard(card.id) : undefined;
 }
 
-export async function updateSettings(id: string, input: Pick<Partial<CardInput>, "name" | "avatar">) {
-  return updateCard(id, input);
-}
-
 export async function addWork(cardId: string, input: Omit<WorkMedia, "id">) {
   const [work] = await db
     .insert(works)

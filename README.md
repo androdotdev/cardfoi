@@ -1,14 +1,14 @@
-# 🃏 Carder
+# 🃏 Cardfoi
 
 > **Get Card In An Instant** — session-owned profile cards with work history, themes, and image uploads.
 
-Live → [carderfoi.vercel.app](https://carderfoi.vercel.app)
+Live → [cardfoi.vercel.app](https://cardfoi.vercel.app)
 
 ---
 
 ## What It Is
 
-Carder lets users spin up a shareable profile card in seconds. Each card lives at a public `/:id` URL and supports a bio, avatar, work history entries, and DaisyUI theme customization. Auth is session-based via Better Auth, storage is Neon PostgreSQL via Drizzle ORM, and images are handled through Cloudinary.
+Cardfoi lets users spin up a shareable profile card in seconds. Each card lives at a public `/:id` URL and supports a bio, avatar, work history entries, and DaisyUI theme customization. Auth is session-based via Better Auth, storage is Neon PostgreSQL via Drizzle ORM, and images are handled through Cloudinary.
 
 ---
 
@@ -31,8 +31,8 @@ Carder lets users spin up a shareable profile card in seconds. Each card lives a
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/androdotdev/carder.git
-cd carder
+git clone https://github.com/androdotdev/cardfoi.git
+cd cardfoi
 npm install
 ```
 
@@ -81,7 +81,7 @@ npm run db:seed       # seed the database
 ## Project Structure
 
 ```
-carder/
+cardfoi/
 ├── app/          # Next.js App Router — pages, layouts, API routes
 ├── db/           # Drizzle schema & DB client
 ├── drizzle/      # Generated migration files
@@ -99,7 +99,7 @@ carder/
 | View card (`/:id`) | Public — no auth needed |
 | Create card | Active Better Auth session |
 | Edit own card | Session (owner only) |
-| Update settings | Session (owner only) |
+| Update card | Session (owner only) |
 | Add / delete work entries | Session (owner only) |
 | Manage all cards | `role = admin` in Better Auth `user` table |
 
