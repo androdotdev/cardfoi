@@ -23,6 +23,7 @@ Cardfoi lets users spin up a shareable profile card in seconds. Each card lives 
 | UI | Tailwind CSS v4 + DaisyUI v5 |
 | Image Uploads | Cloudinary (`next-cloudinary`) |
 | Language | TypeScript |
+| Email | Resend |
 
 ---
 
