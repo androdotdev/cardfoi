@@ -1,69 +1,135 @@
+"use client";
+
+import { motion } from "framer-motion";
 import { ExternalLink, Mail, Phone } from "lucide-react";
 import type { UserCard } from "@/lib/cards";
 
-export default function MinimalTemplate({ card }: { card: UserCard }) {
-  return (
-    <main className="min-h-screen bg-base-200 px-4 py-6 sm:py-8" data-theme={card.theme}>
-      <section className="mx-auto max-w-2xl rounded-box border border-base-300 bg-base-100 p-6 shadow-sm">
-        <div className="flex flex-col items-center text-center">
-          <div className="avatar placeholder mb-4">
-            <div className="h-32 w-32 rounded-full bg-neutral text-neutral-content">
-              {card.avatar ? (
-                <img src={card.avatar} alt="" className="rounded-full" />
-              ) : (
-                <span className="text-5xl">{card.name.slice(0, 1)}</span>
-              )}
-            </div>
-          </div>
-          <h1 className="text-3xl font-bold">{card.name}</h1>
-          <p className="mt-2 max-w-md text-base-content/70">{card.description}</p>
-          <div className="mt-4 flex flex-wrap justify-center gap-2">
-            {card.skills.map((skill) => (
-              <span className="badge badge-primary" key={skill}>{skill}</span>
-            ))}
-          </div>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <a className="btn btn-outline btn-sm" href={`mailto:${card.email}`}>
-              <Mail size={16} />
-              {card.email}
-            </a>
-            <a className="btn btn-outline btn-sm" href={`tel:${card.phone}`}>
-              <Phone size={16} />
-              {card.phone}
-            </a>
-          </div>
-        </div>
-      </section>
+const stagger = {
+  visible: { transition: { staggerChildren: 0.08 } },
+  hidden: {},
+};
 
-      {card.works.length > 0 ? (
-        <section className="mx-auto mt-6 max-w-2xl">
-          <h2 className="mb-3 text-lg font-semibold">Work</h2>
-          <div className="space-y-3">
-            {card.works.map((work) => (
-              <article className="rounded-box border border-base-300 bg-base-100 p-4" key={work.id}>
-                <div className="flex items-start gap-3">
-                  <div className="flex-1">
-                    <h3 className="font-semibold">{work.title}</h3>
-                    {work.description ? (
-                      <p className="mt-1 text-sm text-base-content/70">{work.description}</p>
-                    ) : null}
-                  </div>
-                  <a className="btn btn-sm btn-primary" href={work.url} target="_blank">
-                    <ExternalLink size={14} />
-                    Open
-                  </a>
-                </div>
-                {work.type === "image" ? (
-                  <img className="mt-3 rounded-box w-full" src={work.url} alt="" />
-                ) : null}
-                {work.type === "video" ? (
-                  <video className="mt-3 w-full rounded-box" src={work.url} controls />
-                ) : null}
-              </article>
-            ))}
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+};
+
+export default function MinimalTemplate({ card }: { card: UserCard }) {
+  const skills = card.skills ?? [];
+  const works = card.works ?? [];
+
+  return (
+    <main
+      className="min-h-screen bg-base-100 px-6 py-16 md:px-12"
+      data-theme={card.theme}
+    >
+      <motion.div
+        className="mx-auto max-w-2xl"
+        initial="hidden"
+        animate="visible"
+        variants={stagger}
+      >
+        {/* Header */}
+        <motion.div variants={fadeUp} className="mb-12 flex items-start gap-6">
+          <div className="shrink-0">
+            {card.avatar ? (
+              <img
+                src={card.avatar}
+                alt=""
+                className="h-16 w-16 rounded-full object-cover ring-1 ring-base-300"
+              />
+            ) : (
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-base-200 text-xl font-semibold text-base-content">
+                {card.name?.slice(0, 1)}
+              </div>
+            )}
           </div>
-        </section>
-      ) : null}
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-base-content">
+              {card.name}
+            </h1>
+            <p className="mt-2 text-base-content/60 leading-relaxed max-w-lg">
+              {card.description}
+            </p>
+          </div>
+        </motion.div>
+
+        {/* Divider */}
+        <motion.div variants={fadeUp} className="mb-8 h-px bg-base-200" />
+
+        {/* Skills */}
+        {skills.length > 0 && (
+          <motion.div variants={fadeUp} className="mb-10">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-base-content/40">
+              Stack
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="rounded-md border border-base-300 bg-base-200 px-3 py-1 text-xs font-medium text-base-content/70"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Contact */}
+        <motion.div variants={fadeUp} className="mb-10 flex flex-wrap gap-4">
+          <a
+            href={`mailto:${card.email}`}
+            className="inline-flex items-center gap-2 text-sm text-base-content/60 hover:text-primary transition-colors"
+          >
+            <Mail size={14} />
+            {card.email}
+          </a>
+          <a
+            href={`tel:${card.phone}`}
+            className="inline-flex items-center gap-2 text-sm text-base-content/60 hover:text-primary transition-colors"
+          >
+            <Phone size={14} />
+            {card.phone}
+          </a>
+        </motion.div>
+
+        {/* Works */}
+        {works.length > 0 && (
+          <motion.div variants={fadeUp}>
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-base-content/40">
+              Work
+            </p>
+            <div className="space-y-px">
+              {works.map((work) => (
+                <motion.a
+                  key={work.id}
+                  href={work.url}
+                  target="_blank"
+                  className="group flex items-center justify-between py-4 border-b border-base-200 hover:border-primary/30 transition-colors"
+                  whileHover={{ x: 4 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                >
+                  <div>
+                    <p className="font-medium text-base-content group-hover:text-primary transition-colors">
+                      {work.title}
+                    </p>
+                    {work.description && (
+                      <p className="mt-0.5 text-sm text-base-content/50">
+                        {work.description}
+                      </p>
+                    )}
+                  </div>
+                  <ExternalLink
+                    size={14}
+                    className="shrink-0 text-base-content/30 group-hover:text-primary transition-colors"
+                  />
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </motion.div>
     </main>
   );
 }

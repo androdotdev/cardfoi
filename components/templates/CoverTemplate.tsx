@@ -1,65 +1,143 @@
-import { ExternalLink, Mail, MapPin, Phone } from "lucide-react";
+"use client";
+
+import { motion } from "framer-motion";
+import { ExternalLink, Mail, Phone } from "lucide-react";
 import type { UserCard } from "@/lib/cards";
 
 export default function CoverTemplate({ card }: { card: UserCard }) {
+  const skills = card.skills ?? [];
+  const works = card.works ?? [];
+
   return (
-    <main className="min-h-screen bg-base-200 flex items-center justify-center p-4" data-theme={card.theme}>
+    <main
+      className="min-h-screen bg-base-200 flex items-start justify-center p-4 pt-0 md:p-8 md:pt-0"
+      data-theme={card.theme}
+    >
       <div className="w-full max-w-md">
-        {/* Cover Header */}
-        <div className="relative overflow-hidden rounded-t-2xl bg-gradient-to-br from-primary to-secondary px-6 pb-20 pt-8 text-center text-primary-content">
-          <div className="avatar placeholder">
-            <div className="h-24 w-24 rounded-full bg-primary-content/20 text-primary-content ring-4 ring-primary-content/30">
+        {/* Full-bleed cover */}
+        <motion.div
+          className="relative overflow-hidden rounded-b-3xl bg-primary px-6 pb-24 pt-12 text-primary-content"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          {/* Decorative circles */}
+          <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-primary-content/5" />
+          <div className="absolute -left-8 bottom-0 h-32 w-32 rounded-full bg-primary-content/5" />
+
+          <div className="relative text-center">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+            >
               {card.avatar ? (
-                <img src={card.avatar} alt="" className="rounded-full" />
+                <img
+                  src={card.avatar}
+                  alt=""
+                  className="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-primary-content/30"
+                />
               ) : (
-                <span className="text-4xl">{card.name.slice(0, 1)}</span>
+                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-primary-content/20 text-4xl font-bold ring-4 ring-primary-content/30">
+                  {card.name?.slice(0, 1)}
+                </div>
               )}
+            </motion.div>
+            <motion.h1
+              className="mt-4 text-2xl font-bold"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              {card.name}
+            </motion.h1>
+            <motion.p
+              className="mt-2 text-sm leading-relaxed opacity-80"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              {card.description}
+            </motion.p>
+          </div>
+        </motion.div>
+
+        {/* Floating card body */}
+        <motion.div
+          className="relative -mt-16 mx-4 rounded-2xl border border-base-300 bg-base-100 p-6 shadow-xl"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.5 }}
+        >
+          {/* Skills */}
+          {skills.length > 0 && (
+            <div className="mb-5 flex flex-wrap justify-center gap-1.5">
+              {skills.map((skill) => (
+                <span key={skill} className="badge badge-outline badge-sm">
+                  {skill}
+                </span>
+              ))}
             </div>
-          </div>
-          <h1 className="mt-3 text-2xl font-bold">{card.name}</h1>
-          <p className="mt-1 text-sm opacity-90">{card.description}</p>
-        </div>
+          )}
 
-        {/* Card Body */}
-        <div className="relative -mt-16 rounded-b-2xl border border-base-300 bg-base-100 p-6 shadow-lg">
-          <div className="mb-4 flex flex-wrap justify-center gap-2">
-            {card.skills.map((skill) => (
-              <span className="badge badge-outline" key={skill}>{skill}</span>
-            ))}
-          </div>
-
-          <div className="space-y-3">
-            <a className="flex items-center gap-3 rounded-lg bg-base-200 p-3 transition-colors hover:bg-base-300" href={`mailto:${card.email}`}>
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Mail size={18} />
+          {/* Contact */}
+          <div className="space-y-2">
+            <a
+              href={`mailto:${card.email}`}
+              className="flex items-center gap-3 rounded-xl bg-base-200 px-4 py-3 text-sm transition-colors hover:bg-base-300"
+            >
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <Mail size={15} />
               </div>
-              <span className="text-sm">{card.email}</span>
+              <span className="truncate text-base-content/70">
+                {card.email}
+              </span>
             </a>
-            <a className="flex items-center gap-3 rounded-lg bg-base-200 p-3 transition-colors hover:bg-base-300" href={`tel:${card.phone}`}>
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
-                <Phone size={18} />
+            <a
+              href={`tel:${card.phone}`}
+              className="flex items-center gap-3 rounded-xl bg-base-200 px-4 py-3 text-sm transition-colors hover:bg-base-300"
+            >
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
+                <Phone size={15} />
               </div>
-              <span className="text-sm">{card.phone}</span>
+              <span className="text-base-content/70">{card.phone}</span>
             </a>
           </div>
 
-          {card.works.length > 0 ? (
-            <div className="mt-6 border-t border-base-300 pt-4">
-              <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-base-content/60">Projects</h2>
+          {/* Works */}
+          {works.length > 0 && (
+            <div className="mt-6 border-t border-base-200 pt-5">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-base-content/40">
+                Projects
+              </p>
               <div className="space-y-2">
-                {card.works.map((work) => (
-                  <a className="flex items-center justify-between rounded-lg bg-base-200 p-3 transition-colors hover:bg-base-300" href={work.url} target="_blank" key={work.id}>
-                    <div>
-                      <p className="text-sm font-medium">{work.title}</p>
-                      {work.description ? <p className="text-xs text-base-content/60">{work.description}</p> : null}
+                {works.map((work) => (
+                  <a
+                    key={work.id}
+                    href={work.url}
+                    target="_blank"
+                    className="group flex items-center justify-between rounded-xl bg-base-200 px-4 py-3 transition-colors hover:bg-base-300"
+                  >
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-base-content">
+                        {work.title}
+                      </p>
+                      {work.description && (
+                        <p className="truncate text-xs text-base-content/50">
+                          {work.description}
+                        </p>
+                      )}
                     </div>
-                    <ExternalLink size={14} className="text-base-content/40" />
+                    <ExternalLink
+                      size={13}
+                      className="ml-2 shrink-0 text-base-content/30 group-hover:text-primary transition-colors"
+                    />
                   </a>
                 ))}
               </div>
             </div>
-          ) : null}
-        </div>
+          )}
+        </motion.div>
       </div>
     </main>
   );

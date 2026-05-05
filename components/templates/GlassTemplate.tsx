@@ -1,35 +1,50 @@
 "use client";
 
-import { ExternalLink, Mail, Phone } from "lucide-react";
 import { motion } from "framer-motion";
+import { ExternalLink, Mail, Phone } from "lucide-react";
 import type { UserCard } from "@/lib/cards";
 
 export default function GlassTemplate({ card }: { card: UserCard }) {
+  const skills = card.skills ?? [];
+  const works = card.works ?? [];
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 p-4 sm:p-8" data-theme={card.theme}>
+    <main
+      className="min-h-screen bg-base-200 p-4 sm:p-8"
+      data-theme={card.theme}
+    >
       <div className="mx-auto max-w-4xl">
-        {/* Glass Card */}
+        {/* Glass hero card */}
         <motion.div
-          className="rounded-3xl border border-white/20 bg-white/30 p-6 shadow-xl backdrop-blur-lg sm:p-8"
-          initial={{ opacity: 0, y: 30 }}
+          className="rounded-3xl border border-base-300/50 bg-base-100/60 p-6 shadow-xl backdrop-blur-xl sm:p-8"
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
         >
           <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-            {/* Avatar with glow */}
+            {/* Avatar with ring glow */}
             <motion.div
               className="relative shrink-0"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ type: "spring", stiffness: 260 }}
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{
+                delay: 0.2,
+                type: "spring",
+                stiffness: 220,
+                damping: 18,
+              }}
             >
-              <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 opacity-50 blur"></div>
-              <div className="relative h-28 w-28 overflow-hidden rounded-full border-4 border-white/50 bg-white/50">
+              <div className="absolute -inset-1 rounded-full bg-primary/20 blur-sm" />
+              <div className="relative h-28 w-28 overflow-hidden rounded-full border-2 border-base-300/50">
                 {card.avatar ? (
-                  <img src={card.avatar} alt="" className="h-full w-full object-cover" />
+                  <img
+                    src={card.avatar}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
                 ) : (
-                  <div className="flex h-full items-center justify-center bg-gradient-to-br from-purple-400 to-pink-400 text-4xl font-bold text-white">
-                    {card.name.slice(0, 1)}
+                  <div className="flex h-full items-center justify-center bg-primary/20 text-4xl font-bold text-primary">
+                    {card.name?.slice(0, 1)}
                   </div>
                 )}
               </div>
@@ -37,89 +52,121 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
 
             <div className="min-w-0 text-center sm:text-left">
               <motion.h1
-                className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-4xl font-bold text-transparent"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                className="text-3xl font-bold text-base-content"
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
               >
                 {card.name}
               </motion.h1>
               <motion.p
-                className="mt-2 text-gray-600"
+                className="mt-2 text-base-content/60 leading-relaxed"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
                 {card.description}
               </motion.p>
-              <motion.div
-                className="mt-3 flex flex-wrap justify-center gap-2 sm:justify-start"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                {card.skills.map((skill) => (
-                  <span key={skill} className="rounded-full border border-purple-200/50 bg-white/50 px-3 py-1 text-xs font-medium text-purple-700 backdrop-blur">
-                    {skill}
-                  </span>
-                ))}
-              </motion.div>
+
+              {skills.length > 0 && (
+                <motion.div
+                  className="mt-4 flex flex-wrap justify-center gap-2 sm:justify-start"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  {skills.map((skill) => (
+                    <span
+                      key={skill}
+                      className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </motion.div>
+              )}
             </div>
           </div>
 
-          {/* Contact Buttons */}
+          {/* Contact */}
           <motion.div
             className="mt-6 flex flex-wrap justify-center gap-3 sm:justify-start"
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
+            transition={{ delay: 0.55 }}
           >
-            <a className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/30 px-5 py-2.5 text-sm font-medium text-gray-700 shadow-sm backdrop-blur transition-colors hover:bg-white/50" href={`mailto:${card.email}`}>
-              <Mail size={16} />
+            <a
+              href={`mailto:${card.email}`}
+              className="inline-flex items-center gap-2 rounded-full border border-base-300/60 bg-base-100/40 px-5 py-2.5 text-sm font-medium text-base-content backdrop-blur transition-colors hover:bg-base-100/70"
+            >
+              <Mail size={14} />
               {card.email}
             </a>
-            <a className="inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/30 px-5 py-2.5 text-sm font-medium text-gray-700 shadow-sm backdrop-blur transition-colors hover:bg-white/50" href={`tel:${card.phone}`}>
-              <Phone size={16} />
+            <a
+              href={`tel:${card.phone}`}
+              className="inline-flex items-center gap-2 rounded-full border border-base-300/60 bg-base-100/40 px-5 py-2.5 text-sm font-medium text-base-content backdrop-blur transition-colors hover:bg-base-100/70"
+            >
+              <Phone size={14} />
               {card.phone}
             </a>
           </motion.div>
         </motion.div>
 
-        {/* Works Section */}
-        {card.works.length > 0 ? (
+        {/* Works */}
+        {works.length > 0 && (
           <motion.section
             className="mt-6"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.7 }}
+            transition={{ delay: 0.65 }}
           >
-            <h2 className="mb-4 text-center text-xl font-semibold text-gray-700 sm:text-left">Projects</h2>
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-base-content/40">
+              Projects
+            </h2>
             <div className="grid gap-4 sm:grid-cols-2">
-              {card.works.map((work, index) => (
+              {works.map((work, i) => (
                 <motion.div
                   key={work.id}
-                  className="group rounded-2xl border border-white/20 bg-white/30 p-4 shadow-lg backdrop-blur-lg transition-all hover:bg-white/40"
-                  initial={{ opacity: 0, y: 20 }}
+                  className="group rounded-2xl border border-base-300/50 bg-base-100/50 p-5 backdrop-blur-lg transition-all hover:bg-base-100/70"
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.8 + index * 0.1 }}
+                  transition={{ delay: 0.7 + i * 0.08 }}
                 >
-                  {work.type === "image" ? (
-                    <img className="mb-3 rounded-xl w-full object-cover" src={work.url} alt="" />
-                  ) : null}
-                  {work.type === "video" ? (
-                    <video className="mb-3 rounded-xl w-full bg-black" src={work.url} controls />
-                  ) : null}
-                  <h3 className="font-semibold text-gray-800">{work.title}</h3>
-                  {work.description ? <p className="mt-1 text-sm text-gray-600">{work.description}</p> : null}
-                  <a className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-purple-600 hover:text-purple-700" href={work.url} target="_blank">
-                    View Project
-                    <ExternalLink size={14} />
+                  {work.type === "image" && (
+                    <img
+                      src={work.url}
+                      alt=""
+                      className="mb-3 aspect-video w-full rounded-xl object-cover"
+                    />
+                  )}
+                  {work.type === "video" && (
+                    <video
+                      src={work.url}
+                      className="mb-3 aspect-video w-full rounded-xl"
+                      controls
+                    />
+                  )}
+                  <h3 className="font-semibold text-base-content">
+                    {work.title}
+                  </h3>
+                  {work.description && (
+                    <p className="mt-1 text-sm text-base-content/55">
+                      {work.description}
+                    </p>
+                  )}
+                  <a
+                    href={work.url}
+                    target="_blank"
+                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                  >
+                    View project
+                    <ExternalLink size={13} />
                   </a>
                 </motion.div>
               ))}
             </div>
           </motion.section>
-        ) : null}
+        )}
       </div>
     </main>
   );
