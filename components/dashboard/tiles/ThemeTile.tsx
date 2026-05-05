@@ -33,12 +33,7 @@ export default function ThemeTile({ themes }: ThemeTileProps) {
           <button
             key={theme}
             type="button"
-            onClick={() => {
-              setValue("theme", theme, { shouldDirty: true });
-              if (typeof document !== "undefined") {
-                document.documentElement.setAttribute("data-theme", theme);
-              }
-            }}
+            onClick={() => setValue("theme", theme, { shouldDirty: true })}
             style={{ background: themeColors[theme] || "#888" }}
             className={`w-8 h-8 rounded-full cursor-pointer transition-transform hover:scale-110 ${
               currentTheme === theme ? "ring-2 ring-offset-2 ring-gray-800" : ""

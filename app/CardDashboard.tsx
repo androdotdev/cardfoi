@@ -70,9 +70,6 @@ export default function CardDashboard() {
 
   function applyCard(card: UserCard) {
     setSelectedId(card.id);
-    if (typeof document !== "undefined") {
-      document.documentElement.setAttribute("data-theme", card.theme);
-    }
     // Reset form with selected card values
     form.reset({
       name: card.name,

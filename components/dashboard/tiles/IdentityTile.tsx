@@ -25,7 +25,7 @@ export default function IdentityTile() {
         <div className="min-w-0 flex-1">
           <input
             {...register("name")}
-            className="text-base font-medium bg-transparent border-none p-0 focus:outline-none w-full"
+            className="text-lg font-medium bg-transparent border-none p-0 focus:outline-none w-full"
             placeholder="Your name"
           />
           <p className="text-xs text-gray-400 truncate mt-1">

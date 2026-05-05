@@ -12,9 +12,11 @@ export default function ForgotPasswordForm({
   onBack,
   setMessage
 }: ForgotPasswordFormProps) {
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<{ email: string }>({
+  const { register, handleSubmit, formState: { errors, isSubmitting }, watch } = useForm<{ email: string }>({
     defaultValues: { email: "" }
   });
+
+  const email = watch("email");
 
   async function onSubmit(data: { email: string }) {
     if (!data.email) {
@@ -54,12 +56,12 @@ export default function ForgotPasswordForm({
     <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
       <p className="text-sm">Enter your email to receive a password reset link.</p>
       <div>
-        <input
-          className="input input-bordered input-sm w-full"
-          type="email"
-          placeholder="Email"
-          {...register("email", { required: "Email is required" })}
-        />
+            <input
+              {...register("email")}
+              type="email"
+              placeholder="Enter your email"
+              className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full"
+            />
         {errors.email && <span className="text-sm text-error">{errors.email.message}</span>}
       </div>
       <button className="bg-gray-900 text-white text-sm px-4 py-2 rounded w-full disabled:opacity-50" type="submit" disabled={isSubmitting}>
