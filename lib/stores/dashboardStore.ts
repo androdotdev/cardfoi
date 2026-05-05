@@ -4,6 +4,7 @@ export const selectedIdStore = atom("");
 export const showForgotPasswordStore = atom(false);
 export const forgotEmailStore = atom("");
 export const messageStore = atom("");
+export const showPreviewStore = atom(false);
 export const loadingStore = atom({
   card: false,
   work: false,

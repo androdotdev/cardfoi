@@ -41,11 +41,18 @@ export function useDashboardState() {
     setLoading(type, value);
   }, []);
 
+  const showPreview = useStore(showPreviewStore);
+
+  const setShowPreview = useCallback((show: boolean) => {
+    showPreviewStore.set(show);
+  }, []);
+
   const clearState = useCallback(() => {
     selectedIdStore.set("");
     showForgotPasswordStore.set(false);
     forgotEmailStore.set("");
     messageStore.set("");
+    showPreviewStore.set(false);
     loadingStore.set({ card: false, work: false, password: false });
   }, []);
 
@@ -55,11 +62,13 @@ export function useDashboardState() {
     forgotEmail,
     message,
     loading,
+    showPreview,
     setSelectedId,
     setShowForgotPassword,
     setForgotEmail,
     setMessage,
     setLoadingState,
+    setShowPreview,
     clearState
   };
 }
