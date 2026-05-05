@@ -6,12 +6,12 @@ import type { UserCard } from "@/lib/cards";
 
 const stagger = {
   visible: { transition: { staggerChildren: 0.08 } },
-  hidden: {},
+  hidden: { opacity: 1 },
 };
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
 export default function MinimalTemplate({ card }: { card: UserCard }) {
