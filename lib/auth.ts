@@ -4,7 +4,10 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { db } from "@/lib/db";
 import * as schema from "@/db/schema";
 
-const sendResetEmail = async (user: { name?: string; email: string }, url: string) => {
+const sendResetEmail = async (
+  user: { name?: string; email: string },
+  url: string,
+) => {
   const resendApiKey = process.env.RESEND_API_KEY;
 
   if (!resendApiKey) {
@@ -23,7 +26,7 @@ const sendResetEmail = async (user: { name?: string; email: string }, url: strin
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${resendApiKey}`,
+      Authorization: `Bearer ${resendApiKey}`,
     },
     body: JSON.stringify({
       from: "cardfoi <cardfoi@mail.andro42.qzz.io>",
