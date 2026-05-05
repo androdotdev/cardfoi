@@ -23,22 +23,29 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
       `${card.description ?? ""}`,
       ``,
       `> ls skills/`,
-      ...skills.map((s) => `[${s}]`), // ← removed leading spaces, fix startsWith check
+      ...skills.map((s) => `[${s ?? ""}]`),
       ``,
       `> cat contact.txt`,
       `  email: ${card.email ?? ""}`,
       `  phone: ${card.phone ?? ""}`,
       ``,
       `> ./works.sh`,
-      ...works.map((w, i) => `  ${i + 1}. ${w.title} — ${w.type}`),
+      ...works.map(
+        (w, i) =>
+          `  ${i + 1}. ${w?.title ?? "untitled"} — ${w?.type ?? "link"}`,
+      ),
       ``,
       `> _`,
-    ];
+    ].filter((line): line is string => line !== undefined && line !== null);
 
     let i = 0;
     const interval = setInterval(() => {
       if (i < commands.length) {
-        setLines((prev) => [...prev, commands[i]]);
+        const line = commands[i];
+        if (typeof line === "string") {
+          // ← only push actual strings
+          setLines((prev) => [...prev, line]);
+        }
         i++;
         if (terminalRef.current) {
           terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
@@ -75,6 +82,7 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
             className="h-[80vh] overflow-y-auto p-4 text-sm leading-relaxed"
           >
             {lines.map((line, index) => {
+              if (typeof line !== "string") return null; // ← safety net
               if (line.startsWith("> _")) {
                 return (
                   <div key={index} className="flex items-center">

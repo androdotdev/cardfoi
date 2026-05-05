@@ -67,14 +67,14 @@ export default function PreviewPanel({
   const TemplateComponent = templateMap[currentTemplate] || MinimalTemplate;
 
   return (
-    <div className="fixed top-0 right-0 h-screen w-[280px] bg-base-100 border-l border-base-300 shadow-lg z-40 flex flex-col">
+    <div className="fixed top-0 right-0 h-screen w-[280px] bg-white border-l border-gray-100 shadow-lg z-40 flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-base-300">
+      <div className="flex items-center justify-between p-4 border-b border-gray-100">
         <span className="text-sm font-medium">Preview</span>
         <div className="flex items-center gap-2">
           <button
             onClick={onClose}
-            className="btn btn-ghost btn-xs"
+            className="text-xs px-2 py-1 hover:bg-gray-100 rounded"
             type="button"
             title="Close preview"
           >
@@ -84,11 +84,11 @@ export default function PreviewPanel({
       </div>
 
       {/* Template Selector */}
-      <div className="px-4 py-3 border-b border-base-300">
+      <div className="px-4 py-3 border-b border-gray-100">
         <select
           value={currentTemplate}
           onChange={(e) => onTemplateChange(e.target.value)}
-          className="select select-sm w-full bg-base-200"
+          className="text-sm border border-gray-100 rounded-lg bg-gray-50 px-3 py-2 w-full"
         >
           <option value="minimal">Minimal</option>
           <option value="cover">Cover Card</option>
@@ -107,12 +107,12 @@ export default function PreviewPanel({
       </div>
 
       {/* Footer Link */}
-      <div className="p-4 border-t border-base-300">
+      <div className="p-4 border-t border-gray-100">
         <a
           href={`/${cardId}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn btn-sm btn-outline w-full no-underline"
+          className="border border-gray-200 bg-white text-sm px-3 py-1.5 rounded w-full inline-block text-center no-underline"
         >
           Open full card ↗
         </a>

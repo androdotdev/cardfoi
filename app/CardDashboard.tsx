@@ -109,11 +109,11 @@ export default function CardDashboard() {
   return (
     <>
       {message && (
-        <div className="toast toast-top toast-end z-50">
-          <div className="alert alert-info max-w-sm shadow-lg">
+        <div className="fixed top-4 right-4 z-50">
+          <div className="bg-blue-50 border border-blue-200 text-blue-800 max-w-sm shadow-lg rounded-lg p-4 flex items-center gap-3">
             <span>{message}</span>
             <button
-              className="btn btn-ghost btn-xs"
+              className="text-xs px-2 py-1 hover:bg-blue-100 rounded ml-auto"
               onClick={() => setMessage("")}
               type="button"
             >

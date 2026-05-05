@@ -62,12 +62,13 @@ export default function ForgotPasswordForm({
         />
         {errors.email && <span className="text-sm text-error">{errors.email.message}</span>}
       </div>
-      <button className="btn btn-primary btn-sm w-full" type="submit" disabled={isSubmitting}>
-        {isSubmitting ? <span className="loading loading-spinner"></span> : "Send reset link"}
+      <button className="bg-gray-900 text-white text-sm px-4 py-2 rounded w-full disabled:opacity-50" type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "Sending..." : "Send reset email"}
       </button>
+
       <button
-        className="btn btn-ghost btn-sm w-full"
         type="button"
+        className="border border-gray-200 text-sm px-4 py-2 rounded w-full hover:bg-gray-50"
         onClick={onBack}
       >
         Back to sign in

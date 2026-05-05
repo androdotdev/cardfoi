@@ -2,9 +2,10 @@ export default function DashboardSkeleton() {
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
       {/* Topbar skeleton */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="h-6 w-32 animate-pulse rounded bg-gray-200" />
-        <div className="h-8 w-24 animate-pulse rounded bg-gray-200" />
+      <div className="flex items-center gap-3 mb-5">
+        <div className="h-6 w-20 animate-pulse rounded bg-gray-200" />
+        <div className="h-6 w-24 animate-pulse rounded bg-gray-200 ml-auto" />
+        <div className="h-8 w-20 animate-pulse rounded-full bg-gray-200" />
       </div>
 
       {/* Bento grid skeleton */}
