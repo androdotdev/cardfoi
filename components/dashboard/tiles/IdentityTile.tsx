@@ -29,17 +29,33 @@ export default function IdentityTile() {
             placeholder="Your name"
           />
           <p className="text-xs text-gray-400 truncate mt-1">
-            cardfoi.vercel.app/{name ? name.toLowerCase().replace(/\s+/g, "") : "..."}
+            <a
+              href={`https://cardfoi.vercel.app/${name ? name.toLowerCase().replace(/\s+/g, "") : "..."}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              cardfoi.vercel.app/
+              {name ? name.toLowerCase().replace(/\s+/g, "") : "..."}
+            </a>
           </p>
         </div>
       </div>
       {process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET && (
         <CldUploadWidget
           uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
-          options={{ folder: "cardfoi/avatars", resourceType: "image", sources: ["local"] }}
+          options={{
+            folder: "cardfoi/avatars",
+            resourceType: "image",
+            sources: ["local"],
+          }}
           onSuccess={(result) => {
-            if (typeof result.info === "object" && "secure_url" in result.info) {
-              setValue("avatar", String(result.info.secure_url), { shouldDirty: true });
+            if (
+              typeof result.info === "object" &&
+              "secure_url" in result.info
+            ) {
+              setValue("avatar", String(result.info.secure_url), {
+                shouldDirty: true,
+              });
             }
           }}
         >

@@ -7,6 +7,7 @@ import {
   showForgotPasswordStore,
   forgotEmailStore,
   messageStore,
+  showPreviewStore,
   loadingStore,
   setLoading
 } from "@/lib/stores/dashboardStore";

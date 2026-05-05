@@ -1,6 +1,5 @@
 "use client";
 
-import { useFormContext } from "react-hook-form";
 import type { CardFormData } from "@/components/dashboard/types";
 import type { UserCard } from "@/lib/cards";
 
@@ -23,19 +22,31 @@ const templateMap: Record<string, React.ComponentType<{ card: UserCard }>> = {
 type PreviewPanelProps = {
   onClose: () => void;
   cardId: string;
+  name: string;
+  email: string;
+  phone: string;
+  avatar: string;
+  description: string;
+  skills: string;
+  theme: string;
+  template: string;
+  onTemplateChange: (template: string) => void;
 };
 
-export default function PreviewPanel({ onClose, cardId }: PreviewPanelProps) {
-  const { watch, setValue } = useFormContext<CardFormData>();
-
-  const name = watch("name");
-  const email = watch("email");
-  const phone = watch("phone");
-  const avatar = watch("avatar");
-  const description = watch("description");
-  const skills = watch("skills");
-  const theme = watch("theme");
-  const template = watch("template") || "minimal";
+export default function PreviewPanel({
+  onClose,
+  cardId,
+  name,
+  email,
+  phone,
+  avatar,
+  description,
+  skills,
+  theme,
+  template,
+  onTemplateChange,
+}: PreviewPanelProps) {
+  const currentTemplate = template || "minimal";
 
   const mockCard: UserCard = {
     id: cardId,
@@ -47,13 +58,13 @@ export default function PreviewPanel({ onClose, cardId }: PreviewPanelProps) {
     description: description || "Tell visitors about yourself...",
     skills: typeof skills === "string" ? skills.split(",").map(s => s.trim()).filter(Boolean) : [],
     theme: theme || "corporate",
-    template: template,
+    template: currentTemplate,
     works: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
 
-  const TemplateComponent = templateMap[template] || MinimalTemplate;
+  const TemplateComponent = templateMap[currentTemplate] || MinimalTemplate;
 
   return (
     <div className="fixed top-0 right-0 h-screen w-[280px] bg-base-100 border-l border-base-300 shadow-lg z-40 flex flex-col">
@@ -62,7 +73,7 @@ export default function PreviewPanel({ onClose, cardId }: PreviewPanelProps) {
         <span className="text-sm font-medium">Preview</span>
         <div className="flex items-center gap-2">
           <button
-            onClick={() => onClose()}
+            onClick={onClose}
             className="btn btn-ghost btn-xs"
             type="button"
             title="Close preview"
@@ -75,8 +86,8 @@ export default function PreviewPanel({ onClose, cardId }: PreviewPanelProps) {
       {/* Template Selector */}
       <div className="px-4 py-3 border-b border-base-300">
         <select
-          value={template}
-          onChange={(e) => setValue("template", e.target.value, { shouldDirty: true })}
+          value={currentTemplate}
+          onChange={(e) => onTemplateChange(e.target.value)}
           className="select select-sm w-full bg-base-200"
         >
           <option value="minimal">Minimal</option>
@@ -89,8 +100,8 @@ export default function PreviewPanel({ onClose, cardId }: PreviewPanelProps) {
       </div>
 
       {/* Preview Area */}
-      <div className="flex-1 overflow-auto p-4" data-theme={theme}>
-        <div className="scale-[0.6] origin-top-center" style={{ pointerEvents: "none" }}>
+      <div className="flex-1 overflow-auto p-4" data-theme={theme || "corporate"}>
+        <div className="scale-[0.6] origin-top-center" style={{ pointerEvents: "none" } as React.CSSProperties}>
           <TemplateComponent card={mockCard} />
         </div>
       </div>

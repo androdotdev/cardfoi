@@ -22,6 +22,7 @@ import PasswordTile from "@/components/dashboard/tiles/PasswordTile";
 import ForgotPasswordForm from "@/components/dashboard/ForgotPasswordForm";
 import AuthSection from "@/components/dashboard/AuthSection";
 import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
+import PreviewPanel from "@/components/dashboard/PreviewPanel";
 import EmptyState from "@/components/dashboard/EmptyState";
 
 export default function CardDashboard() {
@@ -38,6 +39,8 @@ export default function CardDashboard() {
     showForgotPassword,
     forgotEmail,
     message,
+    showPreview,
+    setShowPreview,
     setSelectedId,
     setShowForgotPassword,
     setForgotEmail,
@@ -63,6 +66,8 @@ export default function CardDashboard() {
       : undefined,
   });
 
+  const { watch, setValue } = form;
+
   function applyCard(card: UserCard) {
     setSelectedId(card.id);
     if (typeof document !== "undefined") {
@@ -80,6 +85,16 @@ export default function CardDashboard() {
       template: card.template ?? "minimal",
     });
   }
+
+  // Watch form values for preview panel
+  const previewName = watch("name");
+  const previewEmail = watch("email");
+  const previewPhone = watch("phone");
+  const previewAvatar = watch("avatar");
+  const previewDescription = watch("description");
+  const previewSkills = watch("skills");
+  const previewTheme = watch("theme");
+  const previewTemplate = watch("template") || "minimal";
 
   async function handleCardSubmit(data: CardFormData) {
     try {
@@ -161,45 +176,67 @@ export default function CardDashboard() {
           )}
         </div>
       ) : (
-        <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
-          <FormProvider {...form}>
-            <BentoTopbar
-              onSave={form.handleSubmit(handleCardSubmit)}
-              loading={cardSaving}
-            />
-
-            {cards.length > 1 && (
-              <div className="mb-4 flex flex-wrap gap-2">
-                <span className="text-xs text-gray-400 py-1">Switch card:</span>
-                {cards.map((card) => (
-                  <button
-                    key={card.id}
-                    onClick={() => applyCard(card)}
-                    className={`px-3 py-1 rounded-full text-xs border transition-colors ${
-                      selectedId === card.id
-                        ? "bg-gray-900 text-white border-gray-900"
-                        : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
-                    }`}
-                  >
-                    {card.name}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-              <IdentityTile />
-              <ContactTile />
-              <ThemeTile themes={themes} />
-              <BioTile />
-              <SkillsTile />
-              <ProjectsTile
-                works={selectedCard.works}
-                cardId={selectedCard.id}
+        <div className="flex min-h-screen">
+          {/* Main Content - reflows when preview is open */}
+          <div className={`transition-all duration-300 ${showPreview ? 'w-[calc(100%-280px)]' : 'w-full'} min-h-screen bg-gray-50 p-4 sm:p-6`}>
+            <FormProvider {...form}>
+              <BentoTopbar
+                onSave={form.handleSubmit(handleCardSubmit)}
+                loading={cardSaving}
+                showPreview={showPreview}
+                onTogglePreview={() => setShowPreview(!showPreview)}
               />
-              <PasswordTile />
-            </div>
-          </FormProvider>
+
+              {cards.length > 1 && (
+                <div className="mb-4 flex flex-wrap gap-2">
+                  <span className="text-xs text-gray-400 py-1">Switch card:</span>
+                  {cards.map((card) => (
+                    <button
+                      key={card.id}
+                      onClick={() => applyCard(card)}
+                      className={`px-3 py-1 rounded-full text-xs border transition-colors ${
+                        selectedId === card.id
+                          ? "bg-gray-900 text-white border-gray-900"
+                          : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      {card.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                <IdentityTile />
+                <ContactTile />
+                <ThemeTile themes={themes} />
+                <BioTile />
+                <SkillsTile />
+                <ProjectsTile
+                  works={selectedCard.works}
+                  cardId={selectedCard.id}
+                />
+                <PasswordTile />
+              </div>
+            </FormProvider>
+          </div>
+
+              {/* Preview Panel */}
+              {showPreview && (
+                <PreviewPanel
+                  onClose={() => setShowPreview(false)}
+                  cardId={selectedCard.id}
+                  name={previewName || ""}
+                  email={previewEmail || ""}
+                  phone={previewPhone || ""}
+                  avatar={previewAvatar || ""}
+                  description={previewDescription || ""}
+                  skills={previewSkills || ""}
+                  theme={previewTheme || "corporate"}
+                  template={previewTemplate || "minimal"}
+                  onTemplateChange={(newTemplate) => setValue("template", newTemplate, { shouldDirty: true })}
+                />
+              )}
         </div>
       )}
     </>
