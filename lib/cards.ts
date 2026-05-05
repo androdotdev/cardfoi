@@ -40,7 +40,7 @@ type CardInput = {
   template?: string;
 };
 
-const themes = ["corporate", "business", "emerald", "cupcake", "dracula", "night", "synthwave", "retro", "cyberpunk", "garden", "luxury", "dark", "sunset", "aqua", "black", "lemonade", "fantasy", "wireframe", "cmyk"];
+const themes = ["corporate", "night", "business", "luxury", "dracula", "synthwave", "cmyk", "emerald"];
 const templates = ["minimal", "cover", "sidebar", "terminal", "glass", "timeline"];
 
 function toIso(value: Date | string) {
