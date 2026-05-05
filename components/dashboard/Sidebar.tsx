@@ -2,48 +2,56 @@
 
 import { Plus, UserRound } from "lucide-react";
 import type { UserCard } from "@/lib/cards";
-import type { ApiState } from "./types";
 
 type SidebarProps = {
   cards: UserCard[];
   selectedCardId: string | undefined;
   onSelectCard: (card: UserCard) => void;
   onNewCard: () => void;
+  collapsed?: boolean;
 };
 
 export default function Sidebar({
   cards,
   selectedCardId,
   onSelectCard,
-  onNewCard
+  onNewCard,
+  collapsed = false,
 }: SidebarProps) {
   return (
-    <aside className="rounded-box border border-base-300 bg-base-100 p-4">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold">
-          <a href="/">Cardfoi</a>
-        </h1>
-        <button
-          className="btn btn-sm btn-ghost"
-          title="Create new card"
-          onClick={onNewCard}
-        >
-          <Plus size={18} />
-        </button>
-      </div>
+    <div className="space-y-2">
+      <button
+        className={`${collapsed ? "btn-circle btn-sm mx-auto block" : "btn btn-sm w-full justify-start"} ${!collapsed ? "btn-ghost" : ""}`}
+        onClick={onNewCard}
+        title="Create new card"
+      >
+        <Plus size={18} />
+        {!collapsed && <span className="ml-2">New Card</span>}
+      </button>
 
-      <div className="space-y-2">
-        {cards.map((card) => (
-          <button
-            className={`btn w-full justify-start ${card.id === selectedCardId ? "btn-primary" : "btn-ghost"}`}
-            key={card.id}
-            onClick={() => onSelectCard(card)}
-          >
-            <UserRound size={18} />
-            <span className="truncate">{card.name}</span>
-          </button>
-        ))}
-      </div>
-    </aside>
+      {cards.map((card) => (
+        <button
+          key={card.id}
+          className={`btn w-full justify-start ${card.id === selectedCardId ? "btn-primary" : "btn-ghost"} ${collapsed ? "btn-circle mx-auto block" : ""}`}
+          onClick={() => onSelectCard(card)}
+          title={collapsed ? card.name : undefined}
+        >
+          {collapsed ? (
+            <span className="text-sm font-bold">
+              {card.name.charAt(0).toUpperCase()}
+            </span>
+          ) : (
+            <UserRound size={0} />
+          )}
+          {!collapsed && <span className="truncate">{card.name}</span>}
+        </button>
+      ))}
+
+      {cards.length === 0 && !collapsed && (
+        <p className="text-center text-sm text-base-content/40 py-4">
+          No cards yet
+        </p>
+      )}
+    </div>
   );
 }

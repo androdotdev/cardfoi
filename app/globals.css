@@ -11,9 +11,44 @@ html {
 
 body {
   min-height: 100%;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 img,
 video {
   max-width: 100%;
+}
+
+/* Smooth transitions for interactive elements */
+.btn,
+.card,
+.badge {
+  transition: all 0.2s ease;
+}
+
+/* Better focus styles */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid hsl(var(--p) / 0.3);
+  outline-offset: 2px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--b2));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--bc) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--bc) / 0.5);
 }

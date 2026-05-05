@@ -1,13 +1,17 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { authSchema } from "@/lib/validation/dashboardSchemas";
+import type { UserCard } from "@/lib/cards";
 import type { ApiState } from "./types";
 
 type AuthSectionProps = {
   session: ReturnType<typeof authClient.useSession>;
   onSignOut: () => Promise<void>;
-  onAuthSuccess: (cards: ApiState) => void;
+  onAuthSuccess: (cards: UserCard[]) => void;
   setMessage: (msg: string) => void;
   setShowForgotPassword: (show: boolean) => void;
   setForgotEmail: (email: string) => void;
@@ -22,22 +26,29 @@ export default function AuthSection({
   setForgotEmail
 }: AuthSectionProps) {
   const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
-  const [authForm, setAuthForm] = useState({ name: "", email: "", password: "" });
 
-  async function submitAuth(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(authSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: ""
+    }
+  });
+
+  async function onSubmit(data: { name?: string; email: string; password: string }) {
     setMessage("");
 
     const result =
       authMode === "signup"
         ? await authClient.signUp.email({
-            name: authForm.name,
-            email: authForm.email,
-            password: authForm.password
+            name: data.name || "",
+            email: data.email,
+            password: data.password
           })
         : await authClient.signIn.email({
-            email: authForm.email,
-            password: authForm.password
+            email: data.email,
+            password: data.password
           });
 
     if (result.error) {
@@ -47,8 +58,8 @@ export default function AuthSection({
 
     await session.refetch();
     const res = await fetch("/api/cards", { cache: "no-store" });
-    const data = (await res.json()) as ApiState;
-    onAuthSuccess(data);
+    const responseData = await res.json();
+    onAuthSuccess(responseData.cards);
     setMessage(authMode === "signup" ? "Account created." : "Signed in.");
   }
 
@@ -68,7 +79,7 @@ export default function AuthSection({
   }
 
   return (
-    <form className="space-y-3" onSubmit={submitAuth}>
+    <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
       <div className="join w-full">
         <button
           className={`btn join-item btn-sm flex-1 ${authMode === "signin" ? "btn-active" : ""}`}
@@ -86,28 +97,34 @@ export default function AuthSection({
         </button>
       </div>
       {authMode === "signup" ? (
+        <div>
+          <input
+            className="input input-bordered input-sm w-full"
+            placeholder="Name"
+            {...register("name")}
+          />
+          {errors.name && <span className="text-sm text-error">{errors.name.message}</span>}
+        </div>
+      ) : null}
+      <div>
         <input
           className="input input-bordered input-sm w-full"
-          placeholder="Name"
-          value={authForm.name}
-          onChange={(e) => setAuthForm({ ...authForm, name: e.target.value })}
+          placeholder="Email"
+          type="email"
+          {...register("email")}
+          suppressHydrationWarning
         />
-      ) : null}
-      <input
-        className="input input-bordered input-sm w-full"
-        placeholder="Email"
-        type="email"
-        value={authForm.email}
-        onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
-        suppressHydrationWarning
-      />
-      <input
-        className="input input-bordered input-sm w-full"
-        placeholder="Password"
-        type="password"
-        value={authForm.password}
-        onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
-      />
+        {errors.email && <span className="text-sm text-error">{errors.email.message}</span>}
+      </div>
+      <div>
+        <input
+          className="input input-bordered input-sm w-full"
+          placeholder="Password"
+          type="password"
+          {...register("password")}
+        />
+        {errors.password && <span className="text-sm text-error">{errors.password.message}</span>}
+      </div>
       <button className="btn btn-primary btn-sm w-full" type="submit" disabled={session.isPending}>
         {authMode === "signup" ? "Create account" : "Sign in"}
       </button>
@@ -117,7 +134,7 @@ export default function AuthSection({
           type="button"
           onClick={() => {
             setShowForgotPassword(true);
-            setForgotEmail(authForm.email);
+            setForgotEmail(session.data?.user?.email || "");
           }}
         >
           Forgot password?

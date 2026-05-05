@@ -1,53 +1,47 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useForm } from "react-hook-form";
 import { authClient } from "@/lib/auth-client";
 
 type ForgotPasswordFormProps = {
-  forgotEmail: string;
-  setForgotEmail: (email: string) => void;
   onBack: () => void;
   setMessage: (msg: string) => void;
 };
 
 export default function ForgotPasswordForm({
-  forgotEmail,
-  setForgotEmail,
   onBack,
   setMessage
 }: ForgotPasswordFormProps) {
-  const [resetLoading, setResetLoading] = useState(false);
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<{ email: string }>({
+    defaultValues: { email: "" }
+  });
 
-  async function handleReset(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!forgotEmail) {
+  async function onSubmit(data: { email: string }) {
+    if (!data.email) {
       setMessage("Please enter your email.");
       return;
     }
 
     try {
-      setResetLoading(true);
       const check = await fetch("/api/auth/check-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: forgotEmail })
+        body: JSON.stringify({ email: data.email })
       });
       const { exists } = await check.json();
       if (!exists) {
         setMessage("Email not found.");
-        setResetLoading(false);
         return;
       }
     } catch {
-      // proceed anyway if check fails
+      // proceed if check fails
     }
 
     const { error } = await authClient.requestPasswordReset({
-      email: forgotEmail,
+      email: data.email,
       redirectTo: "/reset-password"
     });
 
-    setResetLoading(false);
     if (error) {
       setMessage(error.message ?? "Failed to send reset email.");
     } else {
@@ -57,17 +51,19 @@ export default function ForgotPasswordForm({
   }
 
   return (
-    <form className="space-y-3" onSubmit={handleReset}>
+    <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
       <p className="text-sm">Enter your email to receive a password reset link.</p>
-      <input
-        className="input input-bordered input-sm w-full"
-        placeholder="Email"
-        type="email"
-        value={forgotEmail}
-        onChange={(e) => setForgotEmail(e.target.value)}
-      />
-      <button className="btn btn-primary btn-sm w-full" type="submit" disabled={resetLoading}>
-        {resetLoading ? <span className="loading loading-spinner"></span> : "Send reset link"}
+      <div>
+        <input
+          className="input input-bordered input-sm w-full"
+          type="email"
+          placeholder="Email"
+          {...register("email", { required: "Email is required" })}
+        />
+        {errors.email && <span className="text-sm text-error">{errors.email.message}</span>}
+      </div>
+      <button className="btn btn-primary btn-sm w-full" type="submit" disabled={isSubmitting}>
+        {isSubmitting ? <span className="loading loading-spinner"></span> : "Send reset link"}
       </button>
       <button
         className="btn btn-ghost btn-sm w-full"
