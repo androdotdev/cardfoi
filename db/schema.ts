@@ -68,6 +68,7 @@ export const cards = pgTable("cards", {
   description: text("description").notNull(),
   skills: text("skills").array().notNull().default([]),
   theme: text("theme").notNull().default("corporate"),
+  template: text("template").notNull().default("minimal"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow()
 });

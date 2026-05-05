@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: corporate --default, business, emerald, cupcake, dracula, night;
+  themes: corporate --default, business, emerald, cupcake, dracula, night,
+          synthwave, retro, cyberpunk, garden, luxury, dark, sunset, aqua,
+          black, lemonade, fantasy, wireframe, cmyk;
 }
 
 html {

@@ -23,6 +23,7 @@ export type UserCard = {
   description: string;
   skills: string[];
   theme: string;
+  template?: string;
   works: WorkMedia[];
   createdAt: string;
   updatedAt: string;
@@ -36,9 +37,11 @@ type CardInput = {
   description: string;
   skills: string[];
   theme?: string;
+  template?: string;
 };
 
-const themes = ["corporate", "business", "emerald", "cupcake", "dracula", "night"];
+const themes = ["corporate", "business", "emerald", "cupcake", "dracula", "night", "synthwave", "retro", "cyberpunk", "garden", "luxury", "dark", "sunset", "aqua", "black", "lemonade", "fantasy", "wireframe", "cmyk"];
+const templates = ["minimal", "cover", "sidebar", "terminal", "glass", "timeline"];
 
 function toIso(value: Date | string) {
   return value instanceof Date ? value.toISOString() : value;
@@ -77,6 +80,7 @@ function normalizeCard(row: typeof cards.$inferSelect, cardWorks: (typeof works.
     description: row.description,
     skills: row.skills ?? [],
     theme: row.theme,
+    template: row.template ?? "minimal",
     works: cardWorks.map((work) => ({
       id: work.id,
       type: work.type as WorkMedia["type"],
@@ -150,6 +154,7 @@ export async function createCard(ownerId: string, input: CardInput) {
       description: input.description,
       skills: input.skills,
       theme: input.theme || "corporate",
+      template: input.template || "minimal",
       createdAt: timestamp,
       updatedAt: timestamp
     })
@@ -164,6 +169,7 @@ export async function updateCard(id: string, input: Partial<CardInput>) {
     .set({
       ...input,
       skills: input.skills,
+      template: input.template,
       updatedAt: new Date()
     })
     .where(eq(cards.id, id))

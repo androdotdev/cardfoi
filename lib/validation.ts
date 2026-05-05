@@ -29,7 +29,8 @@ export function cardPayload(body: Record<string, unknown>) {
       avatar: String(body.avatar ?? "").trim(),
       description,
       skills: splitSkills(body.skills),
-      theme: String(body.theme ?? "corporate").trim()
+      theme: String(body.theme ?? "corporate").trim(),
+      template: String(body.template ?? "minimal").trim()
     }
   };
 }
