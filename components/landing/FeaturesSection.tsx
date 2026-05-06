@@ -2,7 +2,7 @@
 
 export default function FeaturesSection() {
   return (
-    <section id="features" className="bg-[#fafaf8] pt-24 pb-24 px-10">
+    <section id="features" className="bg-[#fafaf8] pt-24 pb-24 px-4 sm:px-6 lg:px-10">
       <div className="max-w-[1100px] mx-auto">
         <p className="text-[11px] font-medium tracking-[0.1em] uppercase text-[#9a9a97] mb-3">
           What you get

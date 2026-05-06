@@ -4,8 +4,8 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0a0a0a] border-t border-[#1a1a1a] pt-8 pb-8 px-10">
-      <div className="max-w-[1100px] mx-auto flex items-center justify-between">
+    <footer className="bg-[#0a0a0a] border-t border-[#1a1a1a] pt-8 pb-8 px-4 sm:px-6 lg:px-10">
+      <div className="max-w-[1100px] mx-auto flex flex-col sm:flex-row items-center gap-4 sm:gap-0 sm:justify-between">
         <Link href="/" className="font-['Instrument_Serif','serif'] text-base text-white no-underline">
           Cardfoi
         </Link>

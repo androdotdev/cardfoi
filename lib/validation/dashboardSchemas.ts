@@ -2,6 +2,8 @@ import { z } from "zod";
 
 export const cardSchema = z.object({
   name: z.string().min(1, "Name is required"),
+  slug: z.string().optional(),
+  newSlug: z.string().optional(),
   email: z.string().email("Invalid email address"),
   phone: z.string().min(1, "Phone is required"),
   avatar: z.string().optional(),

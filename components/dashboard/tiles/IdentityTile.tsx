@@ -1,6 +1,7 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
+import { useState } from "react";
 import type { CardFormData } from "@/components/dashboard/types";
 import { CldUploadWidget } from "next-cloudinary";
 
@@ -8,6 +9,9 @@ export default function IdentityTile() {
   const { register, watch, setValue } = useFormContext<CardFormData>();
   const name = watch("name");
   const avatar = watch("avatar");
+  const [isEditingSlug, setIsEditingSlug] = useState(false);
+  const [newSlug, setNewSlug] = useState("");
+  const currentSlug = watch("slug") || "";
 
   return (
     <div className="bg-white border border-gray-100 rounded-xl p-5">
@@ -28,16 +32,69 @@ export default function IdentityTile() {
             className="text-lg font-medium bg-transparent border-none p-0 focus:outline-none w-full"
             placeholder="Your name"
           />
-          <p className="text-xs text-gray-400 truncate mt-1">
-            <a
-              href={`https://cardfoi.vercel.app/${name ? name.toLowerCase().replace(/\s+/g, "") : "..."}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              cardfoi.vercel.app/
-              {name ? name.toLowerCase().replace(/\s+/g, "") : "..."}
-            </a>
-          </p>
+        <div className="mt-4 pt-4 border-t border-gray-100">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-medium text-[#0a0a0a]">Card URL</h3>
+            {!isEditingSlug && (
+              <button
+                onClick={() => {
+                  setNewSlug(currentSlug);
+                  setIsEditingSlug(true);
+                }}
+                className="text-xs text-gray-500 hover:text-gray-700"
+                type="button"
+              >
+                Edit
+              </button>
+            )}
+          </div>
+
+          {isEditingSlug ? (
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-400">cardfoi.vercel.app/</span>
+                <input
+                  className="border border-gray-200 rounded-lg px-3 py-2 text-sm flex-1"
+                  value={newSlug}
+                  onChange={(e) => setNewSlug(e.target.value)}
+                  placeholder="your-slug"
+                />
+              </div>
+              <p className="text-xs text-gray-400 mt-1">Can only be changed once per month</p>
+              <div className="flex gap-2 mt-2">
+                <button
+                  onClick={() => {
+                    setValue("newSlug", newSlug, { shouldDirty: true });
+                    setIsEditingSlug(false);
+                  }}
+                  className="text-xs bg-gray-900 text-white px-3 py-1 rounded"
+                  type="button"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => setIsEditingSlug(false)}
+                  className="text-xs border border-gray-200 px-3 py-1 rounded"
+                  type="button"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <code className="text-sm bg-gray-50 px-2 py-1 rounded">{currentSlug}</code>
+              <a
+                href={`https://cardfoi.vercel.app/${currentSlug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-gray-400 hover:text-gray-700"
+              >
+                cardfoi.vercel.app/{currentSlug}
+              </a>
+            </div>
+          )}
+        </div>
         </div>
       </div>
       {process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET && (

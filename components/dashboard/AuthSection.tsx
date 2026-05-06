@@ -8,6 +8,7 @@ import { authSchema } from "@/lib/validation/dashboardSchemas";
 import type { UserCard } from "@/lib/cards";
 import { useStore } from "@nanostores/react";
 import { authModeStore, authMessageStore, setAuthMode, setAuthMessage } from "@/lib/stores/authStore";
+import { FiLoader } from "react-icons/fi";
 
 type AuthSectionProps = {
   session: ReturnType<typeof authClient.useSession>;
@@ -23,6 +24,7 @@ export default function AuthSection({
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [resetLoading, setResetLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(authSchema),
@@ -35,43 +37,48 @@ export default function AuthSection({
 
   async function onSubmit(data: { name?: string; email: string; password: string }) {
     setAuthMessage("");
+    setLoading(true);
 
-    if (authMode === "signup") {
-      const result = await authClient.signUp.email({
-        name: data.name || "",
+    try {
+      if (authMode === "signup") {
+        const result = await authClient.signUp.email({
+          name: data.name || "",
+          email: data.email,
+          password: data.password
+        });
+
+        if (result.error) {
+          setAuthMessage(result.error.message ?? "Signup failed.");
+          return;
+        }
+
+        setAuthMessage("Account created! Check your email to verify your account.");
+        setAuthMode("signin");
+        return;
+      }
+
+      const result = await authClient.signIn.email({
         email: data.email,
         password: data.password
       });
 
       if (result.error) {
-        setAuthMessage(result.error.message ?? "Signup failed.");
+        const msg = result.error.message ?? "";
+        if (msg.toLowerCase().includes("verify") || msg.toLowerCase().includes("verification")) {
+          setAuthMessage("Please verify your email before signing in.");
+        } else {
+          setAuthMessage(msg);
+        }
         return;
       }
 
-      setAuthMessage("Account created! Check your email to verify your account.");
-      setAuthMode("signin");
-      return;
+      await session.refetch();
+      const res = await fetch("/api/cards", { cache: "no-store" });
+      const responseData = await res.json();
+      onAuthSuccess(responseData.cards);
+    } finally {
+      setLoading(false);
     }
-
-    const result = await authClient.signIn.email({
-      email: data.email,
-      password: data.password
-    });
-
-    if (result.error) {
-      const msg = result.error.message ?? "";
-      if (msg.toLowerCase().includes("verify") || msg.toLowerCase().includes("verification")) {
-        setAuthMessage("Please verify your email before signing in.");
-      } else {
-        setAuthMessage(msg);
-      }
-      return;
-    }
-
-    await session.refetch();
-    const res = await fetch("/api/cards", { cache: "no-store" });
-    const responseData = await res.json();
-    onAuthSuccess(responseData.cards);
   }
 
   async function handleForgotPassword(e: React.FormEvent) {
@@ -193,8 +200,12 @@ export default function AuthSection({
           />
           {errors.password && <span className="text-sm text-red-500">{errors.password.message}</span>}
         </div>
-      <button className="bg-gray-900 text-white text-sm px-4 py-2 rounded w-full disabled:opacity-50" type="submit" disabled={session.isPending}>
-        {authMode === "signup" ? "Create account" : "Sign in"}
+      <button className="bg-gray-900 text-white text-sm px-4 py-2 rounded w-full disabled:opacity-50 flex items-center justify-center gap-2" type="submit" disabled={loading}>
+        {loading ? (
+          <><FiLoader className="animate-spin h-3 w-3" /> {authMode === "signup" ? "Creating..." : "Signing in..."}</>
+        ) : (
+          authMode === "signup" ? "Create account" : "Sign in"
+        )}
       </button>
       {authMode === "signin" && !showForgotPassword && (
         <button

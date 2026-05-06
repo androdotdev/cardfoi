@@ -39,14 +39,14 @@ function ResetPasswordContent() {
     });
     setLoading(false);
 
-    if (error) {
-      setMessage(error.message ?? "Failed to reset password.");
-    } else {
-      setMessage("Password reset successful! Redirecting to sign in...");
-      setTimeout(() => {
-        window.location.href = "/dashboard";
-      }, 2000);
-    }
+        if (error) {
+          setMessage(error.message ?? "Failed to reset password.");
+        } else {
+          setMessage("Password reset successful! Redirecting to sign in...");
+          setTimeout(() => {
+            window.location.href = "/login";
+          }, 2000);
+        }
   }
 
   if (!token) {

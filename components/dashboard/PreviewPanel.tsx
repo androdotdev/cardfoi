@@ -67,7 +67,7 @@ export default function PreviewPanel({
   const TemplateComponent = templateMap[currentTemplate] || MinimalTemplate;
 
   return (
-    <div className="fixed top-0 right-0 h-screen w-[280px] bg-white border-l border-gray-100 shadow-lg z-40 flex flex-col">
+    <div className="fixed top-0 right-0 h-screen w-[400px] bg-white border-l border-gray-100 shadow-lg z-40 flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-100">
         <span className="text-sm font-medium">Preview</span>
@@ -101,7 +101,7 @@ export default function PreviewPanel({
 
       {/* Preview Area */}
       <div className="flex-1 overflow-auto p-4" data-theme={theme || "corporate"}>
-        <div className="scale-[0.6] origin-top-center" style={{ pointerEvents: "none" } as React.CSSProperties}>
+        <div className="scale-[0.85] origin-top-center" style={{ pointerEvents: "none" } as React.CSSProperties}>
           <TemplateComponent card={mockCard} />
         </div>
       </div>

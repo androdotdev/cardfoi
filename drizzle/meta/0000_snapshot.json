@@ -1,5 +1,5 @@
 {
-  "id": "298f79c5-eb89-4355-a3af-3e27d9b01c31",
+  "id": "871d9572-f504-4bf0-be00-57afe37f6bd3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -121,6 +121,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "slug_updated_at": {
+          "name": "slug_updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
         "owner_id": {
           "name": "owner_id",
           "type": "text",
@@ -170,6 +176,13 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'corporate'"
+        },
+        "template": {
+          "name": "template",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'minimal'"
         },
         "created_at": {
           "name": "created_at",
@@ -524,7 +537,7 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "no action"
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},

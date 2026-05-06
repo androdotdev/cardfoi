@@ -7,7 +7,7 @@ const CardMockup = dynamic(() => import("@/components/landing/CardMockup"), { ss
 
 export default function HeroSection() {
   return (
-    <section className="min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center gap-16 pt-32 px-10 max-w-[1200px] mx-auto">
+    <section className="min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center gap-8 lg:gap-16 pt-32 px-4 sm:px-6 lg:px-10 max-w-[1200px] mx-auto">
       <div className="animate-[fadeUp_0.6s_ease_both]">
         <div className="inline-flex items-center gap-1.5 text-[10px] font-medium tracking-[0.08em] uppercase text-[#1a7a52] bg-[#e8f5ef] px-3 py-1 rounded-full mb-6 animate-[fadeUp_0.6s_ease_0s_both]">
           <div className="w-1.5 h-1.5 rounded-full bg-[#1a7a52]" />
@@ -21,7 +21,7 @@ export default function HeroSection() {
         <p className="text-base text-[#5c5c5a] leading-[1.7] max-w-[420px] mb-10 animate-[fadeUp_0.6s_ease_0.2s_both]">
           Build a public profile card with your tech stack, projects, and contact details. One link. No portfolio site needed.
         </p>
-        <div className="flex items-center gap-4 animate-[fadeUp_0.6s_ease_0.35s_both]">
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 animate-[fadeUp_0.6s_ease_0.35s_both]">
           <Link
             href="/dashboard"
             className="bg-[#0a0a0a] text-white text-base px-6 py-2.5 rounded-full font-medium no-underline inline-flex items-center gap-2"

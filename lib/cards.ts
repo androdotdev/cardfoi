@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { cards, user, works } from "@/db/schema";
+import { customAlphabet } from "nanoid";
 
 export type WorkMedia = {
   id: string;
@@ -47,23 +48,83 @@ function toIso(value: Date | string) {
   return value instanceof Date ? value.toISOString() : value;
 }
 
-function toSlug(value: string) {
-  const slug = value
+const nanoid = customAlphabet('abcdefghijklmnopqrstuvwxyz0123456789', 6);
+
+// Generate default slug: name + nanoid
+function generateDefaultSlug(name: string): string {
+  const base = name
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-  return slug || `card-${Date.now()}`;
+  const suffix = nanoid(); // e.g., "x7k2m3"
+  return `${base}-${suffix}`; // e.g., "john-doe-x7k2m3"
 }
 
-async function uniqueSlug(base: string) {
-  let slug = base;
-  let index = 2;
+// Validate user-chosen slug
+function validateSlug(slug: string, isAdmin: boolean = false): { valid: boolean; error?: string } {
+  // Only lowercase letters, numbers, hyphens
+  if (!/^[a-z0-9-]+$/.test(slug)) {
+    return { valid: false, error: "Only lowercase letters, numbers, and hyphens allowed." };
+  }
 
-  while (await getCard(slug)) {
+  // Length: 3-30 characters
+  if (slug.length < 3 || slug.length > 30) {
+    return { valid: false, error: "Slug must be 3-30 characters." };
+  }
+
+  // Must start with a letter
+  if (!/^[a-z]/.test(slug)) {
+    return { valid: false, error: "Slug must start with a letter." };
+  }
+
+  // No consecutive hyphens
+  if (/--/.test(slug)) {
+    return { valid: false, error: "No consecutive hyphens allowed." };
+  }
+
+  // Reserved words (skip for admin)
+  if (!isAdmin) {
+    const reserved = ["api", "dashboard", "www", "admin", "andro"];
+    if (reserved.includes(slug)) {
+      return { valid: false, error: "This slug is reserved." };
+    }
+    
+    // Max 5 segments for normal users (parts separated by hyphens)
+    const segments = slug.split("-");
+    if (segments.length > 5) {
+      return { valid: false, error: "Slug can have maximum 5 segments (separated by hyphens)." };
+    }
+  }
+
+  return { valid: true };
+}
+
+// Check rate limit (once per month)
+function checkSlugRateLimit(lastUpdated: Date | null, isAdmin: boolean = false): { allowed: boolean; error?: string } {
+  if (isAdmin) return { allowed: true }; // Admin bypass
+  if (!lastUpdated) return { allowed: true };
+
+  const now = new Date();
+  const monthsSinceUpdate = (now.getFullYear() - lastUpdated.getFullYear()) * 12 +
+    (now.getMonth() - lastUpdated.getMonth());
+
+  if (monthsSinceUpdate < 1) {
+    return { allowed: false, error: "You can only change your slug once per month." };
+  }
+
+  return { allowed: true };
+}
+
+// Ensure slug uniqueness (fallback for nanoid collision)
+async function uniqueSlug(base: string): Promise<string> {
+  let slug = base;
+  let index = 1;
+
+  while (await db.select({ id: cards.id }).from(cards).where(eq(cards.id, slug)).limit(1).then(r => r.length > 0)) {
     slug = `${base}-${index}`;
-    index += 1;
+    index++;
   }
 
   return slug;
@@ -138,14 +199,21 @@ export async function getCard(id: string) {
   return normalizeCard(card, cardWorks);
 }
 
-export async function createCard(ownerId: string, input: CardInput) {
+export async function createCard(ownerId: string, input: CardInput & { isAdmin?: boolean }) {
+  // Check if card with same email already exists
+  const existingByEmail = await db.select({ id: cards.id }).from(cards).where(eq(cards.email, input.email)).limit(1);
+  if (existingByEmail.length > 0) {
+    throw new Error("A card with this email already exists.");
+  }
+
   const timestamp = new Date();
-  const id = await uniqueSlug(toSlug(input.name));
+  const baseSlug = generateDefaultSlug(input.name);
+  const slug = await uniqueSlug(baseSlug);
 
   const [card] = await db
     .insert(cards)
     .values({
-      id,
+      id: slug,
       ownerId,
       name: input.name,
       email: input.email,
@@ -163,7 +231,57 @@ export async function createCard(ownerId: string, input: CardInput) {
   return normalizeCard(card);
 }
 
-export async function updateCard(id: string, input: Partial<CardInput>) {
+export async function updateCard(id: string, input: Partial<CardInput> & { newSlug?: string, isAdmin?: boolean }) {
+  // Handle slug update
+  if (input.newSlug) {
+    const isAdmin = input.isAdmin || false;
+
+    // Validate new slug
+    const validation = validateSlug(input.newSlug, isAdmin);
+    if (!validation.valid) {
+      throw new Error(validation.error);
+    }
+
+    // Check rate limit
+    const [currentCard] = await db.select({ slugUpdatedAt: cards.slugUpdatedAt })
+      .from(cards).where(eq(cards.id, id)).limit(1);
+
+    const rateCheck = checkSlugRateLimit(currentCard?.slugUpdatedAt || null, isAdmin);
+    if (!rateCheck.allowed) {
+      throw new Error(rateCheck.error);
+    }
+
+    // Check if new slug is already taken
+    const existing = await db.select({ id: cards.id })
+      .from(cards).where(eq(cards.id, input.newSlug)).limit(1);
+
+    if (existing.length > 0) {
+      throw new Error("This slug is already taken.");
+    }
+
+    // Update the primary key (works will cascade update)
+    await db.update(cards)
+      .set({
+        id: input.newSlug,
+        slugUpdatedAt: new Date(),
+        updatedAt: new Date()
+      })
+      .where(eq(cards.id, id));
+
+    // Return updated card
+    return getCard(input.newSlug);
+  }
+
+  // Check if email is being updated and conflicts with existing cards
+  if (input.email) {
+    const existing = await db.select({ id: cards.id }).from(cards)
+      .where(eq(cards.email, input.email))
+      .limit(1);
+    if (existing.length > 0 && existing[0].id !== id) {
+      throw new Error("A card with this email already exists.");
+    }
+  }
+
   const [card] = await db
     .update(cards)
     .set({

@@ -7,7 +7,7 @@ export default function BioTile() {
   const { register, formState: { errors } } = useFormContext<CardFormData>();
 
   return (
-    <div className="bg-white border border-gray-100 rounded-xl p-5 col-span-2">
+    <div className="bg-white border border-gray-100 rounded-xl p-5">
       <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">
         Bio
       </p>

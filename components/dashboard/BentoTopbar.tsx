@@ -1,9 +1,9 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { authClient } from "@/lib/auth-client";
-import { useState } from "react";
 import { useStore } from "@nanostores/react";
+import { authClient } from "@/lib/auth-client";
+import { FiLoader } from "react-icons/fi";
 import { signingOutStore, setSigningOut } from "@/lib/stores/authStore";
 import type { CardFormData } from "@/components/dashboard/types";
 
@@ -15,8 +15,17 @@ type BentoTopbarProps = {
   user?: { name?: string; email: string } | null;
 };
 
-export default function BentoTopbar({ onSave, loading = false, showPreview = false, onTogglePreview, user }: BentoTopbarProps) {
-  const { formState: { isDirty }, watch } = useFormContext<CardFormData>();
+export default function BentoTopbar({
+  onSave,
+  loading = false,
+  showPreview = false,
+  onTogglePreview,
+  user,
+}: BentoTopbarProps) {
+  const {
+    formState: { isDirty },
+    watch,
+  } = useFormContext<CardFormData>();
   const name = watch("name");
   const signingOut = useStore(signingOutStore);
 
@@ -32,15 +41,18 @@ export default function BentoTopbar({ onSave, loading = false, showPreview = fal
 
   return (
     <div className="flex items-center gap-3 mb-5">
-      <a href="/" className="font-medium text-base hover:opacity-70 transition-opacity">Cardfoi</a>
+      <a
+        href="/"
+        className="font-medium text-base hover:opacity-70 transition-opacity"
+      >
+        Cardfoi
+      </a>
       {name && (
         <span className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium">
           {name}
         </span>
       )}
-      {isDirty && (
-        <span className="text-xs text-gray-400">● Unsaved</span>
-      )}
+      {isDirty && <span className="text-xs text-gray-400">● Unsaved</span>}
 
       <div className="ml-auto flex items-center gap-2">
         {user && (
@@ -54,10 +66,7 @@ export default function BentoTopbar({ onSave, loading = false, showPreview = fal
             >
               {signingOut ? (
                 <>
-                  <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
+                  <FiLoader className="animate-spin h-3 w-3" />
                   Signing out...
                 </>
               ) : (

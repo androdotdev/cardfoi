@@ -93,18 +93,27 @@ const sendVerifyEmail = async (
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
-    schema,
+    schema: {
+      user: schema.user,
+      account: schema.account,
+      session: schema.sessions,
+      verification: schema.verification,
+    },
   }),
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
     sendResetPassword: async ({ user, url }, _request) => {
-      sendResetEmail(user, url).catch(err => console.error("Reset email failed:", err));
+      sendResetEmail(user, url).catch((err) =>
+        console.error("Reset email failed:", err),
+      );
     },
   },
   emailVerification: {
     sendVerificationEmail: async ({ user, url }, _request) => {
-      sendVerifyEmail(user, url).catch(err => console.error("Verification email failed:", err));
+      sendVerifyEmail(user, url).catch((err) =>
+        console.error("Verification email failed:", err),
+      );
     },
     sendOnSignUp: true,
   },

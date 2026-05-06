@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { canManageCard, getCard, getCurrentSession, updateCard } from "@/lib/cards";
+import { isAdmin } from "@/lib/cards";
 import { cardPayload } from "@/lib/validation";
 
 type Params = {
@@ -39,7 +40,16 @@ export async function PATCH(request: Request, { params }: Params) {
     return NextResponse.json({ error: payload.error }, { status: 400 });
   }
 
-  const card = await updateCard(id, payload.data);
+  // Handle slug update separately
+  const newSlug = body.newSlug ? String(body.newSlug).trim() : undefined;
+  const userIsAdmin = await isAdmin(session.user.id);
+
+  const card = await updateCard(id, {
+    ...payload.data,
+    newSlug,
+    isAdmin: userIsAdmin
+  });
+
   if (!card) {
     return NextResponse.json({ error: "Card not found." }, { status: 404 });
   }

@@ -1,5 +1,11 @@
 import { relations } from "drizzle-orm";
-import { boolean, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -12,10 +18,10 @@ export const user = pgTable("user", {
   banReason: text("ban_reason"),
   banExpires: timestamp("ban_expires"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow()
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
-export const session = pgTable("session", {
+export const sessions = pgTable("session", {
   id: text("id").primaryKey(),
   expiresAt: timestamp("expires_at").notNull(),
   token: text("token").notNull().unique(),
@@ -26,7 +32,7 @@ export const session = pgTable("session", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  impersonatedBy: text("impersonated_by")
+  impersonatedBy: text("impersonated_by"),
 });
 
 export const account = pgTable("account", {
@@ -44,7 +50,7 @@ export const account = pgTable("account", {
   scope: text("scope"),
   password: text("password"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow()
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 export const verification = pgTable("verification", {
@@ -53,7 +59,7 @@ export const verification = pgTable("verification", {
   value: text("value").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow()
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 export const cards = pgTable("cards", {
@@ -71,7 +77,7 @@ export const cards = pgTable("cards", {
   theme: text("theme").notNull().default("corporate"),
   template: text("template").notNull().default("minimal"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow()
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 export const works = pgTable("works", {
@@ -86,26 +92,40 @@ export const works = pgTable("works", {
   cloudinaryPublicId: text("cloudinary_public_id"),
   order: integer("order").notNull().default(0),
   createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow()
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
 
 export const userRelations = relations(user, ({ many }) => ({
-  sessions: many(session),
+  sessions: many(sessions),
   accounts: many(account),
-  cards: many(cards)
+  cards: many(cards),
 }));
 
 export const cardsRelations = relations(cards, ({ one, many }) => ({
   owner: one(user, {
     fields: [cards.ownerId],
-    references: [user.id]
+    references: [user.id],
   }),
-  works: many(works)
+  works: many(works),
 }));
 
 export const worksRelations = relations(works, ({ one }) => ({
   card: one(cards, {
     fields: [works.cardId],
-    references: [cards.id]
-  })
+    references: [cards.id],
+  }),
+}));
+
+export const sessionRelations = relations(sessions, ({ one }) => ({
+  user: one(user, {
+    fields: [sessions.userId],
+    references: [user.id],
+  }),
+}));
+
+export const accountRelations = relations(account, ({ one }) => ({
+  user: one(user, {
+    fields: [account.userId],
+    references: [user.id],
+  }),
 }));

@@ -18,6 +18,11 @@ Static public card pages (`/:id`) can be ISR-cached at the CDN edge. At scale, m
 **Drizzle ORM**
 Lightweight, no runtime overhead, generates clean SQL. No N+1 risk as long as you keep joins explicit. Good choice.
 
+**State Management Architecture**
+- **Nanostores** (`lib/stores/`): Lightweight (~1KB) UI state management. No prop drilling — components read directly from stores via `@nanostores/react`.
+- **React Query** (`lib/hooks/useDashboardQuery.ts`): Server state with automatic caching and background refetching. Reduces redundant API calls to `/api/cards`.
+- Clean separation: UI state doesn't pollute server state and vice versa. Scales well for complex dashboards.
+
 ---
 
 ## Current Bottlenecks
@@ -69,8 +74,10 @@ Without server-side validation, users can upload large files that eat into your 
 
 1. **ISR on `/:id`** — `export const revalidate = 60` in the card page file. 30 min of work, biggest impact.
 2. **Signed Cloudinary uploads** — protects against abuse and is cleaner architecture anyway.
-3. **Drizzle index audit** — open `db/` schema, verify indexes exist on lookup columns.
-4. **Rate limiting** — Upstash `@upstash/ratelimit` + Redis, apply as Next.js middleware on mutation routes.
+3. **Drizzle index audit** — open `db/` schema files and verify indexes exist on lookup columns.
+4. **Rate limiting** — Upstash `@upstash/ratelimit` + Redis:
+   - Apply to `/api/auth/[...all]` routes to prevent brute force attacks
+   - Protect card creation, work entry adds, and settings updates
 5. **Error monitoring** — add Sentry before you scale. Blind spots get expensive fast.
 
 ---

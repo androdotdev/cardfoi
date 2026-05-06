@@ -2,7 +2,7 @@
 
 export default function HowItWorksSection() {
   return (
-    <section id="how" className="bg-[#f5f5f3] pt-24 pb-24 px-10 border-t border-[#ebebea] border-b border-[#ebebea]">
+    <section id="how" className="bg-[#f5f5f3] pt-24 pb-24 px-4 sm:px-6 lg:px-10 border-t border-[#ebebea] border-b border-[#ebebea]">
       <div className="max-w-[1100px] mx-auto">
         <p className="text-[11px] font-medium tracking-[0.1em] uppercase text-[#9a9a97] mb-3">
           How it works
