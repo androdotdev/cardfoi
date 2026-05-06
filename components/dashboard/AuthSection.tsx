@@ -6,26 +6,23 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authSchema } from "@/lib/validation/dashboardSchemas";
 import type { UserCard } from "@/lib/cards";
-import type { ApiState } from "./types";
+import { useStore } from "@nanostores/react";
+import { authModeStore, authMessageStore, setAuthMode, setAuthMessage } from "@/lib/stores/authStore";
 
 type AuthSectionProps = {
   session: ReturnType<typeof authClient.useSession>;
-  onSignOut: () => Promise<void>;
   onAuthSuccess: (cards: UserCard[]) => void;
-  setMessage: (msg: string) => void;
-  setShowForgotPassword: (show: boolean) => void;
-  setForgotEmail: (email: string) => void;
 };
 
 export default function AuthSection({
   session,
-  onSignOut,
-  onAuthSuccess,
-  setMessage,
-  setShowForgotPassword,
-  setForgotEmail
+  onAuthSuccess
 }: AuthSectionProps) {
-  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+  const authMode = useStore(authModeStore);
+  const message = useStore(authMessageStore);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetLoading, setResetLoading] = useState(false);
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(authSchema),
@@ -37,22 +34,37 @@ export default function AuthSection({
   });
 
   async function onSubmit(data: { name?: string; email: string; password: string }) {
-    setMessage("");
+    setAuthMessage("");
 
-    const result =
-      authMode === "signup"
-        ? await authClient.signUp.email({
-            name: data.name || "",
-            email: data.email,
-            password: data.password
-          })
-        : await authClient.signIn.email({
-            email: data.email,
-            password: data.password
-          });
+    if (authMode === "signup") {
+      const result = await authClient.signUp.email({
+        name: data.name || "",
+        email: data.email,
+        password: data.password
+      });
+
+      if (result.error) {
+        setAuthMessage(result.error.message ?? "Signup failed.");
+        return;
+      }
+
+      setAuthMessage("Account created! Check your email to verify your account.");
+      setAuthMode("signin");
+      return;
+    }
+
+    const result = await authClient.signIn.email({
+      email: data.email,
+      password: data.password
+    });
 
     if (result.error) {
-      setMessage(result.error.message ?? "Authentication failed.");
+      const msg = result.error.message ?? "";
+      if (msg.toLowerCase().includes("verify") || msg.toLowerCase().includes("verification")) {
+        setAuthMessage("Please verify your email before signing in.");
+      } else {
+        setAuthMessage(msg);
+      }
       return;
     }
 
@@ -60,20 +72,69 @@ export default function AuthSection({
     const res = await fetch("/api/cards", { cache: "no-store" });
     const responseData = await res.json();
     onAuthSuccess(responseData.cards);
-    setMessage(authMode === "signup" ? "Account created." : "Signed in.");
   }
 
-  if (session.data) {
+  async function handleForgotPassword(e: React.FormEvent) {
+    e.preventDefault();
+    setResetLoading(true);
+    setAuthMessage("");
+
+    const { error } = await authClient.requestPasswordReset({
+      email: resetEmail,
+      redirectTo: "/reset-password",
+    });
+
+    setResetLoading(false);
+
+    if (error) {
+      setAuthMessage(error.message ?? "Failed to send reset email.");
+    } else {
+      setAuthMessage("Check your email for password reset link!");
+      setShowForgotPassword(false);
+      setResetEmail("");
+    }
+  }
+
+  if (showForgotPassword) {
     return (
-      <div className="space-y-3">
-        <div>
-          <p className="font-medium">{session.data.user.name}</p>
-          <p className="truncate text-[#5c5c5a] text-sm">{session.data.user.email}</p>
+      <form className="space-y-3" onSubmit={handleForgotPassword}>
+        <div className="text-center mb-4">
+          <h3 className="font-medium">Reset Password</h3>
+          <p className="text-sm text-gray-600">Enter your email to receive reset link</p>
         </div>
-        <button className="border border-gray-200 text-sm px-4 py-2 rounded w-full hover:bg-gray-50" onClick={onSignOut}>
-          Sign out
+        <div>
+          <input
+            type="email"
+            value={resetEmail}
+            onChange={(e) => setResetEmail(e.target.value)}
+            placeholder="Email"
+            className="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          disabled={resetLoading}
+          className="bg-gray-900 text-white text-sm px-4 py-2 rounded w-full disabled:opacity-50"
+        >
+          {resetLoading ? "Sending..." : "Send Reset Link"}
         </button>
-      </div>
+        <button
+          type="button"
+          onClick={() => {
+            setShowForgotPassword(false);
+            setResetEmail("");
+          }}
+          className="text-sm text-gray-500 hover:text-gray-700 w-full text-center"
+        >
+          Back to Sign In
+        </button>
+        {message && (
+          <p className={`text-sm ${message.includes("Check your email") ? "text-green-600" : "text-red-500"}`}>
+            {message}
+          </p>
+        )}
+      </form>
     );
   }
 
@@ -135,18 +196,23 @@ export default function AuthSection({
       <button className="bg-gray-900 text-white text-sm px-4 py-2 rounded w-full disabled:opacity-50" type="submit" disabled={session.isPending}>
         {authMode === "signup" ? "Create account" : "Sign in"}
       </button>
-      {authMode === "signin" ? (
+      {authMode === "signin" && !showForgotPassword && (
         <button
-          className="text-sm text-gray-500 hover:text-gray-700 no-underline"
           type="button"
           onClick={() => {
             setShowForgotPassword(true);
-            setForgotEmail(session.data?.user?.email || "");
+            setResetEmail("");
           }}
+          className="text-sm text-gray-500 hover:text-gray-700 no-underline w-full text-center"
         >
           Forgot password?
         </button>
-      ) : null}
+      )}
+      {message && (
+        <p className={`text-sm ${message.includes("Account created") || message.includes("Check your email") ? "text-green-600" : "text-red-500"}`}>
+          {message}
+        </p>
+      )}
     </form>
   );
 }

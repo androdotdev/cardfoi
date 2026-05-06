@@ -11,6 +11,7 @@ const sendResetEmail = async (
   const resendApiKey = process.env.RESEND_API_KEY;
 
   if (!resendApiKey) {
+    console.error("RESEND_API_KEY not set");
     return;
   }
 
@@ -22,22 +23,70 @@ const sendResetEmail = async (
     <p>If you didn't request this, you can ignore this email.</p>
   `;
 
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${resendApiKey}`,
-    },
-    body: JSON.stringify({
-      from: "cardfoi <cardfoi@mail.andro42.qzz.io>",
-      to: [user.email],
-      subject: "Reset your Cardfoi password",
-      html,
-    }),
-  });
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${resendApiKey}`,
+      },
+      body: JSON.stringify({
+        from: "cardfoi <cardfoi@mail.andro42.qzz.io>",
+        to: [user.email],
+        subject: "Reset your Cardfoi password",
+        html,
+      }),
+    });
 
-  if (!res.ok) {
-    const err = await res.json();
+    if (!res.ok) {
+      const err = await res.json();
+      console.error("Resend reset email failed:", err);
+    }
+  } catch (error) {
+    console.error("Failed to send reset email:", error);
+  }
+};
+
+const sendVerifyEmail = async (
+  user: { name?: string; email: string },
+  url: string,
+) => {
+  const resendApiKey = process.env.RESEND_API_KEY;
+
+  if (!resendApiKey) {
+    console.error("RESEND_API_KEY not set");
+    return;
+  }
+
+  const html = `
+    <p>Hello ${user.name || "there"},</p>
+    <p>Click the link below to verify your email:</p>
+    <a href="${url}">Verify Email</a>
+    <p>This link expires in 1 hour.</p>
+    <p>If you didn't request this, you can ignore this email.</p>
+  `;
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${resendApiKey}`,
+      },
+      body: JSON.stringify({
+        from: "cardfoi <cardfoi@mail.andro42.qzz.io>",
+        to: [user.email],
+        subject: "Verify your Cardfoi email",
+        html,
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      console.error("Resend verification email failed:", err);
+    }
+  } catch (error) {
+    console.error("Failed to send verification email:", error);
   }
 };
 
@@ -48,15 +97,26 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: false,
+    requireEmailVerification: true,
     sendResetPassword: async ({ user, url }, _request) => {
-      void sendResetEmail(user, url);
+      sendResetEmail(user, url).catch(err => console.error("Reset email failed:", err));
     },
+  },
+  emailVerification: {
+    sendVerificationEmail: async ({ user, url }, _request) => {
+      sendVerifyEmail(user, url).catch(err => console.error("Verification email failed:", err));
+    },
+    sendOnSignUp: true,
   },
   session: {
     cookieCache: {
       enabled: true,
       maxAge: 5 * 60,
+    },
+  },
+  user: {
+    deleteUser: {
+      enabled: true,
     },
   },
   plugins: [
