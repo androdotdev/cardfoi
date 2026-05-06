@@ -57,29 +57,23 @@ export default function IdentityTile() {
                   className="border border-gray-200 rounded-lg px-3 py-2 text-sm flex-1"
                   value={newSlug}
                   onChange={(e) => setNewSlug(e.target.value)}
+                  onBlur={() => {
+                    setValue("newSlug", newSlug, { shouldDirty: true });
+                  }}
                   placeholder="your-slug"
                 />
               </div>
-              <p className="text-xs text-gray-400 mt-1">Can only be changed once per month</p>
-              <div className="flex gap-2 mt-2">
-                <button
-                  onClick={() => {
-                    setValue("newSlug", newSlug, { shouldDirty: true });
-                    setIsEditingSlug(false);
-                  }}
-                  className="text-xs bg-gray-900 text-white px-3 py-1 rounded"
-                  type="button"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={() => setIsEditingSlug(false)}
-                  className="text-xs border border-gray-200 px-3 py-1 rounded"
-                  type="button"
-                >
-                  Cancel
-                </button>
-              </div>
+              <p className="text-xs text-gray-400 mt-1">Can only be changed once per month. Click outside to confirm, then use the Save button above.</p>
+              <button
+                onClick={() => {
+                  setValue("newSlug", undefined);
+                  setIsEditingSlug(false);
+                }}
+                className="text-xs border border-gray-200 px-3 py-1 rounded mt-2"
+                type="button"
+              >
+                Cancel
+              </button>
             </div>
           ) : (
             <div className="flex items-center gap-2">
