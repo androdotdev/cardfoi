@@ -58,6 +58,7 @@ export const verification = pgTable("verification", {
 
 export const cards = pgTable("cards", {
   id: text("id").primaryKey(),
+  slugUpdatedAt: timestamp("slug_updated_at"),
   ownerId: text("owner_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -77,7 +78,7 @@ export const works = pgTable("works", {
   id: text("id").primaryKey(),
   cardId: text("card_id")
     .notNull()
-    .references(() => cards.id, { onDelete: "cascade" }),
+    .references(() => cards.id, { onDelete: "cascade", onUpdate: "cascade" }),
   type: text("type").notNull().default("link"),
   url: text("url").notNull(),
   title: text("title").notNull(),
