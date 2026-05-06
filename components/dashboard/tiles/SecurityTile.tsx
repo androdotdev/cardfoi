@@ -36,9 +36,9 @@ export default function SecurityTile() {
     }
   }
 
-  async function handleDeleteAccount() {
+  async function handleDeleteSelf() {
     const confirmed = window.confirm(
-      "Are you sure you want to delete your account? This action cannot be undone."
+      "Are you sure you want to delete YOUR account? This action cannot be undone."
     );
 
     if (!confirmed) return;
@@ -46,7 +46,12 @@ export default function SecurityTile() {
     setIsDeleting(true);
 
     try {
-      const res = await fetch("/api/auth/delete-account", { method: "POST" });
+      const res = await fetch("/api/auth/delete-account", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+
       const data = await res.json();
 
       if (res.ok) {
@@ -62,7 +67,7 @@ export default function SecurityTile() {
   }
 
   return (
-    <div className="bg-white border border-gray-100 rounded-xl p-5 h-full">
+    <div className="bg-white border border-gray-100 rounded-xl p-5">
       <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">
         Security
       </p>
@@ -134,13 +139,20 @@ export default function SecurityTile() {
 
       <div className="border-t border-red-100 my-4" />
 
+      <p className="text-xs text-gray-500 mb-2">
+        Delete your own account
+      </p>
+      <p className="text-xs text-gray-400 mb-3">
+        Permanently delete your account and all associated data (cards, works, sessions, accounts).
+      </p>
+
       <button
-        onClick={handleDeleteAccount}
+        onClick={handleDeleteSelf}
         disabled={isDeleting}
         className="border border-red-200 text-red-500 text-sm px-4 py-2 rounded w-full hover:bg-red-50 disabled:opacity-50"
         type="button"
       >
-        {isDeleting ? "Deleting..." : "Delete Account"}
+        {isDeleting ? "Deleting..." : "Delete My Account"}
       </button>
     </div>
   );

@@ -18,6 +18,7 @@ import BioTile from "@/components/dashboard/tiles/BioTile";
 import ThemeTile from "@/components/dashboard/tiles/ThemeTile";
 import ProjectsTile from "@/components/dashboard/tiles/ProjectsTile";
 import SecurityTile from "@/components/dashboard/tiles/SecurityTile";
+import AdminTile from "@/components/dashboard/tiles/AdminTile";
 
 import PreviewPanel from "@/components/dashboard/PreviewPanel";
 
@@ -28,7 +29,7 @@ export default function CardDashboard() {
   const cards = cardsData?.cards || [];
   const themes = cardsData?.themes || [];
 
-  const { mutate: saveCard, isPending: cardSaving } = useSaveCard();
+  const { mutateAsync: saveCard, isPending: cardSaving } = useSaveCard();
 
   const {
     selectedId,
@@ -77,8 +78,14 @@ export default function CardDashboard() {
   }
 
   useEffect(() => {
-    if (cards.length > 0 && !selectedId && cards[0]) {
-      applyCard(cards[0]);
+    if (cards.length > 0) {
+      const currentCard = cards.find((card) => card.id === selectedId);
+      if (!currentCard) {
+        // selectedId is stale (e.g., slug changed), select first valid card
+        applyCard(cards[0]);
+      } else if (!selectedId) {
+        applyCard(cards[0]);
+      }
     }
   }, [cards, selectedId]);
 
@@ -93,17 +100,38 @@ export default function CardDashboard() {
 
   async function handleCardSubmit(data: CardFormData) {
     try {
-      await saveCard({ card: data, selectedCard });
-      form.reset(data);
+      const result = await saveCard({ card: data, selectedCard });
+
+      // Sync user.name with cards.name (one user = one card)
+      if (data.name !== session.data?.user?.name) {
+        try {
+          await authClient.updateUser({ name: data.name });
+        } catch (syncError: any) {
+          console.error("Failed to sync user name:", syncError);
+        }
+      }
+
+      if (result?.card?.id) {
+        const newId = result.card.id;
+        if (newId !== selectedId) {
+          setSelectedId(newId);
+          form.reset({
+            ...data,
+            slug: newId,
+          });
+        } else {
+          form.reset(data);
+        }
+      }
       setMessage("Card saved.");
     } catch (error: any) {
       setMessage(error.message ?? "Unable to save card.");
     }
   }
 
-  function handleCreateCard() {
-    saveCard(
-      {
+  async function handleCreateCard() {
+    try {
+      const result = await saveCard({
         card: {
           name: session.data?.user?.name || "New Card",
           email: session.data?.user?.email || "",
@@ -115,18 +143,13 @@ export default function CardDashboard() {
           template: "minimal",
         },
         selectedCard: undefined,
-      },
-      {
-        onSuccess: (data: any) => {
-          if (data?.card?.id) {
-            applyCard(data.card);
-          }
-        },
-        onError: (error: any) => {
-          setMessage(error.message ?? "Failed to create card.");
-        },
+      });
+      if (result?.card?.id) {
+        applyCard(result.card);
       }
-    );
+    } catch (error: any) {
+      setMessage(error.message ?? "Failed to create card.");
+    }
   }
 
   if (session.isPending) {
@@ -200,18 +223,23 @@ export default function CardDashboard() {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start">
                 <IdentityTile />
                 <ThemeTile themes={themes} />
-                <ContactSkillsTile />
-                <BioTile />
-                <div className="lg:col-span-2">
+                <div className="sm:col-span-2">
                   <ProjectsTile
                     works={selectedCard.works}
                     cardId={selectedCard.id}
                   />
                 </div>
+                <div className="sm:col-span-2">
+                  <BioTile />
+                </div>
+                <ContactSkillsTile />
                 <SecurityTile />
+                <div className="sm:col-span-2">
+                  <AdminTile />
+                </div>
               </div>
             </FormProvider>
           </div>

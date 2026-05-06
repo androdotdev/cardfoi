@@ -41,7 +41,7 @@ export default function ProjectsTile({ works, cardId }: ProjectsTileProps) {
   }
 
   return (
-    <div className="bg-white border border-gray-100 rounded-xl p-5 max-h-[400px] overflow-y-auto">
+    <div className={`bg-white border border-gray-100 rounded-xl p-5 ${works.length > 0 ? "max-h-[400px] overflow-y-auto" : ""}`}>
       <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-3">
         Projects
       </p>

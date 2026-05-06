@@ -9,7 +9,7 @@ export async function GET() {
     return NextResponse.json({ cards: [], themes: getThemes(), session: null });
   }
 
-  const cards = await listCards((await isAdmin(session.user.id)) ? undefined : session.user.id);
+  const cards = await listCards(session.user.id);
   return NextResponse.json({ cards, themes: getThemes(), session });
 }
 

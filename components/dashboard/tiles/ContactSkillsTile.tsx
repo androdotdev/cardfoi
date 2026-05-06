@@ -7,7 +7,7 @@ export default function ContactSkillsTile() {
   const { register, formState: { errors } } = useFormContext<CardFormData>();
 
   return (
-    <div className="bg-white border border-gray-100 rounded-xl p-5 h-full">
+    <div className="bg-white border border-gray-100 rounded-xl p-4 h-full">
       <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">
         Contact & Skills
       </p>
