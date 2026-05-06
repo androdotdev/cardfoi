@@ -1,6 +1,10 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
+import { authClient } from "@/lib/auth-client";
+import { useState } from "react";
+import { useStore } from "@nanostores/react";
+import { signingOutStore, setSigningOut } from "@/lib/stores/authStore";
 import type { CardFormData } from "@/components/dashboard/types";
 
 type BentoTopbarProps = {
@@ -8,11 +12,23 @@ type BentoTopbarProps = {
   loading?: boolean;
   showPreview?: boolean;
   onTogglePreview?: () => void;
+  user?: { name?: string; email: string } | null;
 };
 
-export default function BentoTopbar({ onSave, loading = false, showPreview = false, onTogglePreview }: BentoTopbarProps) {
+export default function BentoTopbar({ onSave, loading = false, showPreview = false, onTogglePreview, user }: BentoTopbarProps) {
   const { formState: { isDirty }, watch } = useFormContext<CardFormData>();
   const name = watch("name");
+  const signingOut = useStore(signingOutStore);
+
+  async function handleSignOut() {
+    setSigningOut(true);
+    try {
+      await authClient.signOut();
+      window.location.href = "/";
+    } finally {
+      setSigningOut(false);
+    }
+  }
 
   return (
     <div className="flex items-center gap-3 mb-5">
@@ -27,6 +43,30 @@ export default function BentoTopbar({ onSave, loading = false, showPreview = fal
       )}
 
       <div className="ml-auto flex items-center gap-2">
+        {user && (
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <span className="hidden sm:inline">{user.email}</span>
+            <button
+              onClick={handleSignOut}
+              disabled={signingOut}
+              className="text-xs border border-gray-200 px-3 py-1.5 rounded-full hover:bg-gray-50 disabled:opacity-50 flex items-center gap-1"
+              type="button"
+            >
+              {signingOut ? (
+                <>
+                  <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Signing out...
+                </>
+              ) : (
+                "Sign out"
+              )}
+            </button>
+          </div>
+        )}
+
         {onTogglePreview && (
           <button
             onClick={onTogglePreview}

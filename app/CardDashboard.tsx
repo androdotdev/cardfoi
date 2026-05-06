@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cardSchema } from "@/lib/validation/dashboardSchemas";
@@ -12,18 +13,13 @@ import { useDashboardState } from "@/lib/hooks/useDashboardState";
 
 import BentoTopbar from "@/components/dashboard/BentoTopbar";
 import IdentityTile from "@/components/dashboard/tiles/IdentityTile";
-import ContactTile from "@/components/dashboard/tiles/ContactTile";
+import ContactSkillsTile from "@/components/dashboard/tiles/ContactSkillsTile";
 import BioTile from "@/components/dashboard/tiles/BioTile";
 import ThemeTile from "@/components/dashboard/tiles/ThemeTile";
-import SkillsTile from "@/components/dashboard/tiles/SkillsTile";
 import ProjectsTile from "@/components/dashboard/tiles/ProjectsTile";
-import PasswordTile from "@/components/dashboard/tiles/PasswordTile";
+import SecurityTile from "@/components/dashboard/tiles/SecurityTile";
 
-import ForgotPasswordForm from "@/components/dashboard/ForgotPasswordForm";
-import AuthSection from "@/components/dashboard/AuthSection";
-import DashboardSkeleton from "@/components/dashboard/DashboardSkeleton";
 import PreviewPanel from "@/components/dashboard/PreviewPanel";
-import EmptyState from "@/components/dashboard/EmptyState";
 
 export default function CardDashboard() {
   const session = authClient.useSession();
@@ -36,15 +32,11 @@ export default function CardDashboard() {
 
   const {
     selectedId,
-    showForgotPassword,
-    forgotEmail,
-    message,
     showPreview,
     setShowPreview,
     setSelectedId,
-    setShowForgotPassword,
-    setForgotEmail,
     setMessage,
+    message,
     clearState,
   } = useDashboardState();
 
@@ -55,6 +47,7 @@ export default function CardDashboard() {
     defaultValues: selectedCard
       ? {
           name: selectedCard.name,
+          slug: selectedCard.id,
           email: selectedCard.email,
           phone: selectedCard.phone,
           avatar: selectedCard.avatar ?? "",
@@ -70,9 +63,9 @@ export default function CardDashboard() {
 
   function applyCard(card: UserCard) {
     setSelectedId(card.id);
-    // Reset form with selected card values
     form.reset({
       name: card.name,
+      slug: card.id,
       email: card.email,
       phone: card.phone,
       avatar: card.avatar ?? "",
@@ -83,7 +76,12 @@ export default function CardDashboard() {
     });
   }
 
-  // Watch form values for preview panel
+  useEffect(() => {
+    if (cards.length > 0 && !selectedId && cards[0]) {
+      applyCard(cards[0]);
+    }
+  }, [cards, selectedId]);
+
   const previewName = watch("name");
   const previewEmail = watch("email");
   const previewPhone = watch("phone");
@@ -96,12 +94,46 @@ export default function CardDashboard() {
   async function handleCardSubmit(data: CardFormData) {
     try {
       await saveCard({ card: data, selectedCard });
-      form.reset(data); // mark as clean
+      form.reset(data);
       setMessage("Card saved.");
     } catch (error: any) {
       setMessage(error.message ?? "Unable to save card.");
     }
   }
+
+  function handleCreateCard() {
+    saveCard(
+      {
+        card: {
+          name: session.data?.user?.name || "New Card",
+          email: session.data?.user?.email || "",
+          phone: "0000000000",
+          avatar: "",
+          description: "Brief description about yourself",
+          skills: "",
+          theme: "corporate",
+          template: "minimal",
+        },
+        selectedCard: undefined,
+      },
+      {
+        onSuccess: (data: any) => {
+          if (data?.card?.id) {
+            applyCard(data.card);
+          }
+        },
+        onError: (error: any) => {
+          setMessage(error.message ?? "Failed to create card.");
+        },
+      }
+    );
+  }
+
+  if (session.isPending) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  if (!session.data) return null;
 
   return (
     <>
@@ -120,68 +152,33 @@ export default function CardDashboard() {
         </div>
       )}
 
-      {showForgotPassword ? (
+      {cardsLoading ? (
+        <div className="min-h-screen flex items-center justify-center">Loading...</div>
+      ) : cards.length === 0 ? (
         <div className="min-h-screen bg-gray-50 p-6">
-          <div className="max-w-md mx-auto mt-20">
-            <ForgotPasswordForm
-              onBack={() => {
-                setShowForgotPassword(false);
-                setForgotEmail("");
-                setMessage("");
-              }}
-              setMessage={setMessage}
-            />
+          <div className="max-w-md mx-auto mt-20 text-center">
+            <p className="text-gray-600 mb-4">You don't have any cards yet.</p>
+            <button
+              onClick={handleCreateCard}
+              disabled={cardSaving}
+              className="bg-gray-900 text-white px-4 py-2 rounded text-sm hover:bg-gray-800 disabled:opacity-50"
+            >
+              {cardSaving ? "Creating..." : "Create Card"}
+            </button>
           </div>
         </div>
-      ) : cardsLoading ? (
-        <DashboardSkeleton />
-      ) : !selectedCard ? (
-        <div className="min-h-screen bg-gray-50 p-6">
-          {cards.length === 0 ? (
-            <div className="max-w-md mx-auto mt-20">
-              <AuthSection
-                session={session}
-                onSignOut={async () => {
-                  clearState();
-                }}
-                onAuthSuccess={(loadedCards) => {
-                  if (loadedCards[0]) applyCard(loadedCards[0]);
-                }}
-                setMessage={setMessage}
-                setShowForgotPassword={setShowForgotPassword}
-                setForgotEmail={setForgotEmail}
-              />
-            </div>
-          ) : (
-            <div className="max-w-4xl mx-auto">
-              <EmptyState type="no-selection" />
-              <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {cards.map((card) => (
-                  <button
-                    key={card.id}
-                    onClick={() => applyCard(card)}
-                    className="bg-white border border-gray-100 rounded-xl p-4 text-left hover:border-gray-300 transition-colors"
-                  >
-                    <p className="text-sm font-medium">{card.name}</p>
-                    <p className="text-[10px] text-gray-400">
-                      {card.email}
-                    </p>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      ) : (
+      ) : selectedCard ? (
         <div className="flex min-h-screen">
-          {/* Main Content - reflows when preview is open */}
-          <div className={`transition-all duration-300 ${showPreview ? 'w-[calc(100%-280px)]' : 'w-full'} min-h-screen bg-gray-50 p-4 sm:p-6`}>
+          <div
+            className={`transition-all duration-300 ${showPreview ? "w-[calc(100%-400px)]" : "w-full"} min-h-screen bg-[#f5f5f3] p-4 sm:p-6`}
+          >
             <FormProvider {...form}>
               <BentoTopbar
                 onSave={form.handleSubmit(handleCardSubmit)}
                 loading={cardSaving}
                 showPreview={showPreview}
                 onTogglePreview={() => setShowPreview(!showPreview)}
+                user={session.data?.user ?? null}
               />
 
               {cards.length > 1 && (
@@ -203,39 +200,41 @@ export default function CardDashboard() {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
                 <IdentityTile />
-                <ContactTile />
                 <ThemeTile themes={themes} />
+                <ContactSkillsTile />
                 <BioTile />
-                <SkillsTile />
-                <ProjectsTile
-                  works={selectedCard.works}
-                  cardId={selectedCard.id}
-                />
-                <PasswordTile />
+                <div className="lg:col-span-2">
+                  <ProjectsTile
+                    works={selectedCard.works}
+                    cardId={selectedCard.id}
+                  />
+                </div>
+                <SecurityTile />
               </div>
             </FormProvider>
           </div>
 
-              {/* Preview Panel */}
-              {showPreview && (
-                <PreviewPanel
-                  onClose={() => setShowPreview(false)}
-                  cardId={selectedCard.id}
-                  name={previewName || ""}
-                  email={previewEmail || ""}
-                  phone={previewPhone || ""}
-                  avatar={previewAvatar || ""}
-                  description={previewDescription || ""}
-                  skills={previewSkills || ""}
-                  theme={previewTheme || "corporate"}
-                  template={previewTemplate || "minimal"}
-                  onTemplateChange={(newTemplate) => setValue("template", newTemplate, { shouldDirty: true })}
-                />
-              )}
+          {showPreview && (
+            <PreviewPanel
+              onClose={() => setShowPreview(false)}
+              cardId={selectedCard.id}
+              name={previewName || ""}
+              email={previewEmail || ""}
+              phone={previewPhone || ""}
+              avatar={previewAvatar || ""}
+              description={previewDescription || ""}
+              skills={previewSkills || ""}
+              theme={previewTheme || "corporate"}
+              template={previewTemplate || "minimal"}
+              onTemplateChange={(newTemplate) =>
+                setValue("template", newTemplate, { shouldDirty: true })
+              }
+            />
+          )}
         </div>
-      )}
+      ) : null}
     </>
   );
 }
