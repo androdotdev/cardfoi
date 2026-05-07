@@ -165,7 +165,7 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                       {/* Show thumbnail for image/video */}
                       {work.type === "image" && (
                         <img
-                          src={`/api/media/${work.id}`}
+                          src={work.url}
                           alt=""
                           className="ml-2 h-10 w-10 rounded object-cover"
                           draggable="false"

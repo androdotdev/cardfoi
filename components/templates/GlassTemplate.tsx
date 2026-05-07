@@ -147,7 +147,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                 >
                   {work.type === "image" && (
                     <img
-                      src={`/api/media/${work.id}`}
+                      src={work.url}
                       alt=""
                       className="mb-3 aspect-video w-full rounded-xl object-cover cursor-pointer hover:opacity-90 transition-opacity"
                       onClick={() => openModal(i)}
@@ -157,7 +157,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                   )}
                   {work.type === "video" && (
                     <video
-                      src={`/api/media/${work.id}`}
+                      src={work.url}
                       className="mb-3 aspect-video w-full rounded-xl"
                       controls
                       controlsList="nodownload"

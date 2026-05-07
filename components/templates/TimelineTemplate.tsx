@@ -122,7 +122,7 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
                       )}
                       {work.type === "image" && (
                         <img
-                          src={`/api/media/${work.id}`}
+                          src={work.url}
                           alt=""
                           className="mt-3 w-full rounded-xl cursor-pointer hover:opacity-90 transition-opacity"
                           onClick={() => openModal(i)}
@@ -132,7 +132,7 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
                       )}
                       {work.type === "video" && (
                         <video
-                          src={`/api/media/${work.id}`}
+                          src={work.url}
                           className="mt-3 w-full rounded-xl"
                           controls
                           controlsList="nodownload"

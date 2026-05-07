@@ -152,7 +152,7 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
                       {/* Thumbnail for image/video */}
                       {work.type === "image" && (
                         <img
-                          src={`/api/media/${work.id}`}
+                          src={work.url}
                           alt=""
                           className="mt-2 h-16 w-16 rounded object-cover"
                           draggable="false"

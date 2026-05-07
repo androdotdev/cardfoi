@@ -20,6 +20,23 @@ export const metadata: Metadata = {
   title: "Cardfoi",
   description:
     "Shareable profile cards for developers, freelancers, and creators",
+  metadataBase: new URL("https://cardfoi.vercel.app"),
+  openGraph: {
+    type: "website",
+    siteName: "Cardfoi",
+    title: "Cardfoi - Shareable Profile Cards",
+    description: "Create your developer portfolio card in minutes",
+    images: ["/og-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Cardfoi - Shareable Profile Cards",
+    description: "Create your developer portfolio card in minutes",
+    images: ["/og-image.png"],
+  },
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default async function RootLayout({

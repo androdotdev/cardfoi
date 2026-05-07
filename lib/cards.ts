@@ -142,14 +142,19 @@ function normalizeCard(row: typeof cards.$inferSelect, cardWorks: (typeof works.
     skills: row.skills ?? [],
     theme: row.theme,
     template: row.template ?? "minimal",
-    works: cardWorks.map((work) => ({
-      id: work.id,
-      type: work.type as WorkMedia["type"],
-      url: work.url,
-      title: work.title,
-      description: work.description,
-      cloudinaryPublicId: work.cloudinaryPublicId
-    })),
+    works: cardWorks.map((work) => {
+      const media = isMediaType(work.type);
+      return {
+        id: work.id,
+        type: work.type as WorkMedia["type"],
+        // Return proxy URL for media types, original URL for links
+        url: media ? `/api/media/${work.id}` : work.url,
+        title: work.title,
+        description: work.description,
+        // Don't expose cloudinaryPublicId to API consumers
+        cloudinaryPublicId: media ? undefined : work.cloudinaryPublicId,
+      };
+    }),
     createdAt: toIso(row.createdAt),
     updatedAt: toIso(row.updatedAt)
   };
@@ -157,6 +162,11 @@ function normalizeCard(row: typeof cards.$inferSelect, cardWorks: (typeof works.
 
 export function getThemes() {
   return themes;
+}
+
+// Helper to check if work type is media (image/video)
+function isMediaType(type: string): boolean {
+  return type === "image" || type === "video";
 }
 
 export async function getCurrentSession() {

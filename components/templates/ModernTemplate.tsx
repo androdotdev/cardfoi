@@ -127,7 +127,7 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
                 >
                   {work.type === "image" && (
                     <img
-                      src={`/api/media/${work.id}`}
+                      src={work.url}
                       alt=""
                       className="mb-4 aspect-video w-full cursor-pointer rounded-lg object-cover transition-opacity hover:opacity-90"
                       onClick={() => openModal(i)}
@@ -137,7 +137,7 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
                   )}
                   {work.type === "video" && (
                     <video
-                      src={`/api/media/${work.id}`}
+                      src={work.url}
                       className="mb-4 aspect-video w-full rounded-lg"
                       controls
                       controlsList="nodownload"
