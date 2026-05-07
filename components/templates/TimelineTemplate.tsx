@@ -1,17 +1,30 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Mail, Phone } from "lucide-react";
 import type { UserCard } from "@/lib/cards";
+import MediaModal from "@/components/shared/MediaModal";
+import { useCardTheme } from "@/lib/hooks/useCardTheme";
 
 export default function TimelineTemplate({ card }: { card: UserCard }) {
+  useCardTheme(card.theme);
   const skills = card.skills ?? [];
   const works = card.works ?? [];
+  const mediaWorks = works.filter(
+    (w) => w.type === "image" || w.type === "video",
+  );
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalIndex, setModalIndex] = useState(0);
+
+  function openModal(index: number) {
+    setModalIndex(index);
+    setModalOpen(true);
+  }
 
   return (
     <main
       className="min-h-screen bg-base-200 p-4 sm:p-8"
-      data-theme={card.theme}
     >
       <div className="mx-auto max-w-3xl">
         {/* Header */}
@@ -71,7 +84,7 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
             </p>
 
             <div className="relative">
-              {/* Vertical line — always left-aligned, avoids mobile breakage */}
+              {/* Vertical line */}
               <div className="absolute left-5 top-0 h-full w-px bg-base-300" />
 
               <div className="space-y-6">
@@ -95,11 +108,11 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
                           {work.title}
                         </h3>
                         <a
-                          href={work.url}
+                          href={work.type === "link" ? work.url : undefined}
                           target="_blank"
                           className="btn btn-xs btn-ghost shrink-0"
                         >
-                          <ExternalLink size={12} />
+                          {work.type === "link" ? <ExternalLink size={12} /> : null}
                         </a>
                       </div>
                       {work.description && (
@@ -109,16 +122,22 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
                       )}
                       {work.type === "image" && (
                         <img
-                          src={work.url}
+                          src={`/api/media/${work.id}`}
                           alt=""
-                          className="mt-3 w-full rounded-xl"
+                          className="mt-3 w-full rounded-xl cursor-pointer hover:opacity-90 transition-opacity"
+                          onClick={() => openModal(i)}
+                          draggable="false"
+                          onContextMenu={(e) => e.preventDefault()}
                         />
                       )}
                       {work.type === "video" && (
                         <video
-                          src={work.url}
+                          src={`/api/media/${work.id}`}
                           className="mt-3 w-full rounded-xl"
                           controls
+                          controlsList="nodownload"
+                          draggable="false"
+                          onContextMenu={(e) => e.preventDefault()}
                         />
                       )}
                     </div>
@@ -129,6 +148,15 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
           </div>
         )}
       </div>
+
+      {/* Media Modal */}
+      <MediaModal
+        works={mediaWorks}
+        currentIndex={modalIndex}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onNavigate={setModalIndex}
+      />
     </main>
   );
 }

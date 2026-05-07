@@ -2,18 +2,32 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { UserCard } from "@/lib/cards";
+import MediaModal from "@/components/shared/MediaModal";
+import { useCardTheme } from "@/lib/hooks/useCardTheme";
 
 export default function TerminalTemplate({ card }: { card: UserCard }) {
+  useCardTheme(card.theme);
   const [lines, setLines] = useState<string[]>([]);
   const [done, setDone] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
+
+  const works = card.works ?? [];
+  const mediaWorks = works.filter(
+    (w) => w.type === "image" || w.type === "video",
+  );
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalIndex, setModalIndex] = useState(0);
+
+  function openModal(index: number) {
+    setModalIndex(index);
+    setModalOpen(true);
+  }
 
   useEffect(() => {
     setLines([]);
     setDone(false);
 
     const skills = card.skills ?? [];
-    const works = card.works ?? [];
 
     const commands = [
       `> whoami`,
@@ -43,7 +57,6 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
       if (i < commands.length) {
         const line = commands[i];
         if (typeof line === "string") {
-          // ← only push actual strings
           setLines((prev) => [...prev, line]);
         }
         i++;
@@ -62,7 +75,6 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
   return (
     <main
       className="min-h-screen bg-[#0a0e14] p-4 font-mono text-[#a6e3a1]"
-      data-theme={card.theme}
     >
       <div className="mx-auto max-w-3xl">
         <div className="overflow-hidden rounded-lg border border-[#2a2f3a] bg-[#13171f] shadow-2xl">
@@ -82,7 +94,7 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
             className="h-[80vh] overflow-y-auto p-4 text-sm leading-relaxed"
           >
             {lines.map((line, index) => {
-              if (typeof line !== "string") return null; // ← safety net
+              if (typeof line !== "string") return null;
               if (line.startsWith("> _")) {
                 return (
                   <div key={index} className="flex items-center">
@@ -122,31 +134,56 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
               );
             })}
 
-            {(card.works ?? []).length > 0 && done && (
+            {works.length > 0 && done && (
               <div className="mt-4 border-t border-[#2a2f3a] pt-4">
                 <div className="mb-2 text-xs text-[#6c7086]">
                   # click to open:
                 </div>
-                {(card.works ?? []).map((work) => (
-                  <a
-                    key={work.id}
-                    href={work.url}
-                    target="_blank"
-                    className="block rounded px-2 py-1 text-[#89b4fa] transition-colors hover:bg-[#2a2f3a]"
-                  >
-                    ► {work.title}
-                    {work.description ? (
-                      <span className="ml-2 text-xs text-[#6c7086]">
-                        {work.description}
-                      </span>
-                    ) : null}
-                  </a>
+                {works.map((work, i) => (
+                  work.type === "link" ? (
+                    <a
+                      key={work.id}
+                      href={work.url}
+                      target="_blank"
+                      className="block rounded px-2 py-1 text-[#89b4fa] transition-colors hover:bg-[#2a2f3a]"
+                    >
+                      ► {work.title}
+                      {work.description ? (
+                        <span className="ml-2 text-xs text-[#6c7086]">
+                          {work.description}
+                        </span>
+                      ) : null}
+                    </a>
+                  ) : (
+                    <div
+                      key={work.id}
+                      className="block rounded px-2 py-1 text-[#89b4fa] transition-colors hover:bg-[#2a2f3a] cursor-pointer"
+                      onClick={() => openModal(i)}
+                    >
+                      ► {work.title}
+                      {work.description ? (
+                        <span className="ml-2 text-xs text-[#6c7086]">
+                          {work.description}
+                        </span>
+                      ) : null}
+                      <span className="ml-2 text-[#f9e2af]">[view media]</span>
+                    </div>
+                  )
                 ))}
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Media Modal */}
+      <MediaModal
+        works={mediaWorks}
+        currentIndex={modalIndex}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onNavigate={setModalIndex}
+      />
     </main>
   );
 }

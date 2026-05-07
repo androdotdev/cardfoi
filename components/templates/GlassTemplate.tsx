@@ -1,18 +1,31 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Mail, Phone } from "lucide-react";
 import type { UserCard } from "@/lib/cards";
+import MediaModal from "@/components/shared/MediaModal";
+import { useCardTheme } from "@/lib/hooks/useCardTheme";
 
 export default function GlassTemplate({ card }: { card: UserCard }) {
+  useCardTheme(card.theme);
   const skills = card.skills ?? [];
   const works = card.works ?? [];
+  const mediaWorks = works.filter(
+    (w) => w.type === "image" || w.type === "video",
+  );
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalIndex, setModalIndex] = useState(0);
+
+  function openModal(index: number) {
+    setModalIndex(index);
+    setModalOpen(true);
+  }
 
   return (
-    <main
-      className="min-h-screen bg-base-200 p-4 sm:p-8"
-      data-theme={card.theme}
-    >
+      <main
+        className="min-h-screen bg-base-200 p-4 sm:p-8"
+      >
       <div className="mx-auto max-w-4xl">
         {/* Glass hero card */}
         <motion.div
@@ -134,16 +147,22 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                 >
                   {work.type === "image" && (
                     <img
-                      src={work.url}
+                      src={`/api/media/${work.id}`}
                       alt=""
-                      className="mb-3 aspect-video w-full rounded-xl object-cover"
+                      className="mb-3 aspect-video w-full rounded-xl object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                      onClick={() => openModal(i)}
+                      draggable="false"
+                      onContextMenu={(e) => e.preventDefault()}
                     />
                   )}
                   {work.type === "video" && (
                     <video
-                      src={work.url}
+                      src={`/api/media/${work.id}`}
                       className="mb-3 aspect-video w-full rounded-xl"
                       controls
+                      controlsList="nodownload"
+                      draggable="false"
+                      onContextMenu={(e) => e.preventDefault()}
                     />
                   )}
                   <h3 className="font-semibold text-base-content">
@@ -154,20 +173,35 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                       {work.description}
                     </p>
                   )}
-                  <a
-                    href={work.url}
-                    target="_blank"
-                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-                  >
-                    View project
-                    <ExternalLink size={13} />
-                  </a>
+                  {work.type === "link" && (
+                    <a
+                      href={work.url}
+                      target="_blank"
+                      className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                    >
+                      View project <ExternalLink size={12} />
+                    </a>
+                  )}
+                  {work.type !== "link" && (
+                    <span className="mt-3 inline-block text-xs text-base-content/50">
+                      Media uploaded ✓
+                    </span>
+                  )}
                 </motion.div>
               ))}
             </div>
           </motion.section>
         )}
       </div>
+
+      {/* Media Modal */}
+      <MediaModal
+        works={mediaWorks}
+        currentIndex={modalIndex}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onNavigate={setModalIndex}
+      />
     </main>
   );
 }

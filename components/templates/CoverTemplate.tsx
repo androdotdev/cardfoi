@@ -1,17 +1,30 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Mail, Phone } from "lucide-react";
 import type { UserCard } from "@/lib/cards";
+import MediaModal from "@/components/shared/MediaModal";
+import { useCardTheme } from "@/lib/hooks/useCardTheme";
 
 export default function CoverTemplate({ card }: { card: UserCard }) {
+  useCardTheme(card.theme);
   const skills = card.skills ?? [];
   const works = card.works ?? [];
+  const mediaWorks = works.filter(
+    (w) => w.type === "image" || w.type === "video",
+  );
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalIndex, setModalIndex] = useState(0);
+
+  function openModal(index: number) {
+    setModalIndex(index);
+    setModalOpen(true);
+  }
 
   return (
     <main
       className="min-h-screen bg-base-200 flex items-start justify-center p-4 pt-0 md:p-8 md:pt-0"
-      data-theme={card.theme}
     >
       <div className="w-full max-w-md">
         {/* Full-bleed cover */}
@@ -111,34 +124,76 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                 Projects
               </p>
               <div className="space-y-2">
-                {works.map((work) => (
-                  <a
-                    key={work.id}
-                    href={work.url}
-                    target="_blank"
-                    className="group flex items-center justify-between rounded-xl bg-base-200 px-4 py-3 transition-colors hover:bg-base-300"
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-base-content">
-                        {work.title}
-                      </p>
-                      {work.description && (
-                        <p className="truncate text-xs text-base-content/50">
-                          {work.description}
+                {works.map((work, i) => (
+                  work.type === "link" ? (
+                    <a
+                      key={work.id}
+                      href={work.url}
+                      target="_blank"
+                      className="group flex items-center justify-between rounded-xl bg-base-200 px-4 py-3 transition-colors hover:bg-base-300"
+                    >
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium text-base-content">
+                          {work.title}
                         </p>
+                        {work.description && (
+                          <p className="truncate text-xs text-base-content/50">
+                            {work.description}
+                          </p>
+                        )}
+                      </div>
+                      <span className="ml-2 shrink-0 text-base-content/30 group-hover:text-primary transition-colors">
+                        <ExternalLink size={13} />
+                      </span>
+                    </a>
+                  ) : (
+                    <div
+                      key={work.id}
+                      className="group flex items-center justify-between rounded-xl bg-base-200 px-4 py-3 transition-colors hover:bg-base-300 cursor-pointer"
+                      onClick={() => openModal(i)}
+                    >
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium text-base-content">
+                          {work.title}
+                        </p>
+                        {work.description && (
+                          <p className="truncate text-xs text-base-content/50">
+                            {work.description}
+                          </p>
+                        )}
+                      </div>
+                      {/* Show thumbnail for image/video */}
+                      {work.type === "image" && (
+                        <img
+                          src={`/api/media/${work.id}`}
+                          alt=""
+                          className="ml-2 h-10 w-10 rounded object-cover"
+                          draggable="false"
+                          onContextMenu={(e) => e.preventDefault()}
+                        />
+                      )}
+                      {work.type === "video" && (
+                        <div className="ml-2 flex h-10 w-10 items-center justify-center rounded bg-base-300">
+                          ▶
+                        </div>
                       )}
                     </div>
-                    <ExternalLink
-                      size={13}
-                      className="ml-2 shrink-0 text-base-content/30 group-hover:text-primary transition-colors"
-                    />
-                  </a>
+                  )
                 ))}
               </div>
             </div>
           )}
         </motion.div>
       </div>
+
+      {/* Media Modal */}
+      <MediaModal
+        works={mediaWorks}
+        currentIndex={modalIndex}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onNavigate={setModalIndex}
+      />
     </main>
   );
 }

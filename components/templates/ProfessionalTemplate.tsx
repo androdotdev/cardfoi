@@ -1,20 +1,33 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Mail, Phone } from "lucide-react";
 import type { UserCard } from "@/lib/cards";
+import MediaModal from "@/components/shared/MediaModal";
+import { useCardTheme } from "@/lib/hooks/useCardTheme";
 
 export default function ProfessionalTemplate({ card }: { card: UserCard }) {
+  useCardTheme(card.theme);
   const skills = card.skills ?? [];
   const works = card.works ?? [];
+  const mediaWorks = works.filter(
+    (w) => w.type === "image" || w.type === "video",
+  );
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalIndex, setModalIndex] = useState(0);
+
+  function openModal(index: number) {
+    setModalIndex(index);
+    setModalOpen(true);
+  }
 
   return (
     <main
       className="min-h-screen bg-base-200 px-4 py-8 sm:py-12"
-      data-theme={card.theme}
     >
       <div className="mx-auto max-w-5xl">
-        {/* Header */}
+        {/* Header card */}
         <motion.header
           className="overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-sm"
           initial={{ opacity: 0, y: 16 }}
@@ -22,7 +35,7 @@ export default function ProfessionalTemplate({ card }: { card: UserCard }) {
           transition={{ duration: 0.5 }}
         >
           <div className="border-b border-base-300 bg-base-200/60 px-6 py-1.5">
-            <p className="text-xs font-medium text-base-content/40 uppercase tracking-widest">
+            <p className="text-xs font-medium uppercase tracking-widest text-base-content/40">
               Profile
             </p>
           </div>
@@ -44,7 +57,7 @@ export default function ProfessionalTemplate({ card }: { card: UserCard }) {
               <h1 className="text-2xl font-bold text-base-content">
                 {card.name}
               </h1>
-              <p className="mt-1.5 text-base-content/60 leading-relaxed">
+              <p className="mt-1.5 leading-relaxed text-base-content/60">
                 {card.description}
               </p>
               {skills.length > 0 && (
@@ -87,11 +100,9 @@ export default function ProfessionalTemplate({ card }: { card: UserCard }) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-base-content/40">
-                Experience & Projects
-              </h2>
-            </div>
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-base-content/40">
+              Experience & Projects
+            </p>
             <div className="grid gap-4 sm:grid-cols-2">
               {works.map((work, i) => (
                 <motion.article
@@ -103,9 +114,22 @@ export default function ProfessionalTemplate({ card }: { card: UserCard }) {
                 >
                   {work.type === "image" && (
                     <img
-                      src={work.url}
+                      src={`/api/media/${work.id}`}
                       alt=""
-                      className="mb-4 aspect-video w-full rounded-lg object-cover"
+                      className="mb-3 aspect-video w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                      onClick={() => openModal(i)}
+                      draggable="false"
+                      onContextMenu={(e) => e.preventDefault()}
+                    />
+                  )}
+                  {work.type === "video" && (
+                    <video
+                      src={`/api/media/${work.id}`}
+                      className="mb-3 aspect-video w-full rounded-lg"
+                      controls
+                      controlsList="nodownload"
+                      draggable="false"
+                      onContextMenu={(e) => e.preventDefault()}
                     />
                   )}
                   {work.type === "video" && (
@@ -123,20 +147,35 @@ export default function ProfessionalTemplate({ card }: { card: UserCard }) {
                       {work.description}
                     </p>
                   )}
-                  <a
-                    href={work.url}
-                    target="_blank"
-                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-base-content hover:text-primary transition-colors"
-                  >
-                    View project
-                    <ExternalLink size={13} />
-                  </a>
+                  {work.type === "link" && (
+                    <a
+                      href={work.url}
+                      target="_blank"
+                      className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-base-content hover:text-primary transition-colors"
+                    >
+                      View project
+                      <ExternalLink size={13} />
+                    </a>
+                  )}
+                  {work.type !== "link" && (
+                    <span className="mt-3 inline-block text-xs text-base-content/50">
+                      Media uploaded ✓
+                    </span>
+                  )}
                 </motion.article>
               ))}
             </div>
           </motion.section>
         )}
       </div>
+
+      <MediaModal
+        works={mediaWorks}
+        currentIndex={modalIndex}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onNavigate={setModalIndex}
+      />
     </main>
   );
 }

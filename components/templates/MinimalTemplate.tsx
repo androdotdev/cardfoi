@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Mail, Phone } from "lucide-react";
 import type { UserCard } from "@/lib/cards";
+import MediaModal from "@/components/shared/MediaModal";
+import { useCardTheme } from "@/lib/hooks/useCardTheme";
 
 const stagger = {
   visible: { transition: { staggerChildren: 0.08 } },
@@ -15,20 +18,23 @@ const fadeUp = {
 };
 
 export default function MinimalTemplate({ card }: { card: UserCard }) {
+  useCardTheme(card.theme);
   const skills = card.skills ?? [];
   const works = card.works ?? [];
+  const mediaWorks = works.filter(w => w.type === "image" || w.type === "video");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalIndex, setModalIndex] = useState(0);
+
+  function openModal(index: number) {
+    setModalIndex(index);
+    setModalOpen(true);
+  }
 
   return (
     <main
       className="min-h-screen bg-base-100 px-6 py-16 md:px-12"
-      data-theme={card.theme}
     >
-      <motion.div
-        className="mx-auto max-w-2xl"
-        initial="hidden"
-        animate="visible"
-        variants={stagger}
-      >
+      <div className="mx-auto max-w-2xl">
         {/* Header */}
         <motion.div variants={fadeUp} className="mb-12 flex items-start gap-6">
           <div className="shrink-0">
@@ -101,35 +107,81 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
               Work
             </p>
             <div className="space-y-px">
-              {works.map((work) => (
-                <motion.a
-                  key={work.id}
-                  href={work.url}
-                  target="_blank"
-                  className="group flex items-center justify-between py-4 border-b border-base-200 hover:border-primary/30 transition-colors"
-                  whileHover={{ x: 4 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                >
-                  <div>
-                    <p className="font-medium text-base-content group-hover:text-primary transition-colors">
-                      {work.title}
-                    </p>
-                    {work.description && (
-                      <p className="mt-0.5 text-sm text-base-content/50">
-                        {work.description}
+              {works.map((work, i) => (
+                work.type === "link" ? (
+                  <motion.a
+                    key={work.id}
+                    href={work.url}
+                    target="_blank"
+                    className="group flex items-center justify-between py-4 border-b border-base-200 hover:border-primary/30 transition-colors"
+                    whileHover={{ x: 4 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  >
+                    <div>
+                      <p className="font-medium text-base-content group-hover:text-primary transition-colors">
+                        {work.title}
                       </p>
-                    )}
-                  </div>
-                  <ExternalLink
-                    size={14}
-                    className="shrink-0 text-base-content/30 group-hover:text-primary transition-colors"
-                  />
-                </motion.a>
+                      {work.description && (
+                        <p className="mt-0.5 text-sm text-base-content/50">
+                          {work.description}
+                        </p>
+                      )}
+                    </div>
+                    <ExternalLink
+                      size={14}
+                      className="shrink-0 text-base-content/30 group-hover:text-primary transition-colors"
+                    />
+                  </motion.a>
+                ) : (
+                  <motion.div
+                    key={work.id}
+                    className="group flex items-center justify-between py-4 border-b border-base-200 hover:border-primary/30 transition-colors cursor-pointer"
+                    whileHover={{ x: 4 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    onClick={() => openModal(i)}
+                  >
+                    <div>
+                      <p className="font-medium text-base-content group-hover:text-primary transition-colors">
+                        {work.title}
+                      </p>
+                      {work.description && (
+                        <p className="mt-0.5 text-sm text-base-content/50">
+                          {work.description}
+                        </p>
+                      )}
+                      {/* Thumbnail for image/video */}
+                      {work.type === "image" && (
+                        <img
+                          src={`/api/media/${work.id}`}
+                          alt=""
+                          className="mt-2 h-16 w-16 rounded object-cover"
+                          draggable="false"
+                          onContextMenu={(e) => e.preventDefault()}
+                        />
+                      )}
+                      {work.type === "video" && (
+                        <div className="mt-2 inline-flex items-center gap-1 text-xs text-base-content/50">
+                          ▶ Watch video
+                        </div>
+                      )}
+                    </div>
+                    <span className="text-xs text-base-content/50">Media uploaded ✓</span>
+                  </motion.div>
+                )
               ))}
             </div>
           </motion.div>
         )}
-      </motion.div>
+      </div>
+
+      {/* Media Modal */}
+      <MediaModal
+        works={mediaWorks}
+        currentIndex={modalIndex}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onNavigate={setModalIndex}
+      />
     </main>
   );
 }

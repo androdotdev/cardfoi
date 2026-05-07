@@ -18,6 +18,7 @@ export default function ProjectsTile({ works, cardId }: ProjectsTileProps) {
   const [url, setUrl] = useState("");
   const [type, setType] = useState<"link" | "image" | "video">("link");
   const [cloudinaryPublicId, setCloudinaryPublicId] = useState("");
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const saveWork = useSaveWork();
   const deleteWork = useDeleteWork();
@@ -40,7 +41,13 @@ export default function ProjectsTile({ works, cardId }: ProjectsTileProps) {
   }
 
   function handleRemove(workId: string) {
-    deleteWork.mutate({ cardId, workId });
+    setDeletingId(workId);
+    deleteWork.mutate(
+      { cardId, workId },
+      {
+        onSettled: () => setDeletingId(null),
+      }
+    );
   }
 
   return (
@@ -53,33 +60,51 @@ export default function ProjectsTile({ works, cardId }: ProjectsTileProps) {
         <p className="text-xs text-gray-400 py-2">No projects yet</p>
       )}
 
-      {works.map((work) => (
-        <div
-          key={work.id}
-          className="flex items-center gap-2 py-2 border-b border-gray-50 last:border-0"
-        >
-          <div className="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0" />
-          <span className="text-sm flex-1">{work.title}</span>
-          {work.url && (
-            <a
-              href={work.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-0.5"
+          {works.map((work) => (
+            <div
+              key={work.id}
+              className="flex items-center gap-2 py-2 border-b border-gray-50 last:border-0"
             >
-              {work.url.replace(/^https?:\/\//, "")} <ExternalLink size={12} />
-            </a>
-          )}
-          <button
-            type="button"
-            onClick={() => handleRemove(work.id)}
-            className="text-gray-300 hover:text-red-500 transition-colors"
-            title="Delete"
-          >
-            <Trash2 size={14} />
-          </button>
-        </div>
-      ))}
+              {deletingId === work.id ? (
+                <>
+                  <div className="w-2 h-2 rounded-full bg-gray-200 animate-pulse flex-shrink-0" />
+                  <div className="h-4 flex-1 bg-gray-200 rounded animate-pulse" />
+                  <div className="w-4 h-4 bg-gray-200 rounded animate-pulse" />
+                </>
+              ) : (
+                <>
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0" />
+                  <span className="text-sm flex-1">{work.title}</span>
+                  {work.type === "link" && work.url && (
+                    <a
+                      href={work.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-0.5"
+                    >
+                      {work.url.replace(/^https?:\/\//, "")} <ExternalLink size={12} />
+                    </a>
+                  )}
+                  {work.type !== "link" && (
+                    <span className="text-xs text-gray-400">Media uploaded ✓</span>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => handleRemove(work.id)}
+                    className="text-gray-300 hover:text-red-500 transition-colors disabled:opacity-50"
+                    title="Delete"
+                    disabled={deletingId === work.id}
+                  >
+                    {deletingId === work.id ? (
+                      <span className="loading loading-spinner loading-xs" />
+                    ) : (
+                      <Trash2 size={14} />
+                    )}
+                  </button>
+                </>
+              )}
+            </div>
+          ))}
 
       {showForm && (
         <div className="mt-3 pt-3 border-t border-gray-100 space-y-2">

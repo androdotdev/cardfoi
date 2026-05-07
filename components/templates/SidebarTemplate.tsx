@@ -1,17 +1,30 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Mail, Phone } from "lucide-react";
 import type { UserCard } from "@/lib/cards";
+import MediaModal from "@/components/shared/MediaModal";
+import { useCardTheme } from "@/lib/hooks/useCardTheme";
 
 export default function SidebarTemplate({ card }: { card: UserCard }) {
+  useCardTheme(card.theme);
   const skills = card.skills ?? [];
   const works = card.works ?? [];
+  const mediaWorks = works.filter(
+    (w) => w.type === "image" || w.type === "video",
+  );
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalIndex, setModalIndex] = useState(0);
+
+  function openModal(index: number) {
+    setModalIndex(index);
+    setModalOpen(true);
+  }
 
   return (
     <main
       className="min-h-screen bg-base-200 p-4 sm:p-6 lg:p-8"
-      data-theme={card.theme}
     >
       <motion.div
         className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-sm"
@@ -54,14 +67,14 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
             >
               <a
                 href={`mailto:${card.email}`}
-                className="flex items-center gap-2.5 text-sm text-base-100/60 hover:text-base-100 transition-colors"
+                className="flex items-center gap-2.5 text-sm text-base-100/60 transition-colors hover:text-base-100"
               >
                 <Mail size={13} />
                 <span className="truncate">{card.email}</span>
               </a>
               <a
                 href={`tel:${card.phone}`}
-                className="flex items-center gap-2.5 text-sm text-base-100/60 hover:text-base-100 transition-colors"
+                className="flex items-center gap-2.5 text-sm text-base-100/60 transition-colors hover:text-base-100"
               >
                 <Phone size={13} />
                 {card.phone}
@@ -118,19 +131,34 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                           </p>
                         )}
                       </div>
-                      <a
-                        href={work.url}
-                        target="_blank"
-                        className="btn btn-sm btn-ghost shrink-0"
-                      >
-                        <ExternalLink size={14} />
-                      </a>
+                      {work.type === "link" && (
+                        <a
+                          href={work.url}
+                          target="_blank"
+                          className="btn btn-sm btn-ghost shrink-0"
+                        >
+                          <ExternalLink size={14} />
+                        </a>
+                      )}
                     </div>
                     {work.type === "image" && (
                       <img
-                        src={work.url}
+                        src={`/api/media/${work.id}`}
                         alt=""
+                        className="mt-3 w-full max-w-lg cursor-pointer hover:opacity-90 transition-opacity"
+                        onClick={() => openModal(i)}
+                        draggable="false"
+                        onContextMenu={(e) => e.preventDefault()}
+                      />
+                    )}
+                    {work.type === "video" && (
+                      <video
+                        src={`/api/media/${work.id}`}
                         className="mt-3 w-full max-w-lg rounded-xl"
+                        controls
+                        controlsList="nodownload"
+                        draggable="false"
+                        onContextMenu={(e) => e.preventDefault()}
                       />
                     )}
                     {work.type === "video" && (
@@ -149,6 +177,14 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
           </div>
         </div>
       </motion.div>
+
+      <MediaModal
+        works={mediaWorks}
+        currentIndex={modalIndex}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onNavigate={setModalIndex}
+      />
     </main>
   );
 }

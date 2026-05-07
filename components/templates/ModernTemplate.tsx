@@ -1,15 +1,29 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Mail, Phone, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Mail, Phone } from "lucide-react";
 import type { UserCard } from "@/lib/cards";
+import MediaModal from "@/components/shared/MediaModal";
+import { useCardTheme } from "@/lib/hooks/useCardTheme";
 
 export default function ModernTemplate({ card }: { card: UserCard }) {
+  useCardTheme(card.theme);
   const skills = card.skills ?? [];
   const works = card.works ?? [];
+  const mediaWorks = works.filter(
+    (w) => w.type === "image" || w.type === "video",
+  );
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalIndex, setModalIndex] = useState(0);
+
+  function openModal(index: number) {
+    setModalIndex(index);
+    setModalOpen(true);
+  }
 
   return (
-    <main className="min-h-screen bg-base-200" data-theme={card.theme}>
+    <main className="min-h-screen bg-base-200">
       {/* Bold hero strip */}
       <motion.div
         className="bg-base-content px-6 py-10 md:px-14 md:py-14"
@@ -17,7 +31,7 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="mx-auto max-w-5xl flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        <div className="mx-auto flex max-w-5xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-5">
             {card.avatar ? (
               <img
@@ -40,7 +54,7 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
                 {card.name}
               </motion.h1>
               <motion.p
-                className="mt-1 max-w-xl text-base-100/60 text-sm leading-relaxed"
+                className="mt-1 max-w-xl text-sm leading-relaxed text-base-100/60"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.35 }}
@@ -50,7 +64,6 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
             </div>
           </div>
 
-          {/* Contact pills */}
           <motion.div
             className="flex flex-wrap gap-2"
             initial={{ opacity: 0, y: 10 }}
@@ -59,14 +72,14 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
           >
             <a
               href={`mailto:${card.email}`}
-              className="inline-flex items-center gap-2 rounded-full bg-base-100/10 px-4 py-2 text-xs font-medium text-base-100 hover:bg-base-100/20 transition-colors"
+              className="inline-flex items-center gap-2 rounded-full bg-base-100/10 px-4 py-2 text-xs font-medium text-base-100 transition-colors hover:bg-base-100/20"
             >
               <Mail size={12} />
               {card.email}
             </a>
             <a
               href={`tel:${card.phone}`}
-              className="inline-flex items-center gap-2 rounded-full bg-base-100/10 px-4 py-2 text-xs font-medium text-base-100 hover:bg-base-100/20 transition-colors"
+              className="inline-flex items-center gap-2 rounded-full bg-base-100/10 px-4 py-2 text-xs font-medium text-base-100 transition-colors hover:bg-base-100/20"
             >
               <Phone size={12} />
               {card.phone}
@@ -104,10 +117,8 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
               {works.map((work, i) => (
-                <motion.a
+                <motion.div
                   key={work.id}
-                  href={work.url}
-                  target="_blank"
                   className="group relative overflow-hidden rounded-2xl border border-base-300 bg-base-100 p-5 transition-shadow hover:shadow-lg"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -116,21 +127,27 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
                 >
                   {work.type === "image" && (
                     <img
-                      src={work.url}
+                      src={`/api/media/${work.id}`}
                       alt=""
-                      className="mb-4 aspect-video w-full rounded-lg object-cover"
+                      className="mb-4 aspect-video w-full cursor-pointer rounded-lg object-cover transition-opacity hover:opacity-90"
+                      onClick={() => openModal(i)}
+                      draggable="false"
+                      onContextMenu={(e) => e.preventDefault()}
                     />
                   )}
                   {work.type === "video" && (
                     <video
-                      src={work.url}
-                      className="mb-4 aspect-video w-full rounded-lg bg-base-300"
+                      src={`/api/media/${work.id}`}
+                      className="mb-4 aspect-video w-full rounded-lg"
                       controls
+                      controlsList="nodownload"
+                      draggable="false"
+                      onContextMenu={(e) => e.preventDefault()}
                     />
                   )}
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="font-semibold text-base-content group-hover:text-primary transition-colors">
+                      <h3 className="font-semibold text-base-content transition-colors group-hover:text-primary">
                         {work.title}
                       </h3>
                       {work.description && (
@@ -139,17 +156,34 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
                         </p>
                       )}
                     </div>
-                    <ArrowUpRight
-                      size={16}
-                      className="shrink-0 mt-0.5 text-base-content/30 group-hover:text-primary transition-colors"
-                    />
+                    <a
+                      href={work.type === "link" ? work.url : undefined}
+                      target="_blank"
+                      className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-base-content hover:text-primary transition-colors"
+                    >
+                      {work.type === "link" ? (
+                        <>
+                          View project <ArrowUpRight size={16} />
+                        </>
+                      ) : (
+                        <span className="text-xs text-base-content/50">Media uploaded ✓</span>
+                      )}
+                    </a>
                   </div>
-                </motion.a>
+                </motion.div>
               ))}
             </div>
           </motion.div>
         )}
       </div>
+
+      <MediaModal
+        works={mediaWorks}
+        currentIndex={modalIndex}
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onNavigate={setModalIndex}
+      />
     </main>
   );
 }
