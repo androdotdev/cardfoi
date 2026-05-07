@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Instrument_Serif, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     "Shareable profile cards for developers, freelancers, and creators",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

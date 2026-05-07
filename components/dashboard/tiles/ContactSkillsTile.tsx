@@ -34,6 +34,9 @@ export default function ContactSkillsTile() {
           )}
         </div>
       </div>
+      <p className="text-xs text-gray-400 mt-2 mb-3">
+        These are for your card only, separate from your account email
+      </p>
       <div className="mt-3">
         <input
           {...register("skills")}

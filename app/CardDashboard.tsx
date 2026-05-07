@@ -10,6 +10,7 @@ import { authClient } from "@/lib/auth-client";
 
 import { useCards, useSaveCard } from "@/lib/hooks/useDashboardQuery";
 import { useDashboardState } from "@/lib/hooks/useDashboardState";
+import { initDashboardTheme } from "@/lib/stores/dashboardThemeStore";
 
 import BentoTopbar from "@/components/dashboard/BentoTopbar";
 import IdentityTile from "@/components/dashboard/tiles/IdentityTile";
@@ -178,7 +179,7 @@ export default function CardDashboard() {
       {cardsLoading ? (
         <div className="min-h-screen flex items-center justify-center">Loading...</div>
       ) : cards.length === 0 ? (
-        <div className="min-h-screen bg-gray-50 p-6">
+        <div className="min-h-screen bg-gray-50 p-6 dashboard-bg">
           <div className="max-w-md mx-auto mt-20 text-center">
             <p className="text-gray-600 mb-4">You don't have any cards yet.</p>
             <button
@@ -193,7 +194,7 @@ export default function CardDashboard() {
       ) : selectedCard ? (
         <div className="flex min-h-screen">
           <div
-            className={`transition-all duration-300 ${showPreview ? "w-[calc(100%-400px)]" : "w-full"} min-h-screen bg-[#f5f5f3] p-4 sm:p-6`}
+            className={`transition-all duration-300 ${showPreview ? "w-[calc(100%-400px)]" : "w-full"} min-h-screen bg-[#f5f5f3] p-4 sm:p-6 dashboard-bg`}
           >
             <FormProvider {...form}>
               <BentoTopbar

@@ -4,8 +4,12 @@ import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useStore } from "@nanostores/react";
 import { authClient } from "@/lib/auth-client";
-import { FiLoader, FiMenu, FiX } from "react-icons/fi";
+import { FiLoader, FiMenu, FiX, FiSun, FiMoon } from "react-icons/fi";
 import { signingOutStore, setSigningOut } from "@/lib/stores/authStore";
+import {
+  dashboardThemeStore,
+  toggleDashboardTheme,
+} from "@/lib/stores/dashboardThemeStore";
 import type { CardFormData } from "@/components/dashboard/types";
 
 type BentoTopbarProps = {
@@ -30,6 +34,7 @@ export default function BentoTopbar({
   } = useFormContext<CardFormData>();
   const name = watch("name");
   const signingOut = useStore(signingOutStore);
+  const dashboardTheme = useStore(dashboardThemeStore);
 
   async function handleSignOut() {
     setSigningOut(true);
@@ -49,6 +54,18 @@ export default function BentoTopbar({
       >
         Cardfoi
       </a>
+        <button
+          onClick={toggleDashboardTheme}
+          className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors dashboard-theme-toggle"
+          type="button"
+          aria-label="Toggle dark mode"
+        >
+        {dashboardTheme === "dark" ? (
+          <FiSun className="h-4 w-4" />
+        ) : (
+          <FiMoon className="h-4 w-4" />
+        )}
+      </button>
       {name && (
         <span className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium truncate max-w-[100px] sm:max-w-none">
           {name}
@@ -58,6 +75,18 @@ export default function BentoTopbar({
 
       <div className="ml-auto flex items-center gap-2">
         <div className="hidden sm:flex items-center gap-2">
+          <button
+            onClick={toggleDashboardTheme}
+            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors dashboard-theme-toggle"
+            type="button"
+            aria-label="Toggle dark mode"
+          >
+            {dashboardTheme === "dark" ? (
+              <FiSun className="h-4 w-4" />
+            ) : (
+              <FiMoon className="h-4 w-4" />
+            )}
+          </button>
           {user && (
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <span>{user.email}</span>
@@ -113,7 +142,24 @@ export default function BentoTopbar({
           </button>
 
           {menuOpen && (
-            <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-lg p-2 z-50">
+            <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-lg p-2 z-50 dashboard-mobile-menu">
+                  <button
+                    onClick={() => {
+                      toggleDashboardTheme();
+                    }}
+                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded-lg flex items-center gap-2 dashboard-theme-toggle"
+                    type="button"
+                  >
+                {dashboardTheme === "dark" ? (
+                  <>
+                    <FiSun className="h-4 w-4" /> Light mode
+                  </>
+                ) : (
+                  <>
+                    <FiMoon className="h-4 w-4" /> Dark mode
+                  </>
+                )}
+              </button>
               {isDirty && (
                 <div className="px-3 py-2 text-xs text-gray-400">● Unsaved</div>
               )}

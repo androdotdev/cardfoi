@@ -61,3 +61,203 @@ select:focus {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Dashboard dark mode - applied to .dashboard-bg.dark */
+.dashboard-bg.dark {
+  background-color: #121212;
+  color: #E0E0E0;
+}
+
+.dashboard-bg.dark .bg-white {
+  background-color: #1e1e1e;
+}
+
+.dashboard-bg.dark .bg-gray-50 {
+  background-color: #2a2a2a;
+}
+
+.dashboard-bg.dark .bg-gray-100 {
+  background-color: #333333;
+}
+
+.dashboard-bg.dark .border-gray-100 {
+  border-color: #333333;
+}
+
+.dashboard-bg.dark .border-gray-200 {
+  border-color: #404040;
+}
+
+.dashboard-bg.dark .text-gray-400 {
+  color: #BDBDBD;
+}
+
+.dashboard-bg.dark .text-gray-600 {
+  color: #E0E0E0;
+}
+
+.dashboard-bg.dark .text-gray-700 {
+  color: #E0E0E0;
+}
+
+.dashboard-bg.dark .text-gray-800 {
+  color: #FFFFFF;
+}
+
+.dashboard-bg.dark .text-gray-300 {
+  color: #BDBDBD;
+}
+
+.dashboard-bg.dark .hover\:bg-gray-50:hover {
+  background-color: #2a2a2a;
+}
+
+.dashboard-bg.dark .ring-gray-800 {
+  --tw-ring-color: #e5e5e5;
+}
+
+.dashboard-bg.dark ::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+.dashboard-bg.dark ::-webkit-scrollbar-thumb {
+  background: #424242;
+}
+
+.dashboard-bg.dark ::-webkit-scrollbar-thumb:hover {
+  background: #616161;
+}
+
+.dashboard-bg.dark .dashboard-theme-toggle:hover {
+  background-color: #2a2a2a;
+}
+
+.dashboard-bg.dark .dashboard-mobile-menu {
+  background-color: #1e1e1e;
+  border-color: #333333;
+}
+
+.dark .dashboard-bg .bg-white {
+  background-color: #1e1e1e;
+}
+
+.dark .dashboard-bg .bg-gray-50 {
+  background-color: #2a2a2a;
+}
+
+.dark .dashboard-bg .bg-gray-100 {
+  background-color: #333333;
+}
+
+.dark .dashboard-bg .border-gray-100 {
+  border-color: #333333;
+}
+
+.dark .dashboard-bg .border-gray-200 {
+  border-color: #404040;
+}
+
+.dark .dashboard-bg .text-gray-400 {
+  color: #BDBDBD;
+}
+
+.dark .dashboard-bg .text-gray-600 {
+  color: #E0E0E0;
+}
+
+.dark .dashboard-bg .text-gray-700 {
+  color: #E0E0E0;
+}
+
+.dark .dashboard-bg .text-gray-800 {
+  color: #FFFFFF;
+}
+
+.dark .dashboard-bg .text-gray-300 {
+  color: #BDBDBD;
+}
+
+.dark .dashboard-bg .hover\:bg-gray-50:hover {
+  background-color: #2a2a2a;
+}
+
+.dark .dashboard-bg ::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+.dark .dashboard-bg ::-webkit-scrollbar-thumb {
+  background: #424242;
+}
+
+.dark .dashboard-bg ::-webkit-scrollbar-thumb:hover {
+  background: #616161;
+}
+
+.dark .dashboard-bg .dashboard-theme-toggle:hover {
+  background-color: #2a2a2a;
+}
+
+.dark .dashboard-bg .dashboard-mobile-menu {
+  background-color: #1e1e1e;
+  border-color: #333333;
+}
+
+.dark .bg-white {
+  background-color: #1e1e1e;
+}
+
+.dark .bg-gray-50 {
+  background-color: #2a2a2a;
+}
+
+.dark .bg-gray-100 {
+  background-color: #333333;
+}
+
+.dark .border-gray-100 {
+  border-color: #2a2a2a;
+}
+
+.dark .border-gray-200 {
+  border-color: #404040;
+}
+
+.dark .text-gray-400 {
+  color: #a3a3a3;
+}
+
+.dark .text-gray-600 {
+  color: #E0E0E0;
+}
+
+.dark .text-gray-700 {
+  color: #E0E0E0;
+}
+
+.dark .text-gray-800 {
+  color: #FFFFFF;
+}
+
+.dark .text-gray-300 {
+  color: #BDBDBD;
+}
+
+.dark .hover\:bg-gray-50:hover {
+  background-color: #2a2a2a;
+}
+
+.dark .ring-gray-800 {
+  --tw-ring-color: #e5e5e5;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #424242;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #616161;
+}
