@@ -5,6 +5,7 @@ import { Plus, Trash2, ExternalLink } from "lucide-react";
 import { useSaveWork, useDeleteWork } from "@/lib/hooks/useDashboardQuery";
 import { useQueryClient } from "@tanstack/react-query";
 import type { WorkMedia } from "@/lib/cards";
+import WorkUploadButton from "@/components/dashboard/WorkUploadButton";
 
 type ProjectsTileProps = {
   works: WorkMedia[];
@@ -16,6 +17,7 @@ export default function ProjectsTile({ works, cardId }: ProjectsTileProps) {
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [type, setType] = useState<"link" | "image" | "video">("link");
+  const [cloudinaryPublicId, setCloudinaryPublicId] = useState("");
 
   const saveWork = useSaveWork();
   const deleteWork = useDeleteWork();
@@ -26,10 +28,11 @@ export default function ProjectsTile({ works, cardId }: ProjectsTileProps) {
     try {
       await saveWork.mutateAsync({
         cardId,
-        work: { title, url, description: "", type, cloudinaryPublicId: "" },
+        work: { title, url, description: "", type, cloudinaryPublicId },
       });
       setTitle("");
       setUrl("");
+      setCloudinaryPublicId("");
       setShowForm(false);
     } catch (error) {
       console.error("Failed to add work:", error);
@@ -87,12 +90,27 @@ export default function ProjectsTile({ works, cardId }: ProjectsTileProps) {
             className="bg-gray-50 border border-gray-100 rounded-lg px-4 py-2.5 text-sm w-full"
             autoFocus
           />
-          <input
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="https://..."
-            className="bg-gray-50 border border-gray-100 rounded-lg px-4 py-2.5 text-sm w-full"
-          />
+          {type === "link" ? (
+            <input
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="https://..."
+              className="bg-gray-50 border border-gray-100 rounded-lg px-4 py-2.5 text-sm w-full"
+            />
+          ) : (
+            <WorkUploadButton
+              type={type}
+              cardId={cardId}
+              currentUrl={url}
+              onUploadSuccess={(uploadedUrl, publicId) => {
+                setUrl(uploadedUrl);
+                setCloudinaryPublicId(publicId);
+              }}
+            />
+          )}
+          {url && type !== "link" && (
+            <p className="text-[10px] text-gray-400 truncate">{url}</p>
+          )}
           <div className="flex items-center gap-2">
             <select
               value={type}
@@ -117,6 +135,7 @@ export default function ProjectsTile({ works, cardId }: ProjectsTileProps) {
                 setShowForm(false);
                 setTitle("");
                 setUrl("");
+                setCloudinaryPublicId("");
               }}
               className="text-sm text-gray-400 hover:text-gray-600"
             >
