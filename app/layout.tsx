@@ -17,25 +17,31 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Cardfoi",
+  title: "Cardfoi - Shareable Profile Cards for Developers",
   description:
-    "Shareable profile cards for developers, freelancers, and creators",
+    "Create beautiful developer portfolio profile cards in minutes. Share your skills, projects, and contact info with a single link. Free, fast, and customizable.",
   metadataBase: new URL("https://cardfoi.vercel.app"),
   openGraph: {
     type: "website",
     siteName: "Cardfoi",
-    title: "Cardfoi - Shareable Profile Cards",
-    description: "Create your developer portfolio card in minutes",
+    title: "Cardfoi - Shareable Profile Cards for Developers",
+    description:
+      "Create beautiful developer portfolio profile cards in minutes. Share your skills, projects, and contact info with a single link.",
+    url: "https://cardfoi.vercel.app",
     images: ["/og-image.png"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cardfoi - Shareable Profile Cards",
-    description: "Create your developer portfolio card in minutes",
+    title: "Cardfoi - Shareable Profile Cards for Developers",
+    description:
+      "Create beautiful developer portfolio profile cards in minutes. Share your skills, projects, and contact info with a single link.",
     images: ["/og-image.png"],
   },
   icons: {
     icon: "/icon.svg",
+  },
+  alternates: {
+    canonical: "https://cardfoi.vercel.app",
   },
 };
 

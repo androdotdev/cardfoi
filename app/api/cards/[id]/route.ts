@@ -44,15 +44,20 @@ export async function PATCH(request: Request, { params }: Params) {
   const newSlug = body.newSlug ? String(body.newSlug).trim() : undefined;
   const userIsAdmin = await isAdmin(session.user.id);
 
-  const card = await updateCard(id, {
-    ...payload.data,
-    newSlug,
-    isAdmin: userIsAdmin
-  });
+  try {
+    const card = await updateCard(id, {
+      ...payload.data,
+      newSlug,
+      isAdmin: userIsAdmin
+    });
 
-  if (!card) {
-    return NextResponse.json({ error: "Card not found." }, { status: 404 });
+    if (!card) {
+      return NextResponse.json({ error: "Card not found." }, { status: 404 });
+    }
+
+    return NextResponse.json({ card });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to update card.";
+    return NextResponse.json({ error: message }, { status: 400 });
   }
-
-  return NextResponse.json({ card });
 }

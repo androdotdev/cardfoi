@@ -26,6 +26,40 @@ Quick reference for AI agents continuing development. Read this FIRST.
 6. **Database cleanup**: Removed all non-admin users via `scripts/clean-db.ts`
 7. **Slug system**: Format `name-nanoid` (6-char random), rate-limited once/month
 
+### May 8, 2026 — SEO, Media Proxy, Theme Fixes
+
+1. **Media proxy to hide Cloudinary URLs**:
+   - `normalizeCard()` in `lib/cards.ts` returns `/api/media/${work.id}` for image/video types
+   - `cloudinaryPublicId` hidden from API responses for media types
+   - All 8 templates updated to use `work.url` directly (single source of truth)
+
+2. **SEO infrastructure**:
+   - Created `app/robots.ts` — prevents indexing of private pages
+   - Created `app/sitemap.ts` — auto-generates sitemap with all public card pages
+   - Created `app/not-found.tsx` — custom 404 page with helpful links
+   - Updated `app/layout.tsx` — longer title/description, `metadataBase`, OG/Twitter defaults, canonical
+   - Enhanced `app/[id]/page.tsx` — per-card OG/Twitter metadata, canonical URLs
+   - Created `components/shared/StructuredData.tsx` — JSON-LD Person schema on card pages
+   - Created metadata files for private pages (`login`, `sign-up`, `reset-password`)
+   - Added `rel="noopener noreferrer"` to all `target="_blank"` links across 9 templates
+
+3. **Card theme applied globally**:
+   - Created `lib/hooks/useCardTheme.ts` — applies theme to `<html>` via `useEffect`
+   - Updated all 8 templates to use the hook instead of `data-theme` on `<main>`
+   - Fixes modal backdrop white flash issue
+
+4. **Dashboard fixes**:
+   - Removed duplicate theme toggle button in `BentoTopbar.tsx`
+   - Added `initDashboardTheme()` call in `CardDashboard.tsx` (was imported but never called — fixes theme reset on refresh)
+   - Slug rate limit errors now caught with try/catch in API route (prevents raw error exposure)
+   - Added delete loading state (skeleton + spinner) in `ProjectsTile.tsx`
+
+5. **Landing nav auth state**:
+   - `LandingNav.tsx` now checks `authClient.useSession()`
+   - Shows "Dashboard" instead of "Sign in" when user is logged in
+
+6. **Public OG image**: `public/og-image.png` (1200×630, ~222KB)
+
 ---
 
 ## Key Files (Read These First)

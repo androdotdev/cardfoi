@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
 
 export default function LandingNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const session = authClient.useSession();
+  const isLoggedIn = !!session.data;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 lg:px-10 py-4 bg-[#fafaf8]/85 backdrop-blur-md border-b border-[#ebebea]">
@@ -24,7 +27,7 @@ export default function LandingNav() {
           GitHub
         </Link>
         <Link href="/dashboard" className="text-sm text-[#5c5c5a] hover:text-[#0a0a0a] no-underline px-[1.2rem] py-2 border border-[#d4d4d2] rounded-full hover:bg-[#f5f5f3]">
-          Sign in
+          {isLoggedIn ? "Dashboard" : "Sign in"}
         </Link>
         <Link href="/dashboard" className="bg-[#0a0a0a] text-white text-sm px-[1.2rem] py-2 rounded-full font-medium no-underline">
           Create card →
@@ -74,7 +77,7 @@ export default function LandingNav() {
               onClick={() => setIsMenuOpen(false)}
               className="text-sm text-[#5c5c5a] hover:text-[#0a0a0a] no-underline py-2"
             >
-              Sign in
+              {isLoggedIn ? "Dashboard" : "Sign in"}
             </Link>
             <Link
               href="/dashboard"

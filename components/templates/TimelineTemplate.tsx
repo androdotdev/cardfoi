@@ -109,7 +109,7 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
                         </h3>
                         <a
                           href={work.type === "link" ? work.url : undefined}
-                          target="_blank"
+                          target="_blank" rel="noopener noreferrer"
                           className="btn btn-xs btn-ghost shrink-0"
                         >
                           {work.type === "link" ? <ExternalLink size={12} /> : null}

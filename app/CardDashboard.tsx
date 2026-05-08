@@ -79,6 +79,7 @@ export default function CardDashboard() {
   }
 
   useEffect(() => {
+    initDashboardTheme();
     if (cards.length > 0) {
       const currentCard = cards.find((card) => card.id === selectedId);
       if (!currentCard) {

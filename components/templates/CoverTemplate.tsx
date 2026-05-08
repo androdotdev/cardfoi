@@ -129,7 +129,7 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                     <a
                       key={work.id}
                       href={work.url}
-                      target="_blank"
+                      target="_blank" rel="noopener noreferrer"
                       className="group flex items-center justify-between rounded-xl bg-base-200 px-4 py-3 transition-colors hover:bg-base-300"
                     >
                       <div className="min-w-0">

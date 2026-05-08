@@ -144,7 +144,7 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
                     <a
                       key={work.id}
                       href={work.url}
-                      target="_blank"
+                      target="_blank" rel="noopener noreferrer"
                       className="block rounded px-2 py-1 text-[#89b4fa] transition-colors hover:bg-[#2a2f3a]"
                     >
                       ► {work.title}

@@ -112,7 +112,7 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
                   <motion.a
                     key={work.id}
                     href={work.url}
-                    target="_blank"
+                    target="_blank" rel="noopener noreferrer"
                     className="group flex items-center justify-between py-4 border-b border-base-200 hover:border-primary/30 transition-colors"
                     whileHover={{ x: 4 }}
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}

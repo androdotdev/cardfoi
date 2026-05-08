@@ -175,7 +175,7 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
                   {work.type === "link" && (
                     <a
                       href={work.url}
-                      target="_blank"
+                      target="_blank" rel="noopener noreferrer"
                       className="btn btn-sm btn-primary mt-4 gap-1.5"
                     >
                       <ExternalLink size={13} />

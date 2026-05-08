@@ -134,7 +134,7 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                       {work.type === "link" && (
                         <a
                           href={work.url}
-                          target="_blank"
+                          target="_blank" rel="noopener noreferrer"
                           className="btn btn-sm btn-ghost shrink-0"
                         >
                           <ExternalLink size={14} />

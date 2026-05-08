@@ -158,7 +158,7 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
                     </div>
                     <a
                       href={work.type === "link" ? work.url : undefined}
-                      target="_blank"
+                      target="_blank" rel="noopener noreferrer"
                       className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-base-content hover:text-primary transition-colors"
                     >
                       {work.type === "link" ? (

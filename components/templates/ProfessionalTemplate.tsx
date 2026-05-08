@@ -150,7 +150,7 @@ export default function ProfessionalTemplate({ card }: { card: UserCard }) {
                   {work.type === "link" && (
                     <a
                       href={work.url}
-                      target="_blank"
+                      target="_blank" rel="noopener noreferrer"
                       className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-base-content hover:text-primary transition-colors"
                     >
                       View project

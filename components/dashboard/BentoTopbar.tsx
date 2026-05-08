@@ -54,18 +54,6 @@ export default function BentoTopbar({
       >
         Cardfoi
       </a>
-        <button
-          onClick={toggleDashboardTheme}
-          className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors dashboard-theme-toggle"
-          type="button"
-          aria-label="Toggle dark mode"
-        >
-        {dashboardTheme === "dark" ? (
-          <FiSun className="h-4 w-4" />
-        ) : (
-          <FiMoon className="h-4 w-4" />
-        )}
-      </button>
       {name && (
         <span className="text-xs bg-gray-100 text-gray-700 px-3 py-1 rounded-full font-medium truncate max-w-[100px] sm:max-w-none">
           {name}
