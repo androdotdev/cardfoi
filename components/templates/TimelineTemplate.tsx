@@ -2,10 +2,17 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Mail, Phone } from "lucide-react";
+import { ExternalLink, Mail } from "lucide-react";
+import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaInstagram, FaGlobe } from "react-icons/fa";
 import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
+import Image from "next/image";
+
+const platformIcon: Record<string, React.ComponentType<{ className?: string }>> = {
+  github: FaGithub, twitter: FaTwitter, linkedin: FaLinkedin,
+  youtube: FaYoutube, instagram: FaInstagram, website: FaGlobe,
+};
 
 export default function TimelineTemplate({ card }: { card: UserCard }) {
   useCardTheme(card.theme);
@@ -35,7 +42,7 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
           transition={{ duration: 0.5 }}
         >
           {card.avatar ? (
-            <img
+            <Image
               src={card.avatar}
               alt=""
               className="mx-auto mb-4 h-24 w-24 rounded-full object-cover ring-4 ring-base-300"
@@ -66,13 +73,20 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
               <Mail size={14} />
               {card.email}
             </a>
-            <a
-              href={`tel:${card.phone}`}
-              className="btn btn-sm btn-ghost gap-2"
-            >
-              <Phone size={14} />
-              {card.phone}
-            </a>
+            {card.socialLinks.map((link) => {
+              const Icon = platformIcon[link.platform];
+              return (
+                <a
+                  key={link.id}
+                  href={link.url}
+                  target="_blank" rel="noopener noreferrer"
+                  className="btn btn-sm btn-ghost gap-2"
+                >
+                  {Icon && <Icon className="h-3.5 w-3.5" />}
+                  {link.url.replace(/^https?:\/\//, "")}
+                </a>
+              );
+            })}
           </div>
         </motion.div>
 
@@ -121,7 +135,7 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
                         </p>
                       )}
                       {work.type === "image" && (
-                        <img
+                        <Image
                           src={work.url}
                           alt=""
                           className="mt-3 w-full rounded-xl cursor-pointer hover:opacity-90 transition-opacity"

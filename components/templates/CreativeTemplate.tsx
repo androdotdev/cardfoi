@@ -1,11 +1,18 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { ExternalLink, Mail, Phone } from "lucide-react";
+import { ExternalLink, Mail } from "lucide-react";
+import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaInstagram, FaGlobe } from "react-icons/fa";
 import gsap from "gsap";
 import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
+import Image from "next/image";
+
+const platformIcon: Record<string, React.ComponentType<{ className?: string }>> = {
+  github: FaGithub, twitter: FaTwitter, linkedin: FaLinkedin,
+  youtube: FaYoutube, instagram: FaInstagram, website: FaGlobe,
+};
 
 export default function CreativeTemplate({ card }: { card: UserCard }) {
   useCardTheme(card.theme);
@@ -70,7 +77,7 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
           <div className="flex flex-col gap-6 md:flex-row md:items-center">
             <div className="shrink-0">
               {card.avatar ? (
-                <img
+                <Image
                   src={card.avatar}
                   alt=""
                   className="h-28 w-28 rounded-2xl object-cover ring-4 ring-base-100/10"
@@ -96,13 +103,20 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
                   <Mail size={13} />
                   {card.email}
                 </a>
-                <a
-                  href={`tel:${card.phone}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-base-100/10 px-4 py-2 text-xs font-medium text-base-100 transition-colors hover:bg-base-100/20"
-                >
-                  <Phone size={13} />
-                  {card.phone}
-                </a>
+                {card.socialLinks.map((link) => {
+                  const Icon = platformIcon[link.platform];
+                  return (
+                    <a
+                      key={link.id}
+                      href={link.url}
+                      target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-base-100/10 px-4 py-2 text-xs font-medium text-base-100 transition-colors hover:bg-base-100/20"
+                    >
+                      {Icon && <Icon className="h-3.5 w-3.5" />}
+                      {link.url.replace(/^https?:\/\//, "")}
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -135,7 +149,7 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
                   className="c-work group rounded-2xl border border-base-300 bg-base-100 p-5 transition-shadow hover:shadow-md"
                 >
                   {work.type === "image" && (
-                    <img
+                    <Image
                       src={work.url}
                       alt=""
                       className="mb-3 aspect-video w-full rounded-xl object-cover cursor-pointer hover:opacity-90 transition-opacity"

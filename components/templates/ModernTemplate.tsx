@@ -2,10 +2,17 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Mail, Phone } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
+import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaInstagram, FaGlobe } from "react-icons/fa";
 import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
+import Image from "next/image";
+
+const platformIcon: Record<string, React.ComponentType<{ className?: string }>> = {
+  github: FaGithub, twitter: FaTwitter, linkedin: FaLinkedin,
+  youtube: FaYoutube, instagram: FaInstagram, website: FaGlobe,
+};
 
 export default function ModernTemplate({ card }: { card: UserCard }) {
   useCardTheme(card.theme);
@@ -34,7 +41,7 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
         <div className="mx-auto flex max-w-5xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-5">
             {card.avatar ? (
-              <img
+              <Image
                 src={card.avatar}
                 alt=""
                 className="h-20 w-20 rounded-xl object-cover ring-2 ring-base-content/20"
@@ -77,13 +84,20 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
               <Mail size={12} />
               {card.email}
             </a>
-            <a
-              href={`tel:${card.phone}`}
-              className="inline-flex items-center gap-2 rounded-full bg-base-100/10 px-4 py-2 text-xs font-medium text-base-100 transition-colors hover:bg-base-100/20"
-            >
-              <Phone size={12} />
-              {card.phone}
-            </a>
+            {card.socialLinks.map((link) => {
+              const Icon = platformIcon[link.platform];
+              return (
+                <a
+                  key={link.id}
+                  href={link.url}
+                  target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-base-100/10 px-4 py-2 text-xs font-medium text-base-100 transition-colors hover:bg-base-100/20"
+                >
+                  {Icon && <Icon className="h-3.5 w-3.5" />}
+                  {link.url.replace(/^https?:\/\//, "")}
+                </a>
+              );
+            })}
           </motion.div>
         </div>
       </motion.div>
@@ -126,7 +140,7 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
                   whileHover={{ y: -2 }}
                 >
                   {work.type === "image" && (
-                    <img
+                    <Image
                       src={work.url}
                       alt=""
                       className="mb-4 aspect-video w-full cursor-pointer rounded-lg object-cover transition-opacity hover:opacity-90"

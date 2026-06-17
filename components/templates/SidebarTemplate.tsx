@@ -2,10 +2,17 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Mail, Phone } from "lucide-react";
+import { ExternalLink, Mail } from "lucide-react";
+import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaInstagram, FaGlobe } from "react-icons/fa";
 import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
+import Image from "next/image";
+
+const platformIcon: Record<string, React.ComponentType<{ className?: string }>> = {
+  github: FaGithub, twitter: FaTwitter, linkedin: FaLinkedin,
+  youtube: FaYoutube, instagram: FaInstagram, website: FaGlobe,
+};
 
 export default function SidebarTemplate({ card }: { card: UserCard }) {
   useCardTheme(card.theme);
@@ -41,7 +48,7 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
               transition={{ delay: 0.2 }}
             >
               {card.avatar ? (
-                <img
+                <Image
                   src={card.avatar}
                   alt=""
                   className="h-20 w-20 rounded-xl object-cover ring-2 ring-base-100/20"
@@ -72,13 +79,20 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                 <Mail size={13} />
                 <span className="truncate">{card.email}</span>
               </a>
-              <a
-                href={`tel:${card.phone}`}
-                className="flex items-center gap-2.5 text-sm text-base-100/60 transition-colors hover:text-base-100"
-              >
-                <Phone size={13} />
-                {card.phone}
-              </a>
+              {card.socialLinks.map((link) => {
+                const Icon = platformIcon[link.platform];
+                return (
+                  <a
+                    key={link.id}
+                    href={link.url}
+                    target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 text-sm text-base-100/60 transition-colors hover:text-base-100"
+                  >
+                    {Icon && <Icon className="h-3.5 w-3.5" />}
+                    <span className="truncate">{link.url.replace(/^https?:\/\//, "")}</span>
+                  </a>
+                );
+              })}
             </motion.div>
 
             {skills.length > 0 && (
@@ -142,7 +156,7 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                       )}
                     </div>
                     {work.type === "image" && (
-                      <img
+                      <Image
                         src={work.url}
                         alt=""
                         className="mt-3 w-full max-w-lg cursor-pointer hover:opacity-90 transition-opacity"

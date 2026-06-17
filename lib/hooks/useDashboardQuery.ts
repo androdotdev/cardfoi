@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { UserCard } from "@/lib/cards";
 import type {
   CardFormData,
+  SocialFormData,
   WorkFormData,
   PasswordFormData,
 } from "@/components/dashboard/types";
@@ -85,6 +86,51 @@ export function useDeleteWork() {
       workId: string;
     }) => {
       await fetch(`/api/cards/${cardId}/works/${workId}`, {
+        method: "DELETE",
+      });
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["cards"] });
+    },
+  });
+}
+
+export function useSaveSocial() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      cardId,
+      social,
+    }: {
+      cardId: string;
+      social: SocialFormData;
+    }) => {
+      const res = await fetch(`/api/cards/${cardId}/socials`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(social),
+      });
+      return res.json();
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["cards"] });
+    },
+  });
+}
+
+export function useDeleteSocial() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      cardId,
+      socialId,
+    }: {
+      cardId: string;
+      socialId: string;
+    }) => {
+      await fetch(`/api/cards/${cardId}/socials/${socialId}`, {
         method: "DELETE",
       });
     },

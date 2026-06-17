@@ -2,10 +2,17 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Mail, Phone } from "lucide-react";
+import { ExternalLink, Mail } from "lucide-react";
+import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaInstagram, FaGlobe } from "react-icons/fa";
 import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
+import Image from "next/image";
+
+const platformIcon: Record<string, React.ComponentType<{ className?: string }>> = {
+  github: FaGithub, twitter: FaTwitter, linkedin: FaLinkedin,
+  youtube: FaYoutube, instagram: FaInstagram, website: FaGlobe,
+};
 
 export default function GlassTemplate({ card }: { card: UserCard }) {
   useCardTheme(card.theme);
@@ -50,7 +57,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
               <div className="absolute -inset-1 rounded-full bg-primary/20 blur-sm" />
               <div className="relative h-28 w-28 overflow-hidden rounded-full border-2 border-base-300/50">
                 {card.avatar ? (
-                  <img
+                  <Image
                     src={card.avatar}
                     alt=""
                     className="h-full w-full object-cover"
@@ -115,13 +122,20 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
               <Mail size={14} />
               {card.email}
             </a>
-            <a
-              href={`tel:${card.phone}`}
-              className="inline-flex items-center gap-2 rounded-full border border-base-300/60 bg-base-100/40 px-5 py-2.5 text-sm font-medium text-base-content backdrop-blur transition-colors hover:bg-base-100/70"
-            >
-              <Phone size={14} />
-              {card.phone}
-            </a>
+            {card.socialLinks.map((link) => {
+              const Icon = platformIcon[link.platform];
+              return (
+                <a
+                  key={link.id}
+                  href={link.url}
+                  target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-base-300/60 bg-base-100/40 px-5 py-2.5 text-sm font-medium text-base-content backdrop-blur transition-colors hover:bg-base-100/70"
+                >
+                  {Icon && <Icon className="h-4 w-4" />}
+                  {link.url.replace(/^https?:\/\//, "")}
+                </a>
+              );
+            })}
           </motion.div>
         </motion.div>
 
@@ -146,7 +160,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                   transition={{ delay: 0.7 + i * 0.08 }}
                 >
                   {work.type === "image" && (
-                    <img
+                    <Image
                       src={work.url}
                       alt=""
                       className="mb-3 aspect-video w-full rounded-xl object-cover cursor-pointer hover:opacity-90 transition-opacity"

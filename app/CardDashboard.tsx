@@ -15,6 +15,7 @@ import { initDashboardTheme } from "@/lib/stores/dashboardThemeStore";
 import BentoTopbar from "@/components/dashboard/BentoTopbar";
 import IdentityTile from "@/components/dashboard/tiles/IdentityTile";
 import ContactSkillsTile from "@/components/dashboard/tiles/ContactSkillsTile";
+import SocialLinksTile from "@/components/dashboard/tiles/SocialLinksTile";
 import BioTile from "@/components/dashboard/tiles/BioTile";
 import ThemeTile from "@/components/dashboard/tiles/ThemeTile";
 import ProjectsTile from "@/components/dashboard/tiles/ProjectsTile";
@@ -39,7 +40,6 @@ export default function CardDashboard() {
     setSelectedId,
     setMessage,
     message,
-    clearState,
   } = useDashboardState();
 
   const selectedCard = cards.find((card) => card.id === selectedId);
@@ -51,7 +51,6 @@ export default function CardDashboard() {
           name: selectedCard.name,
           slug: selectedCard.id,
           email: selectedCard.email,
-          phone: selectedCard.phone,
           avatar: selectedCard.avatar ?? "",
           description: selectedCard.description,
           skills: selectedCard.skills.join(", "),
@@ -69,7 +68,6 @@ export default function CardDashboard() {
       name: card.name,
       slug: card.id,
       email: card.email,
-      phone: card.phone,
       avatar: card.avatar ?? "",
       description: card.description,
       skills: card.skills.join(", "),
@@ -93,7 +91,6 @@ export default function CardDashboard() {
 
   const previewName = watch("name");
   const previewEmail = watch("email");
-  const previewPhone = watch("phone");
   const previewAvatar = watch("avatar");
   const previewDescription = watch("description");
   const previewSkills = watch("skills");
@@ -137,7 +134,6 @@ export default function CardDashboard() {
         card: {
           name: session.data?.user?.name || "New Card",
           email: session.data?.user?.email || "",
-          phone: "0000000000",
           avatar: "",
           description: "Brief description about yourself",
           skills: "",
@@ -238,6 +234,10 @@ export default function CardDashboard() {
                   <BioTile />
                 </div>
                 <ContactSkillsTile />
+                <SocialLinksTile
+                  socialLinks={selectedCard.socialLinks}
+                  cardId={selectedCard.id}
+                />
                 <SecurityTile />
                 <div className="sm:col-span-2">
                   <AdminTile />
@@ -252,7 +252,6 @@ export default function CardDashboard() {
               cardId={selectedCard.id}
               name={previewName || ""}
               email={previewEmail || ""}
-              phone={previewPhone || ""}
               avatar={previewAvatar || ""}
               description={previewDescription || ""}
               skills={previewSkills || ""}

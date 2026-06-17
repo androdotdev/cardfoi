@@ -2,19 +2,21 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Mail, Phone } from "lucide-react";
+import { ExternalLink, Mail } from "lucide-react";
+import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaInstagram, FaGlobe } from "react-icons/fa";
 import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
-
-const stagger = {
-  visible: { transition: { staggerChildren: 0.08 } },
-  hidden: { opacity: 1 },
-};
+import Image from "next/image";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+
+const platformIcon: Record<string, React.ComponentType<{ className?: string }>> = {
+  github: FaGithub, twitter: FaTwitter, linkedin: FaLinkedin,
+  youtube: FaYoutube, instagram: FaInstagram, website: FaGlobe,
 };
 
 export default function MinimalTemplate({ card }: { card: UserCard }) {
@@ -39,7 +41,7 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
         <motion.div variants={fadeUp} className="mb-12 flex items-start gap-6">
           <div className="shrink-0">
             {card.avatar ? (
-              <img
+              <Image
                 src={card.avatar}
                 alt=""
                 className="h-16 w-16 rounded-full object-cover ring-1 ring-base-300"
@@ -91,13 +93,20 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
             <Mail size={14} />
             {card.email}
           </a>
-          <a
-            href={`tel:${card.phone}`}
-            className="inline-flex items-center gap-2 text-sm text-base-content/60 hover:text-primary transition-colors"
-          >
-            <Phone size={14} />
-            {card.phone}
-          </a>
+          {card.socialLinks.map((link) => {
+            const Icon = platformIcon[link.platform];
+            return (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-base-content/60 hover:text-primary transition-colors"
+              >
+                {Icon && <Icon className="h-4 w-4" />}
+                {link.url.replace(/^https?:\/\//, "")}
+              </a>
+            );
+          })}
         </motion.div>
 
         {/* Works */}
@@ -151,7 +160,7 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
                       )}
                       {/* Thumbnail for image/video */}
                       {work.type === "image" && (
-                        <img
+                        <Image
                           src={work.url}
                           alt=""
                           className="mt-2 h-16 w-16 rounded object-cover"

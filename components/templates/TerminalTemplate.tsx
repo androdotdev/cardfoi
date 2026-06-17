@@ -41,7 +41,9 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
       ``,
       `> cat contact.txt`,
       `  email: ${card.email ?? ""}`,
-      `  phone: ${card.phone ?? ""}`,
+      ...(card.socialLinks ?? []).map(
+        (s) => `  ${s.platform}: ${s.url}`,
+      ),
       ``,
       `> ./works.sh`,
       ...works.map(

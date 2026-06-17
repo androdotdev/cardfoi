@@ -4,6 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { useState } from "react";
 import type { CardFormData } from "@/components/dashboard/types";
 import { CldUploadWidget } from "next-cloudinary";
+import Image from "next/image";
 
 export default function IdentityTile() {
   const { register, watch, setValue } = useFormContext<CardFormData>();
@@ -21,7 +22,7 @@ export default function IdentityTile() {
       <div className="flex items-center gap-4">
         <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium text-lg overflow-hidden">
           {avatar ? (
-            <img src={avatar} alt="" className="w-full h-full object-cover" />
+            <Image src={avatar} alt="" className="w-full h-full object-cover" />
           ) : (
             <span>{name ? name.slice(0, 1).toUpperCase() : "?"}</span>
           )}

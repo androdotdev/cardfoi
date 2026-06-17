@@ -24,7 +24,6 @@ type PreviewPanelProps = {
   cardId: string;
   name: string;
   email: string;
-  phone: string;
   avatar: string;
   description: string;
   skills: string;
@@ -38,7 +37,6 @@ export default function PreviewPanel({
   cardId,
   name,
   email,
-  phone,
   avatar,
   description,
   skills,
@@ -53,13 +51,13 @@ export default function PreviewPanel({
     ownerId: "",
     name: name || "Your Name",
     email: email || "you@example.com",
-    phone: phone || "",
     avatar: avatar || undefined,
     description: description || "Tell visitors about yourself...",
     skills: typeof skills === "string" ? skills.split(",").map(s => s.trim()).filter(Boolean) : [],
     theme: theme || "corporate",
     template: currentTemplate,
     works: [],
+    socialLinks: [],
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };

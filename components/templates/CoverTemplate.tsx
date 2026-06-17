@@ -2,10 +2,17 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Mail, Phone } from "lucide-react";
+import { ExternalLink, Mail } from "lucide-react";
+import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaInstagram, FaGlobe } from "react-icons/fa";
 import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
+import Image from "next/image"
+
+const platformIcon: Record<string, React.ComponentType<{ className?: string }>> = {
+  github: FaGithub, twitter: FaTwitter, linkedin: FaLinkedin,
+  youtube: FaYoutube, instagram: FaInstagram, website: FaGlobe,
+};
 
 export default function CoverTemplate({ card }: { card: UserCard }) {
   useCardTheme(card.theme);
@@ -45,7 +52,7 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             >
               {card.avatar ? (
-                <img
+                <Image
                   src={card.avatar}
                   alt=""
                   className="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-primary-content/30"
@@ -106,15 +113,24 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                 {card.email}
               </span>
             </a>
-            <a
-              href={`tel:${card.phone}`}
-              className="flex items-center gap-3 rounded-xl bg-base-200 px-4 py-3 text-sm transition-colors hover:bg-base-300"
-            >
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
-                <Phone size={15} />
-              </div>
-              <span className="text-base-content/70">{card.phone}</span>
-            </a>
+            {card.socialLinks.map((link) => {
+              const Icon = platformIcon[link.platform];
+              return (
+                <a
+                  key={link.id}
+                  href={link.url}
+                  target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-3 rounded-xl bg-base-200 px-4 py-3 text-sm transition-colors hover:bg-base-300"
+                >
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
+                    {Icon && <Icon className="h-4 w-4" />}
+                  </div>
+                  <span className="truncate text-base-content/70">
+                    {link.url.replace(/^https?:\/\//, "")}
+                  </span>
+                </a>
+              );
+            })}
           </div>
 
           {/* Works */}
@@ -164,7 +180,7 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                       </div>
                       {/* Show thumbnail for image/video */}
                       {work.type === "image" && (
-                        <img
+                        <Image
                           src={work.url}
                           alt=""
                           className="ml-2 h-10 w-10 rounded object-cover"

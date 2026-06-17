@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getCard } from "@/lib/cards";
+
 import type { UserCard } from "@/lib/cards";
+
 import MinimalTemplate from "@/components/templates/MinimalTemplate";
 import CoverTemplate from "@/components/templates/CoverTemplate";
 import SidebarTemplate from "@/components/templates/SidebarTemplate";
