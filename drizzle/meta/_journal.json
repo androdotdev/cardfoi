@@ -8,6 +8,13 @@
       "when": 1778069049926,
       "tag": "0000_lyrical_captain_america",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1781756294331,
+      "tag": "0001_simple_stephen_strange",
+      "breakpoints": true
     }
   ]
 }

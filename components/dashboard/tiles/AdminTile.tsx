@@ -13,14 +13,12 @@ type UserListItem = {
 export default function AdminTile() {
   const session = authClient.useSession();
   const isAdmin = session.data?.user?.role === "admin";
-
-  if (!isAdmin) return null;
   const [userId, setUserId] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [message, setMessage] = useState("");
   const [users, setUsers] = useState<UserListItem[]>([]);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   async function fetchUsers() {
@@ -46,6 +44,8 @@ export default function AdminTile() {
   useEffect(() => {
     fetchUsers();
   }, [search]);
+
+  if (!isAdmin) return null;
 
   async function handleDeleteUser() {
     if (!userId.trim()) {

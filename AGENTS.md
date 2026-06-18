@@ -8,7 +8,7 @@ Quick reference for AI agents continuing development. Read this FIRST.
 
 **Cardfoi** — Developer portfolio card platform. Users create shareable profile cards at `cardfoi.vercel.app/{slug}`.
 
-**Stack:** Next.js 16 (Turbopack) · TypeScript · Tailwind CSS · DaisyUI · Better Auth · Neon PostgreSQL · Drizzle ORM · Cloudinary · React Query · Nanostores
+**Stack:** Next.js 16 (Turbopack) · TypeScript · Tailwind CSS · DaisyUI · Better Auth · Neon PostgreSQL · Drizzle ORM · Cloudinary · React Query · Zustand · Vitest
 
 ---
 
@@ -60,6 +60,32 @@ Quick reference for AI agents continuing development. Read this FIRST.
 
 6. **Public OG image**: `public/og-image.png` (1200×630, ~222KB)
 
+### June 18, 2026 — Zustand Migration, Vitest, Image & AdminTile Fixes
+
+1. **Nanostores → Zustand migration**:
+   - Created 3 zustand stores: `useAuthStore`, `useDashboardStore`, `useThemeStore` (with persist middleware)
+   - Deleted 4 old files: `lib/stores/authStore.ts`, `dashboardStore.ts`, `dashboardThemeStore.ts`, `lib/hooks/useDashboardState.ts`
+   - Updated 5 consumer files: `BentoTopbar.tsx`, `AuthSection.tsx`, `sign-up/page.tsx`, `login/page.tsx`, `CardDashboard.tsx`
+   - Uninstalled `nanostores` and `@nanostores/react`
+
+2. **Testing with Vitest**:
+   - Created `vitest.config.ts` (jsdom + `@` alias)
+   - Added `tests/setup.ts` (localStorage mock for persist middleware)
+   - Added `"test": "vitest run"` script
+   - Wrote 3 test files (17 tests) for all zustand stores — all passing
+
+3. **Image width/height compliance**:
+   - Added explicit `width`/`height` props to all 16 `<Image>` tags across 8 templates (was relying on CSS classes only)
+   - Avatar images: matched CSS dimensions (64×64 up to 112×112)
+   - Work images: 1280×720 for 16:9, 800×600 for flexible, 512×384 for `max-w-lg`, 64×64 for thumbnails
+   - `MediaModal.tsx` already uses `fill` — no change needed
+
+4. **AdminTile cleanup**:
+   - Moved all hooks before the `if (!isAdmin) return null` guard (fixes Rules of Hooks violation)
+   - Changed `loading` initial state to `false`
+   - Added minimum 2-char search requirement before API call (prevents empty-string fetch on mount)
+   - Removed stale users when search is cleared
+
 ---
 
 ## Key Files (Read These First)
@@ -71,8 +97,8 @@ Quick reference for AI agents continuing development. Read this FIRST.
 | `app/sign-up/page.tsx` | Sign up page |
 | `app/reset-password/page.tsx` | Password reset (token-based) |
 | `lib/auth.ts` | Better Auth config (email verification, Resend) |
-| `lib/stores/authStore.ts` | Auth state (nanostores) |
-| `lib/stores/dashboardStore.ts` | Dashboard UI state |
+| `lib/stores/useAuthStore.ts` | Auth state (zustand) |
+| `lib/stores/useDashboardStore.ts` | Dashboard UI state (zustand) |
 | `components/dashboard/AuthSection.tsx` | Shared auth form (login/signup/forgot) |
 | `components/dashboard/BentoTopbar.tsx` | Top nav (save, preview, signout) |
 | `db/schema.ts` | DB schema (user, cards, works, verification) |
@@ -81,14 +107,15 @@ Quick reference for AI agents continuing development. Read this FIRST.
 
 ## State Management Architecture
 
-**Nanostores** (UI State) — `lib/stores/`:
-- `authStore.ts`: `authMode`, `signingOut`, `authMessage`
-- `dashboardStore.ts`: `selectedId`, `showPreview`, `message`
+**Zustand** (UI State) — `lib/stores/`:
+- `useAuthStore.ts`: `authMode`, `signingOut`, `authMessage`
+- `useDashboardStore.ts`: `selectedId`, `showPreview`, `message`
+- `useThemeStore.ts`: `dashboardTheme` (persisted to localStorage)
 
 **React Query** (Server State) — `lib/hooks/useDashboardQuery.ts`:
 - `useCards()`, `useSaveCard()`, `useSaveWork()`, `useDeleteWork()`, `useChangePassword()`
 
-**Usage**: Components import from `@nanostores/react` — no prop drilling.
+**Usage**: Components import store hooks and use selectors — no prop drilling.
 
 ---
 
@@ -154,11 +181,12 @@ Quick reference for AI agents continuing development. Read this FIRST.
 npm run dev          # Start dev server (Turbopack)
 npm run build        # Production build (MUST pass before committing)
 npm run start        # Production server
+npm run test         # Run vitest (17 tests across 3 store files)
 npm run db:push      # Push schema to Neon
 npm run db:studio    # Drizzle Studio (DB GUI)
 ```
 
-**Build status**: ✅ Passes (last verified May 6, 2026)
+**Build status**: ✅ Passes (last verified June 18, 2026)
 
 ---
 
@@ -189,13 +217,14 @@ DATABASE_URL="postgresql://..."
 
 1. **Read this file first** — contains essential context
 2. **Run `npm run build`** — verify current state before changes
-3. **Check `lib/stores/`** — understand nanostores state management
+3. **Check `lib/stores/`** — understand zustand state management
 4. **Review `components/dashboard/tiles/`** — bento grid structure
 5. **Test auth flow** — sign up → verify email → sign in → dashboard
 6. **Preview panel width** — 400px, scale 0.85 (mobile-sized)
+7. **Run `npm run test`** — verify store tests pass after changes
 
 **Current mode:** Build mode — you can make file changes directly.
 
 ---
 
-*Last updated: May 6, 2026*
+*Last updated: June 18, 2026*

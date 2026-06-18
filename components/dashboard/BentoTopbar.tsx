@@ -2,29 +2,21 @@
 
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { useStore } from "@nanostores/react";
 import { authClient } from "@/lib/auth-client";
 import { FiLoader, FiMenu, FiX, FiSun, FiMoon } from "react-icons/fi";
-import { signingOutStore, setSigningOut } from "@/lib/stores/authStore";
-import {
-  dashboardThemeStore,
-  toggleDashboardTheme,
-} from "@/lib/stores/dashboardThemeStore";
+import { useAuthStore } from "@/lib/stores/useAuthStore";
+import { useThemeStore } from "@/lib/stores/useThemeStore";
 import type { CardFormData } from "@/components/dashboard/types";
 
 type BentoTopbarProps = {
   onSave: () => void;
   loading?: boolean;
-  showPreview?: boolean;
-  onTogglePreview?: () => void;
   user?: { name?: string; email: string } | null;
 };
 
 export default function BentoTopbar({
   onSave,
   loading = false,
-  showPreview = false,
-  onTogglePreview,
   user,
 }: BentoTopbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -33,8 +25,10 @@ export default function BentoTopbar({
     watch,
   } = useFormContext<CardFormData>();
   const name = watch("name");
-  const signingOut = useStore(signingOutStore);
-  const dashboardTheme = useStore(dashboardThemeStore);
+  const signingOut = useAuthStore((s) => s.signingOut);
+  const dashboardTheme = useThemeStore((s) => s.dashboardTheme);
+  const setSigningOut = useAuthStore((s) => s.setSigningOut);
+  const toggleDashboardTheme = useThemeStore((s) => s.toggleDashboardTheme);
 
   async function handleSignOut() {
     setSigningOut(true);
@@ -96,20 +90,6 @@ export default function BentoTopbar({
             </div>
           )}
 
-          {onTogglePreview && (
-            <button
-              onClick={onTogglePreview}
-              className={`flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm transition-colors ${
-                showPreview
-                  ? "border-gray-800 bg-gray-900 text-white"
-                  : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
-              }`}
-              type="button"
-            >
-              {showPreview ? "✕" : "👁"} Preview
-            </button>
-          )}
-
           <button
             className="bg-gray-900 text-white text-sm px-5 py-2 rounded-full font-medium disabled:opacity-50"
             disabled={!isDirty || loading}
@@ -150,18 +130,6 @@ export default function BentoTopbar({
               </button>
               {isDirty && (
                 <div className="px-3 py-2 text-xs text-gray-400">● Unsaved</div>
-              )}
-              {onTogglePreview && (
-                <button
-                  onClick={() => {
-                    onTogglePreview();
-                    setMenuOpen(false);
-                  }}
-                  className="w-full text-left px-3 py-2 text-sm hover:bg-gray-50 rounded-lg"
-                  type="button"
-                >
-                  {showPreview ? "✕ Hide Preview" : "👁 Preview"}
-                </button>
               )}
               <button
                 className="w-full text-left px-3 py-2 text-sm bg-gray-900 text-white rounded-lg font-medium disabled:opacity-50"

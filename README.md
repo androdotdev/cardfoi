@@ -24,6 +24,9 @@ Cardfoi lets users spin up a shareable profile card in seconds. Each card lives 
 | Image Uploads | Cloudinary (`next-cloudinary`) |
 | Language | TypeScript |
 | Email | Resend |
+| UI State | Zustand |
+| Server State | React Query |
+| Testing | Vitest + jsdom |
 
 ---
 
@@ -71,6 +74,7 @@ npm run dev           # start Next.js dev server
 npm run build         # production build
 npm run start         # start production server
 npm run lint          # run ESLint
+npm run test          # run Vitest (unit tests)
 npm run db:generate   # generate Drizzle migration files
 npm run db:push       # push schema directly to DB
 npm run db:studio     # open Drizzle Studio (DB GUI)
@@ -86,9 +90,10 @@ cardfoi/
 ├── app/          # Next.js App Router — pages, layouts, API routes
 ├── db/           # Drizzle schema & DB client
 ├── drizzle/      # Generated migration files
-├── lib/          # Shared utilities, auth config, Cloudinary helpers
+├── lib/          # Shared utilities, auth config, stores, Cloudinary helpers
+├── tests/        # Vitest test files (per-module)
 ├── scripts/      # Seed scripts
-└── drizzle.config.ts
+└── vitest.config.ts
 ```
 
 ---

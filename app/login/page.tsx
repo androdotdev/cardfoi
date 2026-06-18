@@ -4,15 +4,14 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import AuthSection from "@/components/dashboard/AuthSection";
-import { useStore } from "@nanostores/react";
-import { setAuthMode } from "@/lib/stores/authStore";
+import { useAuthStore } from "@/lib/stores/useAuthStore";
 
 export default function LoginPage() {
   const session = authClient.useSession();
   const router = useRouter();
 
   useEffect(() => {
-    setAuthMode("signin");
+    useAuthStore.getState().setAuthMode("signin");
   }, []);
 
   useEffect(() => {

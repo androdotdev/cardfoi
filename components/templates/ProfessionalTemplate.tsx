@@ -52,6 +52,8 @@ export default function ProfessionalTemplate({ card }: { card: UserCard }) {
                 <Image
                   src={card.avatar}
                   alt=""
+                  width={80}
+                  height={80}
                   className="h-20 w-20 rounded-xl object-cover"
                 />
               ) : (
@@ -81,7 +83,7 @@ export default function ProfessionalTemplate({ card }: { card: UserCard }) {
               )}
             </div>
           </div>
-          <div className="flex flex-wrap gap-3 border-t border-base-300 px-6 py-4">
+          <div className="border-t border-base-300 px-6 py-4">
             <a
               href={`mailto:${card.email}`}
               className="btn btn-sm btn-neutral gap-2"
@@ -89,20 +91,6 @@ export default function ProfessionalTemplate({ card }: { card: UserCard }) {
               <Mail size={14} />
               {card.email}
             </a>
-            {card.socialLinks.map((link) => {
-              const Icon = platformIcon[link.platform];
-              return (
-                <a
-                  key={link.id}
-                  href={link.url}
-                  target="_blank" rel="noopener noreferrer"
-                  className="btn btn-sm btn-outline gap-2"
-                >
-                  {Icon && <Icon className="h-3.5 w-3.5" />}
-                  {link.url.replace(/^https?:\/\//, "")}
-                </a>
-              );
-            })}
           </div>
         </motion.header>
 
@@ -130,6 +118,8 @@ export default function ProfessionalTemplate({ card }: { card: UserCard }) {
                     <Image
                       src={work.url}
                       alt=""
+                      width={1280}
+                      height={720}
                       className="mb-3 aspect-video w-full rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
                       onClick={() => openModal(i)}
                       draggable="false"
@@ -182,6 +172,26 @@ export default function ProfessionalTemplate({ card }: { card: UserCard }) {
           </motion.section>
         )}
       </div>
+
+      {/* Social */}
+      {card.socialLinks && card.socialLinks.length > 0 && (
+        <div className="mt-8 flex justify-center gap-4 border-t border-base-300 pt-6 text-base-content/60">
+          {card.socialLinks.map((link) => {
+            const Icon = platformIcon[link.platform] || FaGlobe;
+            return (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank" rel="noopener noreferrer"
+                title={link.platform}
+                className="hover:opacity-70 transition-opacity"
+              >
+                {Icon && <Icon className="h-6 w-6" />}
+              </a>
+            );
+          })}
+        </div>
+      )}
 
       <MediaModal
         works={mediaWorks}

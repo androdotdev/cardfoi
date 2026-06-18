@@ -6,13 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authSchema } from "@/lib/validation/dashboardSchemas";
 import type { UserCard } from "@/lib/cards";
-import { useStore } from "@nanostores/react";
-import {
-  authModeStore,
-  authMessageStore,
-  setAuthMode,
-  setAuthMessage,
-} from "@/lib/stores/authStore";
+import { useAuthStore } from "@/lib/stores/useAuthStore";
 import { FiLoader } from "react-icons/fi";
 
 type AuthSectionProps = {
@@ -24,8 +18,8 @@ export default function AuthSection({
   session,
   onAuthSuccess,
 }: AuthSectionProps) {
-  const authMode = useStore(authModeStore);
-  const message = useStore(authMessageStore);
+  const authMode = useAuthStore((s) => s.authMode);
+  const message = useAuthStore((s) => s.authMessage);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
   const [resetLoading, setResetLoading] = useState(false);
@@ -49,7 +43,7 @@ export default function AuthSection({
     email: string;
     password: string;
   }) {
-    setAuthMessage("");
+    useAuthStore.getState().setAuthMessage("");
     setLoading(true);
 
     try {
@@ -61,14 +55,14 @@ export default function AuthSection({
         });
 
         if (result.error) {
-          setAuthMessage(result.error.message ?? "Signup failed.");
+          useAuthStore.getState().setAuthMessage(result.error.message ?? "Signup failed.");
           return;
         }
 
-        setAuthMessage(
+        useAuthStore.getState().setAuthMessage(
           "Account created! Check your Inbox to verify your account. PLEASE CHECK THE SPAM FOLDER TOO!",
         );
-        setAuthMode("signin");
+        useAuthStore.getState().setAuthMode("signin");
         return;
       }
 
@@ -83,9 +77,9 @@ export default function AuthSection({
           msg.toLowerCase().includes("verify") ||
           msg.toLowerCase().includes("verification")
         ) {
-          setAuthMessage("Please verify your email before signing in.");
+          useAuthStore.getState().setAuthMessage("Please verify your email before signing in.");
         } else {
-          setAuthMessage(msg);
+          useAuthStore.getState().setAuthMessage(msg);
         }
         return;
       }
@@ -102,7 +96,7 @@ export default function AuthSection({
   async function handleForgotPassword(e: React.FormEvent) {
     e.preventDefault();
     setResetLoading(true);
-    setAuthMessage("");
+    useAuthStore.getState().setAuthMessage("");
 
     const { error } = await authClient.requestPasswordReset({
       email: resetEmail,
@@ -112,9 +106,9 @@ export default function AuthSection({
     setResetLoading(false);
 
     if (error) {
-      setAuthMessage(error.message ?? "Failed to send reset email.");
+      useAuthStore.getState().setAuthMessage(error.message ?? "Failed to send reset email.");
     } else {
-      setAuthMessage("Check your email for password reset link!");
+      useAuthStore.getState().setAuthMessage("Check your email for password reset link!");
       setShowForgotPassword(false);
       setResetEmail("");
     }
@@ -172,7 +166,7 @@ export default function AuthSection({
       <div className="flex w-full rounded overflow-hidden">
         <button
           type="button"
-          onClick={() => setAuthMode("signin")}
+          onClick={() => useAuthStore.getState().setAuthMode("signin")}
           className={`flex-1 text-sm px-4 py-2 border ${
             authMode === "signin"
               ? "bg-gray-900 text-white border-gray-900"
@@ -183,7 +177,7 @@ export default function AuthSection({
         </button>
         <button
           type="button"
-          onClick={() => setAuthMode("signup")}
+          onClick={() => useAuthStore.getState().setAuthMode("signup")}
           className={`flex-1 text-sm px-4 py-2 border ${
             authMode === "signup"
               ? "bg-gray-900 text-white border-gray-900"

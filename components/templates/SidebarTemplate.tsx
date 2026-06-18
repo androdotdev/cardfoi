@@ -51,6 +51,8 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                 <Image
                   src={card.avatar}
                   alt=""
+                  width={80}
+                  height={80}
                   className="h-20 w-20 rounded-xl object-cover ring-2 ring-base-100/20"
                 />
               ) : (
@@ -79,20 +81,7 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                 <Mail size={13} />
                 <span className="truncate">{card.email}</span>
               </a>
-              {card.socialLinks.map((link) => {
-                const Icon = platformIcon[link.platform];
-                return (
-                  <a
-                    key={link.id}
-                    href={link.url}
-                    target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-2.5 text-sm text-base-100/60 transition-colors hover:text-base-100"
-                  >
-                    {Icon && <Icon className="h-3.5 w-3.5" />}
-                    <span className="truncate">{link.url.replace(/^https?:\/\//, "")}</span>
-                  </a>
-                );
-              })}
+
             </motion.div>
 
             {skills.length > 0 && (
@@ -159,6 +148,8 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                       <Image
                         src={work.url}
                         alt=""
+                        width={512}
+                        height={384}
                         className="mt-3 w-full max-w-lg cursor-pointer hover:opacity-90 transition-opacity"
                         onClick={() => openModal(i)}
                         draggable="false"
@@ -191,6 +182,26 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
           </div>
         </div>
       </motion.div>
+
+      {/* Social */}
+      {card.socialLinks && card.socialLinks.length > 0 && (
+        <div className="mt-8 flex justify-center gap-4 border-t border-base-300 pt-6 text-base-content/60">
+          {card.socialLinks.map((link) => {
+            const Icon = platformIcon[link.platform] || FaGlobe;
+            return (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank" rel="noopener noreferrer"
+                title={link.platform}
+                className="hover:opacity-70 transition-opacity"
+              >
+                {Icon && <Icon className="h-6 w-6" />}
+              </a>
+            );
+          })}
+        </div>
+      )}
 
       <MediaModal
         works={mediaWorks}

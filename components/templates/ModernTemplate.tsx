@@ -44,6 +44,8 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
               <Image
                 src={card.avatar}
                 alt=""
+                width={80}
+                height={80}
                 className="h-20 w-20 rounded-xl object-cover ring-2 ring-base-content/20"
               />
             ) : (
@@ -84,20 +86,6 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
               <Mail size={12} />
               {card.email}
             </a>
-            {card.socialLinks.map((link) => {
-              const Icon = platformIcon[link.platform];
-              return (
-                <a
-                  key={link.id}
-                  href={link.url}
-                  target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-base-100/10 px-4 py-2 text-xs font-medium text-base-100 transition-colors hover:bg-base-100/20"
-                >
-                  {Icon && <Icon className="h-3.5 w-3.5" />}
-                  {link.url.replace(/^https?:\/\//, "")}
-                </a>
-              );
-            })}
           </motion.div>
         </div>
       </motion.div>
@@ -143,6 +131,8 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
                     <Image
                       src={work.url}
                       alt=""
+                      width={1280}
+                      height={720}
                       className="mb-4 aspect-video w-full cursor-pointer rounded-lg object-cover transition-opacity hover:opacity-90"
                       onClick={() => openModal(i)}
                       draggable="false"
@@ -190,6 +180,26 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
           </motion.div>
         )}
       </div>
+
+      {/* Social */}
+      {card.socialLinks && card.socialLinks.length > 0 && (
+        <div className="mt-8 flex justify-center gap-4 border-t border-base-300 pt-6 text-base-content/60">
+          {card.socialLinks.map((link) => {
+            const Icon = platformIcon[link.platform] || FaGlobe;
+            return (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank" rel="noopener noreferrer"
+                title={link.platform}
+                className="hover:opacity-70 transition-opacity"
+              >
+                {Icon && <Icon className="h-6 w-6" />}
+              </a>
+            );
+          })}
+        </div>
+      )}
 
       <MediaModal
         works={mediaWorks}

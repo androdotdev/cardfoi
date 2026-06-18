@@ -44,6 +44,8 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
               <Image
                 src={card.avatar}
                 alt=""
+                width={64}
+                height={64}
                 className="h-16 w-16 rounded-full object-cover ring-1 ring-base-300"
               />
             ) : (
@@ -93,20 +95,6 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
             <Mail size={14} />
             {card.email}
           </a>
-          {card.socialLinks.map((link) => {
-            const Icon = platformIcon[link.platform];
-            return (
-              <a
-                key={link.id}
-                href={link.url}
-                target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-base-content/60 hover:text-primary transition-colors"
-              >
-                {Icon && <Icon className="h-4 w-4" />}
-                {link.url.replace(/^https?:\/\//, "")}
-              </a>
-            );
-          })}
         </motion.div>
 
         {/* Works */}
@@ -163,6 +151,8 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
                         <Image
                           src={work.url}
                           alt=""
+                          width={64}
+                          height={64}
                           className="mt-2 h-16 w-16 rounded object-cover"
                           draggable="false"
                           onContextMenu={(e) => e.preventDefault()}
@@ -182,6 +172,26 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
           </motion.div>
         )}
       </div>
+
+      {/* Social */}
+      {card.socialLinks && card.socialLinks.length > 0 && (
+        <div className="mt-8 flex justify-center gap-4 border-t border-base-300 pt-6 text-base-content/60">
+          {card.socialLinks.map((link) => {
+            const Icon = platformIcon[link.platform] || FaGlobe;
+            return (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank" rel="noopener noreferrer"
+                title={link.platform}
+                className="hover:opacity-70 transition-opacity"
+              >
+                {Icon && <Icon className="h-6 w-6" />}
+              </a>
+            );
+          })}
+        </div>
+      )}
 
       {/* Media Modal */}
       <MediaModal

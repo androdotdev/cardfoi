@@ -60,6 +60,8 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                   <Image
                     src={card.avatar}
                     alt=""
+                    width={112}
+                    height={112}
                     className="h-full w-full object-cover"
                   />
                 ) : (
@@ -122,20 +124,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
               <Mail size={14} />
               {card.email}
             </a>
-            {card.socialLinks.map((link) => {
-              const Icon = platformIcon[link.platform];
-              return (
-                <a
-                  key={link.id}
-                  href={link.url}
-                  target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-base-300/60 bg-base-100/40 px-5 py-2.5 text-sm font-medium text-base-content backdrop-blur transition-colors hover:bg-base-100/70"
-                >
-                  {Icon && <Icon className="h-4 w-4" />}
-                  {link.url.replace(/^https?:\/\//, "")}
-                </a>
-              );
-            })}
+
           </motion.div>
         </motion.div>
 
@@ -163,6 +152,8 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                     <Image
                       src={work.url}
                       alt=""
+                      width={1280}
+                      height={720}
                       className="mb-3 aspect-video w-full rounded-xl object-cover cursor-pointer hover:opacity-90 transition-opacity"
                       onClick={() => openModal(i)}
                       draggable="false"
@@ -207,6 +198,26 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
           </motion.section>
         )}
       </div>
+
+      {/* Social */}
+      {card.socialLinks && card.socialLinks.length > 0 && (
+        <div className="mt-8 flex justify-center gap-4 border-t border-base-300 pt-6 text-base-content/60">
+          {card.socialLinks.map((link) => {
+            const Icon = platformIcon[link.platform] || FaGlobe;
+            return (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank" rel="noopener noreferrer"
+                title={link.platform}
+                className="hover:opacity-70 transition-opacity"
+              >
+                {Icon && <Icon className="h-6 w-6" />}
+              </a>
+            );
+          })}
+        </div>
+      )}
 
       {/* Media Modal */}
       <MediaModal

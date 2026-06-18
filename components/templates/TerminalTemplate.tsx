@@ -122,6 +122,15 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
                   </span>
                 );
               }
+              if (line.startsWith("  ") && line.includes("://")) {
+                const url = line.trim().split(": ").slice(1).join(": ");
+                return (
+                  <a key={index} href={url} target="_blank" rel="noopener noreferrer"
+                     className="block text-[#cba6f7] hover:text-[#89b4fa] transition-colors">
+                    {line}
+                  </a>
+                );
+              }
               if (line.startsWith("  ")) {
                 return (
                   <div key={index} className="text-[#cba6f7]">

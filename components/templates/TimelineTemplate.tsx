@@ -45,6 +45,8 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
             <Image
               src={card.avatar}
               alt=""
+              width={96}
+              height={96}
               className="mx-auto mb-4 h-24 w-24 rounded-full object-cover ring-4 ring-base-300"
             />
           ) : (
@@ -73,20 +75,7 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
               <Mail size={14} />
               {card.email}
             </a>
-            {card.socialLinks.map((link) => {
-              const Icon = platformIcon[link.platform];
-              return (
-                <a
-                  key={link.id}
-                  href={link.url}
-                  target="_blank" rel="noopener noreferrer"
-                  className="btn btn-sm btn-ghost gap-2"
-                >
-                  {Icon && <Icon className="h-3.5 w-3.5" />}
-                  {link.url.replace(/^https?:\/\//, "")}
-                </a>
-              );
-            })}
+
           </div>
         </motion.div>
 
@@ -138,6 +127,8 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
                         <Image
                           src={work.url}
                           alt=""
+                          width={800}
+                          height={600}
                           className="mt-3 w-full rounded-xl cursor-pointer hover:opacity-90 transition-opacity"
                           onClick={() => openModal(i)}
                           draggable="false"
@@ -162,6 +153,26 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
           </div>
         )}
       </div>
+
+      {/* Social */}
+      {card.socialLinks && card.socialLinks.length > 0 && (
+        <div className="mt-8 flex justify-center gap-4 border-t border-base-300 pt-6 text-base-content/60">
+          {card.socialLinks.map((link) => {
+            const Icon = platformIcon[link.platform] || FaGlobe;
+            return (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank" rel="noopener noreferrer"
+                title={link.platform}
+                className="hover:opacity-70 transition-opacity"
+              >
+                {Icon && <Icon className="h-6 w-6" />}
+              </a>
+            );
+          })}
+        </div>
+      )}
 
       {/* Media Modal */}
       <MediaModal

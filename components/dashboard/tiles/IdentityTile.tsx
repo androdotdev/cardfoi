@@ -22,7 +22,7 @@ export default function IdentityTile() {
       <div className="flex items-center gap-4">
         <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-medium text-lg overflow-hidden">
           {avatar ? (
-            <Image src={avatar} alt="" className="w-full h-full object-cover" />
+            <Image width={56} height={56} alt="" className="w-full h-full object-cover" src={avatar} />
           ) : (
             <span>{name ? name.slice(0, 1).toUpperCase() : "?"}</span>
           )}

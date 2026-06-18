@@ -55,6 +55,8 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                 <Image
                   src={card.avatar}
                   alt=""
+                  width={96}
+                  height={96}
                   className="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-primary-content/30"
                 />
               ) : (
@@ -113,24 +115,7 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                 {card.email}
               </span>
             </a>
-            {card.socialLinks.map((link) => {
-              const Icon = platformIcon[link.platform];
-              return (
-                <a
-                  key={link.id}
-                  href={link.url}
-                  target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-3 rounded-xl bg-base-200 px-4 py-3 text-sm transition-colors hover:bg-base-300"
-                >
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
-                    {Icon && <Icon className="h-4 w-4" />}
-                  </div>
-                  <span className="truncate text-base-content/70">
-                    {link.url.replace(/^https?:\/\//, "")}
-                  </span>
-                </a>
-              );
-            })}
+
           </div>
 
           {/* Works */}
@@ -183,6 +168,8 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                         <Image
                           src={work.url}
                           alt=""
+                          width={40}
+                          height={40}
                           className="ml-2 h-10 w-10 rounded object-cover"
                           draggable="false"
                           onContextMenu={(e) => e.preventDefault()}
@@ -201,6 +188,26 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
           )}
         </motion.div>
       </div>
+
+      {/* Social */}
+      {card.socialLinks && card.socialLinks.length > 0 && (
+        <div className="mt-8 flex justify-center gap-4 border-t border-base-300 pt-6 text-base-content/60">
+          {card.socialLinks.map((link) => {
+            const Icon = platformIcon[link.platform] || FaGlobe;
+            return (
+              <a
+                key={link.id}
+                href={link.url}
+                target="_blank" rel="noopener noreferrer"
+                title={link.platform}
+                className="hover:opacity-70 transition-opacity"
+              >
+                {Icon && <Icon className="h-6 w-6" />}
+              </a>
+            );
+          })}
+        </div>
+      )}
 
       {/* Media Modal */}
       <MediaModal

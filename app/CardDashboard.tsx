@@ -9,8 +9,8 @@ import type { UserCard } from "@/lib/cards";
 import { authClient } from "@/lib/auth-client";
 
 import { useCards, useSaveCard } from "@/lib/hooks/useDashboardQuery";
-import { useDashboardState } from "@/lib/hooks/useDashboardState";
-import { initDashboardTheme } from "@/lib/stores/dashboardThemeStore";
+import { useDashboardStore } from "@/lib/stores/useDashboardStore";
+import { useThemeStore } from "@/lib/stores/useThemeStore";
 
 import BentoTopbar from "@/components/dashboard/BentoTopbar";
 import IdentityTile from "@/components/dashboard/tiles/IdentityTile";
@@ -22,8 +22,6 @@ import ProjectsTile from "@/components/dashboard/tiles/ProjectsTile";
 import SecurityTile from "@/components/dashboard/tiles/SecurityTile";
 import AdminTile from "@/components/dashboard/tiles/AdminTile";
 
-import PreviewPanel from "@/components/dashboard/PreviewPanel";
-
 export default function CardDashboard() {
   const session = authClient.useSession();
 
@@ -33,14 +31,10 @@ export default function CardDashboard() {
 
   const { mutateAsync: saveCard, isPending: cardSaving } = useSaveCard();
 
-  const {
-    selectedId,
-    showPreview,
-    setShowPreview,
-    setSelectedId,
-    setMessage,
-    message,
-  } = useDashboardState();
+  const selectedId = useDashboardStore((s) => s.selectedId);
+  const message = useDashboardStore((s) => s.message);
+  const setSelectedId = useDashboardStore((s) => s.setSelectedId);
+  const setMessage = useDashboardStore((s) => s.setMessage);
 
   const selectedCard = cards.find((card) => card.id === selectedId);
 
@@ -60,7 +54,7 @@ export default function CardDashboard() {
       : undefined,
   });
 
-  const { watch, setValue } = form;
+  const { setValue } = form;
 
   function applyCard(card: UserCard) {
     setSelectedId(card.id);
@@ -77,7 +71,7 @@ export default function CardDashboard() {
   }
 
   useEffect(() => {
-    initDashboardTheme();
+    useThemeStore.getState().initDashboardTheme();
     if (cards.length > 0) {
       const currentCard = cards.find((card) => card.id === selectedId);
       if (!currentCard) {
@@ -88,14 +82,6 @@ export default function CardDashboard() {
       }
     }
   }, [cards, selectedId]);
-
-  const previewName = watch("name");
-  const previewEmail = watch("email");
-  const previewAvatar = watch("avatar");
-  const previewDescription = watch("description");
-  const previewSkills = watch("skills");
-  const previewTheme = watch("theme");
-  const previewTemplate = watch("template") || "minimal";
 
   async function handleCardSubmit(data: CardFormData) {
     try {
@@ -189,18 +175,13 @@ export default function CardDashboard() {
           </div>
         </div>
       ) : selectedCard ? (
-        <div className="flex min-h-screen">
-          <div
-            className={`transition-all duration-300 ${showPreview ? "w-[calc(100%-400px)]" : "w-full"} min-h-screen bg-[#f5f5f3] p-4 sm:p-6 dashboard-bg`}
-          >
-            <FormProvider {...form}>
-              <BentoTopbar
-                onSave={form.handleSubmit(handleCardSubmit)}
-                loading={cardSaving}
-                showPreview={showPreview}
-                onTogglePreview={() => setShowPreview(!showPreview)}
-                user={session.data?.user ?? null}
-              />
+        <div className="min-h-screen bg-[#f5f5f3] p-4 sm:p-6 dashboard-bg">
+          <FormProvider {...form}>
+            <BentoTopbar
+              onSave={form.handleSubmit(handleCardSubmit)}
+              loading={cardSaving}
+              user={session.data?.user ?? null}
+            />
 
               {cards.length > 1 && (
                 <div className="mb-4 flex flex-wrap gap-2">
@@ -239,30 +220,10 @@ export default function CardDashboard() {
                   cardId={selectedCard.id}
                 />
                 <SecurityTile />
-                <div className="sm:col-span-2">
-                  <AdminTile />
-                </div>
+                <AdminTile />
               </div>
             </FormProvider>
           </div>
-
-          {showPreview && (
-            <PreviewPanel
-              onClose={() => setShowPreview(false)}
-              cardId={selectedCard.id}
-              name={previewName || ""}
-              email={previewEmail || ""}
-              avatar={previewAvatar || ""}
-              description={previewDescription || ""}
-              skills={previewSkills || ""}
-              theme={previewTheme || "corporate"}
-              template={previewTemplate || "minimal"}
-              onTemplateChange={(newTemplate) =>
-                setValue("template", newTemplate, { shouldDirty: true })
-              }
-            />
-          )}
-        </div>
       ) : null}
     </>
   );
