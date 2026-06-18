@@ -10,6 +10,5 @@ yarn-debug.log*
 yarn-error.log*
 justf ix thiscripts/
 
-.demos/
-.workflows/
-.plans/
+.opencode/
+scripts/

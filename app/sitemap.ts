@@ -6,11 +6,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://cardfoi.vercel.app";
 
   // Get all public card slugs from DB
-  const allCards = await db.select({ id: cards.id }).from(cards);
+  const allCards = await db
+    .select({ id: cards.id, updatedAt: cards.updatedAt })
+    .from(cards);
 
   const cardUrls = allCards.map((card) => ({
     url: `${baseUrl}/${card.id}`,
-    lastModified: new Date(),
+    lastModified: card.updatedAt,
     changeFrequency: "monthly" as const,
     priority: 0.8,
   }));

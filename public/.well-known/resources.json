@@ -1,0 +1,44 @@
+{
+  "apiCatalog": {
+    "linkset": [
+      {
+        "anchor": "https://cardfoi.vercel.app/api",
+        "service-desc": [
+          { "href": "https://cardfoi.vercel.app/openapi.json", "type": "application/openapi+json" }
+        ],
+        "service-doc": [
+          { "href": "https://cardfoi.vercel.app/docs/api", "type": "text/html" }
+        ],
+        "status": [
+          { "href": "https://cardfoi.vercel.app/health", "type": "application/json" }
+        ]
+      }
+    ]
+  },
+  "mcp": {
+    "serverInfo": {
+      "name": "cardfoi",
+      "version": "0.1.0"
+    },
+    "transport": {
+      "type": "http",
+      "endpoint": "https://cardfoi.vercel.app/api/mcp"
+    },
+    "capabilities": {
+      "tools": { "list": true, "call": true },
+      "resources": { "list": true, "read": true }
+    }
+  },
+  "agentSkills": {
+    "$schema": "https://agentskills.io/schema.json",
+    "skills": [
+      {
+        "name": "cardfoi-docs",
+        "type": "documentation",
+        "description": "Cardfoi developer portfolio card platform documentation",
+        "url": "https://cardfoi.vercel.app/AGENTS.md",
+        "sha256": ""
+      }
+    ]
+  }
+}

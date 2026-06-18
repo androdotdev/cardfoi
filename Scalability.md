@@ -19,7 +19,7 @@ Static public card pages (`/:id`) can be ISR-cached at the CDN edge. At scale, m
 Lightweight, no runtime overhead, generates clean SQL. No N+1 risk as long as you keep joins explicit. Good choice.
 
 **State Management Architecture**
-- **Nanostores** (`lib/stores/`): Lightweight (~1KB) UI state management. No prop drilling — components read directly from stores via `@nanostores/react`.
+- **Zustand** (`lib/stores/`): Lightweight (~1KB) UI state management with persist middleware. No prop drilling — components read directly from stores via hooks.
 - **React Query** (`lib/hooks/useDashboardQuery.ts`): Server state with automatic caching and background refetching. Reduces redundant API calls to `/api/cards`.
 - Clean separation: UI state doesn't pollute server state and vice versa. Scales well for complex dashboards.
 

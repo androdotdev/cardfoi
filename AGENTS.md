@@ -107,7 +107,7 @@ Quick reference for AI agents continuing development. Read this FIRST.
 
 | File | Purpose |
 |------|---------|
-| `app/CardDashboard.tsx` | Main dashboard with bento grid |
+| `app/CardDashboard.tsx` | Main dashboard with sidebar navigation |
 | `app/login/page.tsx` | Sign in page |
 | `app/sign-up/page.tsx` | Sign up page |
 | `app/reset-password/page.tsx` | Password reset (token-based) |
@@ -115,7 +115,8 @@ Quick reference for AI agents continuing development. Read this FIRST.
 | `lib/stores/useAuthStore.ts` | Auth state (zustand) |
 | `lib/stores/useDashboardStore.ts` | Dashboard UI state (zustand) |
 | `components/dashboard/AuthSection.tsx` | Shared auth form (login/signup/forgot) |
-| `components/dashboard/BentoTopbar.tsx` | Top nav (save, preview, signout) |
+| `components/dashboard/Sidebar.tsx` | Navigation sidebar with section groups |
+| `components/dashboard/DashboardShell.tsx` | Flex layout (sidebar + main panel) |
 | `db/schema.ts` | DB schema (user, cards, works, verification) |
 
 ---
@@ -124,7 +125,7 @@ Quick reference for AI agents continuing development. Read this FIRST.
 
 **Zustand** (UI State) — `lib/stores/`:
 - `useAuthStore.ts`: `authMode`, `signingOut`, `authMessage`
-- `useDashboardStore.ts`: `selectedId`, `showPreview`, `message`
+- `useDashboardStore.ts`: `selectedId`, `activeSection`, `mobileSidebarOpen`, `message`
 - `useThemeStore.ts`: `dashboardTheme` (persisted to localStorage)
 
 **React Query** (Server State) — `lib/hooks/useDashboardQuery.ts`:
@@ -147,20 +148,20 @@ Quick reference for AI agents continuing development. Read this FIRST.
 
 ---
 
-## Bento Grid Layout
+## Dashboard Layout
 
-**Grid**: `grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start`
+**Layout**: Sidebar nav (`200px`) + single scrollable panel (`max-w-[720px]`). One section visible at a time, toggled via `activeSection` in `useDashboardStore`.
 
-| Tile | File | Notes |
-|------|------|-------|
-| Identity | `tiles/IdentityTile.tsx` | Avatar, name, slug editing |
-| Contact & Skills | `tiles/ContactSkillsTile.tsx` | Merged from 2 tiles |
-| Theme | `tiles/ThemeTile.tsx` | 8 daisyUI themes, circular swatches |
-| Bio | `tiles/BioTile.tsx` | Textarea, auto-rows |
-| Projects | `tiles/ProjectsTile.tsx` | `lg:col-span-2`, `max-h-[400px]` scroll |
+| Section | File | Notes |
+|---------|------|-------|
+| Identity | `tiles/IdentityTile.tsx` | Avatar, name, slug editing, bio, skills, email on card |
+| Projects | `tiles/ProjectsTile.tsx` | Work history entries (links + media uploads) |
+| Social links | `tiles/SocialLinksTile.tsx` | Platform links (GitHub, Twitter, etc.) |
+| Theme | `tiles/ThemeTile.tsx` | 8 daisyUI themes, 6 layout style selectors |
 | Security | `tiles/SecurityTile.tsx` | Change password + Delete account |
+| Admin | `tiles/AdminTile.tsx` | User search + delete (admin only) |
 
-**Background**: `#f5f5f3` (gray-50 from design system)
+**Background**: `#fafaf8` (landing page design system)
 
 ---
 
@@ -169,7 +170,7 @@ Quick reference for AI agents continuing development. Read this FIRST.
 1. **Sign up**: `/sign-up` → Better Auth → verification email via Resend → user clicks link
 2. **Sign in**: `/login` → must verify email first → dashboard
 3. **Forgot password**: "Forgot password?" → email → `/reset-password?token=xxx` → new password
-4. **Sign out**: BentoTopbar button → loading spinner → redirects to `/`
+4. **Sign out**: Sidebar footer → loading spinner → redirects to `/`
 
 **Resend emails**: Configured in `lib/auth.ts` (`sendVerificationEmail`, `sendResetEmail`)
 
@@ -235,8 +236,7 @@ DATABASE_URL="postgresql://..."
 3. **Check `lib/stores/`** — understand zustand state management
 4. **Review `components/dashboard/tiles/`** — bento grid structure
 5. **Test auth flow** — sign up → verify email → sign in → dashboard
-6. **Preview panel width** — 400px, scale 0.85 (mobile-sized)
-7. **Run `npm run test`** — verify store tests pass after changes
+6. **Run `npm run test`** — verify store tests pass after changes
 
 **Current mode:** Build mode — you can make file changes directly.
 

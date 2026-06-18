@@ -8,7 +8,20 @@ Live → [cardfoi.vercel.app](https://cardfoi.vercel.app)
 
 ## What It Is
 
-Cardfoi lets users spin up a shareable profile card in seconds. Each card lives at a public `/:id` URL and supports a bio, avatar, work history entries, and DaisyUI theme customization. Auth is session-based via Better Auth, storage is Neon PostgreSQL via Drizzle ORM, and images are handled through Cloudinary.
+Cardfoi lets users spin up a shareable profile card in seconds. Each card lives at a public `/:id` URL and supports a bio, avatar, work history entries, social links, and DaisyUI theme customization. Auth is handled by Better Auth (email/password + Google OAuth), storage is Neon PostgreSQL via Drizzle ORM, and images are handled through Cloudinary.
+
+---
+
+## Features
+
+- **Shareable profile cards** — one link per card, live at `cardfoi.vercel.app/{slug}`
+- **8 visual templates** — Minimal, Cover, Sidebar, Terminal, Glass, Timeline, Modern, Professional
+- **8 DaisyUI themes** — switch accent colors instantly
+- **Media uploads** — images and video via Cloudinary, served through a proxy
+- **Social links** — GitHub, Twitter, LinkedIn, and more in the card footer
+- **Dark mode dashboard** — with smooth CSS transitions and responsive sidebar
+- **Email/password + Google OAuth** — via Better Auth, with email verification and password reset
+- **Work history entries** — links and media with titles
 
 ---
 
@@ -26,6 +39,9 @@ Cardfoi lets users spin up a shareable profile card in seconds. Each card lives 
 | Email | Resend |
 | UI State | Zustand |
 | Server State | React Query |
+| Animation | Framer Motion + GSAP |
+| Icons | Lucide React |
+| ID Generation | Nanoid |
 | Testing | Vitest + jsdom |
 
 ---
@@ -42,21 +58,13 @@ npm install
 
 ### 2. Environment Variables
 
-Create a `.env.local` file at the root:
+Copy `.env.example` to `.env.local` and fill in the values:
 
-```env
-DATABASE_URL="postgresql://USER:PASSWORD@HOST.neon.tech/DB?sslmode=require"
-BETTER_AUTH_SECRET="generate-a-strong-secret"
-BETTER_AUTH_URL="http://localhost:3000"
-
-CLOUDINARY_CLOUD_NAME=""
-CLOUDINARY_API_KEY=""
-CLOUDINARY_API_SECRET=""
-NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=""
-NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=""
+```bash
+cp .env.example .env.local
 ```
 
-> Cloudinary uploads use an **unsigned upload preset** — set `NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET` to a preset created in your Cloudinary dashboard with unsigned mode enabled.
+See `.env.example` for all required variables.
 
 ### 3. Push DB Schema & Run
 
@@ -87,13 +95,24 @@ npm run db:seed       # seed the database
 
 ```
 cardfoi/
-├── app/          # Next.js App Router — pages, layouts, API routes
-├── db/           # Drizzle schema & DB client
-├── drizzle/      # Generated migration files
-├── lib/          # Shared utilities, auth config, stores, Cloudinary helpers
-├── tests/        # Vitest test files (per-module)
-├── scripts/      # Seed scripts
-└── vitest.config.ts
+├── app/                   # Next.js App Router — pages, layouts, API routes
+├── components/
+│   ├── dashboard/         # Dashboard shell, sidebar, tiles (Identity, Theme, Projects, etc.)
+│   ├── landing/           # Landing page nav
+│   ├── shared/            # MediaModal, StructuredData
+│   └── templates/         # 8 card templates (Minimal, Cover, Sidebar, Terminal, etc.)
+├── db/                    # Drizzle schema & DB client
+├── drizzle/               # Generated migration files
+├── lib/                   # Shared utilities, auth config, stores, Cloudinary helpers
+│   ├── hooks/             # React Query hooks + useCardTheme
+│   ├── stores/            # Zustand stores (auth, dashboard, theme)
+│   └── validation/        # Zod schemas
+├── public/                # Static assets, favicon, OG image
+├── scripts/               # Seed scripts
+├── tests/                 # Vitest test files (per-module)
+├── .opencode/             # Agent plans and skills
+├── vitest.config.ts
+└── .env.example
 ```
 
 ---
