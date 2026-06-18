@@ -2,17 +2,24 @@ import { create } from "zustand";
 
 type LoadingState = { card: boolean; work: boolean; password: boolean };
 
+export type SectionId = "identity" | "projects" | "socials" | "theme" | "security" | "admin";
+
 type DashboardState = {
   selectedId: string;
   showForgotPassword: boolean;
   forgotEmail: string;
   message: string;
   loading: LoadingState;
+  activeSection: string;
+  mobileSidebarOpen: boolean;
   setSelectedId: (id: string) => void;
   setShowForgotPassword: (show: boolean) => void;
   setForgotEmail: (email: string) => void;
   setMessage: (msg: string) => void;
   setLoading: (type: keyof LoadingState, value: boolean) => void;
+  setActiveSection: (section: string) => void;
+  setMobileSidebarOpen: (open: boolean) => void;
+  toggleMobileSidebar: () => void;
   clearState: () => void;
 };
 
@@ -24,6 +31,8 @@ export const useDashboardStore = create<DashboardState>((set) => ({
   forgotEmail: "",
   message: "",
   loading: { card: false, work: false, password: false },
+  activeSection: "identity",
+  mobileSidebarOpen: false,
   setSelectedId: (id) => set({ selectedId: id }),
   setShowForgotPassword: (show) => set({ showForgotPassword: show }),
   setForgotEmail: (email) => set({ forgotEmail: email }),
@@ -36,6 +45,9 @@ export const useDashboardStore = create<DashboardState>((set) => ({
   },
   setLoading: (type, value) =>
     set((state) => ({ loading: { ...state.loading, [type]: value } })),
+  setActiveSection: (section) => set({ activeSection: section }),
+  setMobileSidebarOpen: (open) => set({ mobileSidebarOpen: open }),
+  toggleMobileSidebar: () => set((s) => ({ mobileSidebarOpen: !s.mobileSidebarOpen })),
   clearState: () =>
     set({
       selectedId: "",
@@ -43,5 +55,7 @@ export const useDashboardStore = create<DashboardState>((set) => ({
       forgotEmail: "",
       message: "",
       loading: { card: false, work: false, password: false },
+      activeSection: "identity",
+      mobileSidebarOpen: false,
     }),
 }));

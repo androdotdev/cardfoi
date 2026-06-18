@@ -67,93 +67,96 @@ export default function SecurityTile() {
   }
 
   return (
-    <div className="bg-white border border-gray-100 rounded-xl p-5">
-      <p className="text-xs uppercase tracking-widest text-gray-400 mb-4">
+    <div className="bg-white border border-[#ebebea] rounded-xl p-7">
+      <p className="text-[11px] uppercase tracking-[0.1em] text-[#9a9a97] mb-5">
         Security
       </p>
 
-      {!showPasswordForm ? (
+      {/* Change password */}
+      <div className="border border-[#ebebea] rounded-xl p-5 mb-6">
+        <p className="text-[13px] font-medium text-[#0a0a0a] mb-1">Password</p>
+        <p className="text-[12px] text-[#5c5c5a] mb-4">Update your account password</p>
+        {!showPasswordForm ? (
+          <button
+            type="button"
+            onClick={() => setShowPasswordForm(true)}
+            className="border border-[#ebebea] text-sm px-4 py-2 rounded-full text-[#5c5c5a] hover:text-[#0a0a0a] hover:border-[#d4d4d2] transition-colors"
+          >
+            Update password
+          </button>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+            <div>
+              <input
+                {...register("currentPassword")}
+                type="password"
+                placeholder="Current password"
+                className="bg-[#fafaf8] border border-[#ebebea] rounded-lg px-4 py-2.5 text-sm w-full text-[#5c5c5a] focus:border-[#d4d4d2] transition-colors"
+              />
+              {errors.currentPassword && (
+                <p className="text-xs text-red-500 mt-1">{errors.currentPassword.message}</p>
+              )}
+            </div>
+            <div>
+              <input
+                {...register("newPassword")}
+                type="password"
+                placeholder="New password"
+                className="bg-[#fafaf8] border border-[#ebebea] rounded-lg px-4 py-2.5 text-sm w-full text-[#5c5c5a] focus:border-[#d4d4d2] transition-colors"
+              />
+              {errors.newPassword && (
+                <p className="text-xs text-red-500 mt-1">{errors.newPassword.message}</p>
+              )}
+            </div>
+            <div>
+              <input
+                {...register("confirmPassword")}
+                type="password"
+                placeholder="Confirm new password"
+                className="bg-[#fafaf8] border border-[#ebebea] rounded-lg px-4 py-2.5 text-sm w-full text-[#5c5c5a] focus:border-[#d4d4d2] transition-colors"
+              />
+              {errors.confirmPassword && (
+                <p className="text-xs text-red-500 mt-1">{errors.confirmPassword.message}</p>
+              )}
+            </div>
+            <div className="flex items-center gap-2 pt-1">
+              <button
+                type="submit"
+                disabled={changePassword.isPending}
+                className="bg-[#0a0a0a] text-white text-sm px-5 py-2 rounded-full font-medium disabled:opacity-40 transition-opacity"
+              >
+                {changePassword.isPending ? "Saving..." : "Update password"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowPasswordForm(false);
+                  reset();
+                }}
+                className="text-sm text-[#9a9a97] hover:text-[#5c5c5a] transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+
+      {/* Danger zone */}
+      <div className="border border-red-200 rounded-xl p-5">
+        <p className="text-[13px] font-medium text-red-500 mb-1">Delete account</p>
+        <p className="text-[12px] text-[#5c5c5a] mb-3">
+          Permanently removes your account, cards, works, sessions, and all associated data. This cannot be undone.
+        </p>
         <button
+          onClick={handleDeleteSelf}
+          disabled={isDeleting}
+          className="border border-red-200 text-red-500 text-sm px-4 py-2 rounded-full hover:bg-red-50 transition-colors disabled:opacity-50"
           type="button"
-          onClick={() => setShowPasswordForm(true)}
-          className="text-sm text-gray-400 hover:text-gray-600"
         >
-          Change password
+          {isDeleting ? "Deleting..." : "Delete my account"}
         </button>
-      ) : (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-          <div>
-            <input
-              {...register("currentPassword")}
-              type="password"
-              placeholder="Current password"
-              className="bg-gray-50 border border-gray-100 rounded-lg px-4 py-2.5 text-sm w-full"
-            />
-            {errors.currentPassword && (
-              <p className="text-xs text-red-500 mt-1">{errors.currentPassword.message}</p>
-            )}
-          </div>
-          <div>
-            <input
-              {...register("newPassword")}
-              type="password"
-              placeholder="New password"
-              className="bg-gray-50 border border-gray-100 rounded-lg px-4 py-2.5 text-sm w-full"
-            />
-            {errors.newPassword && (
-              <p className="text-xs text-red-500 mt-1">{errors.newPassword.message}</p>
-            )}
-          </div>
-          <div>
-            <input
-              {...register("confirmPassword")}
-              type="password"
-              placeholder="Confirm password"
-              className="bg-gray-50 border border-gray-100 rounded-lg px-4 py-2.5 text-sm w-full"
-            />
-            {errors.confirmPassword && (
-              <p className="text-xs text-red-500 mt-1">{errors.confirmPassword.message}</p>
-            )}
-          </div>
-          <div className="flex items-center gap-2 pt-1">
-            <button
-              type="submit"
-              disabled={changePassword.isPending}
-              className="bg-gray-900 text-white text-sm px-5 py-2 rounded-full font-medium disabled:opacity-50"
-            >
-              {changePassword.isPending ? "Saving..." : "Save"}
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setShowPasswordForm(false);
-                reset();
-              }}
-              className="text-sm text-gray-400 hover:text-gray-600"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      )}
-
-      <div className="border-t border-red-100 my-4" />
-
-      <p className="text-xs text-gray-500 mb-2">
-        Delete your own account
-      </p>
-      <p className="text-xs text-gray-400 mb-3">
-        Permanently delete your account and all associated data (cards, works, sessions, accounts).
-      </p>
-
-      <button
-        onClick={handleDeleteSelf}
-        disabled={isDeleting}
-        className="border border-red-200 text-red-500 text-sm px-4 py-2 rounded w-full hover:bg-red-50 disabled:opacity-50"
-        type="button"
-      >
-        {isDeleting ? "Deleting..." : "Delete My Account"}
-      </button>
+      </div>
     </div>
   );
 }

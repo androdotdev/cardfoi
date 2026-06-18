@@ -10,6 +10,7 @@ describe("useDashboardStore", () => {
       forgotEmail: "",
       message: "",
       loading: { card: false, work: false, password: false },
+      mobileSidebarOpen: false,
     });
   });
 
@@ -57,5 +58,21 @@ describe("useDashboardStore", () => {
     expect(s.forgotEmail).toBe("");
     expect(s.message).toBe("");
     expect(s.loading).toEqual({ card: false, work: false, password: false });
+    expect(s.mobileSidebarOpen).toBe(false);
+  });
+
+  it("setMobileSidebarOpen updates the flag", () => {
+    useDashboardStore.getState().setMobileSidebarOpen(true);
+    expect(useDashboardStore.getState().mobileSidebarOpen).toBe(true);
+    useDashboardStore.getState().setMobileSidebarOpen(false);
+    expect(useDashboardStore.getState().mobileSidebarOpen).toBe(false);
+  });
+
+  it("toggleMobileSidebar flips the flag", () => {
+    expect(useDashboardStore.getState().mobileSidebarOpen).toBe(false);
+    useDashboardStore.getState().toggleMobileSidebar();
+    expect(useDashboardStore.getState().mobileSidebarOpen).toBe(true);
+    useDashboardStore.getState().toggleMobileSidebar();
+    expect(useDashboardStore.getState().mobileSidebarOpen).toBe(false);
   });
 });

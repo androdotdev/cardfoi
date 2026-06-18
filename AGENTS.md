@@ -60,6 +60,21 @@ Quick reference for AI agents continuing development. Read this FIRST.
 
 6. **Public OG image**: `public/og-image.png` (1200×630, ~222KB)
 
+### June 18, 2026 — Dark Mode Transition + Responsive Sidebar
+
+1. **Smooth dark mode transitions**:
+   - Added `@media (prefers-reduced-motion: no-preference)` guard with `transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease` on `.dashboard-bg.dark, .dashboard-bg.dark *`
+   - Removed all `!important` from dark mode CSS rules (attribute selectors at 0,3,0 beat Tailwind's 0,1,0 without it)
+   - Added `.preload * { transition: none !important; }` to prevent flash before JS hydrates, removed in `CardDashboard.tsx:useEffect`
+
+2. **Responsive sidebar**:
+   - Added `mobileSidebarOpen` state + `setMobileSidebarOpen`/`toggleMobileSidebar` to `useDashboardStore`
+   - Sidebar: fixed overlay on mobile (`translate-x` transform), invisible at lg+
+   - Backdrop: semi-transparent overlay, dismisses sidebar on click
+   - Hamburger: `Menu` icon from `lucide-react` in `DashboardShell` header, visible below lg
+   - Route change: `useEffect` with `usePathname()` resets `mobileSidebarOpen` to false
+   - Nav item click automatically closes sidebar on mobile
+
 ### June 18, 2026 — Zustand Migration, Vitest, Image & AdminTile Fixes
 
 1. **Nanostores → Zustand migration**:
@@ -181,12 +196,12 @@ Quick reference for AI agents continuing development. Read this FIRST.
 npm run dev          # Start dev server (Turbopack)
 npm run build        # Production build (MUST pass before committing)
 npm run start        # Production server
-npm run test         # Run vitest (17 tests across 3 store files)
+npm run test         # Run vitest (18 tests across 3 store files)
 npm run db:push      # Push schema to Neon
 npm run db:studio    # Drizzle Studio (DB GUI)
 ```
 
-**Build status**: ✅ Passes (last verified June 18, 2026)
+**Build status**: ✅ Passes (last verified June 18, 2026, post dark-mode + sidebar)
 
 ---
 
@@ -227,4 +242,4 @@ DATABASE_URL="postgresql://..."
 
 ---
 
-*Last updated: June 18, 2026*
+*Last updated: June 18, 2026 (2nd revision)*

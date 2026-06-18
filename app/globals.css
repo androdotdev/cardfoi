@@ -62,202 +62,128 @@ select:focus {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Dashboard dark mode - applied to .dashboard-bg.dark */
+/* Dashboard card + label utilities (landing page theme) */
+.dashboard-card {
+  background: #ffffff;
+  border: 0.5px solid #ebebea;
+  border-radius: 12px;
+  padding: 28px;
+}
+
+.dashboard-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #9a9a97;
+}
+
+/* Prevent transition flash before JS hydrates */
+.preload * {
+  transition: none !important;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dashboard-bg.dark,
+  .dashboard-bg.dark * {
+    transition: background-color 0.15s ease,
+                color 0.15s ease,
+                border-color 0.15s ease;
+  }
+}
+
+/* Dashboard dark mode */
 .dashboard-bg.dark {
-  background-color: #121212;
-  color: #E0E0E0;
+  --dash-bg-base: #0f0f10;
+  --dash-bg-surface: #161618;
+  --dash-bg-elevated: #1e1e21;
+  --dash-border: #2a2a2e;
+  --dash-text-primary: #f0eff4;
+  --dash-text-muted: #6b6a72;
+
+  background-color: var(--dash-bg-base);
+  color: var(--dash-text-primary);
 }
 
+/* Sidebar + card backgrounds */
+.dashboard-bg.dark aside,
 .dashboard-bg.dark .bg-white {
-  background-color: #1e1e1e;
+  background-color: var(--dash-bg-surface);
 }
 
-.dashboard-bg.dark .bg-gray-50 {
-  background-color: #2a2a2a;
+/* Inputs, hover states, nav active bg */
+.dashboard-bg.dark input,
+.dashboard-bg.dark textarea,
+.dashboard-bg.dark select {
+  background-color: var(--dash-bg-elevated);
+  border-color: var(--dash-border);
+  color: var(--dash-text-primary);
 }
 
-.dashboard-bg.dark .bg-gray-100 {
-  background-color: #333333;
+.dashboard-bg.dark input::placeholder,
+.dashboard-bg.dark textarea::placeholder {
+  color: var(--dash-text-muted);
 }
 
-.dashboard-bg.dark .border-gray-100 {
-  border-color: #333333;
+.dashboard-bg.dark input:focus,
+.dashboard-bg.dark textarea:focus,
+.dashboard-bg.dark select:focus {
+  border-color: #3b3b40;
+  outline-color: #3b3b40;
 }
 
-.dashboard-bg.dark .border-gray-200 {
-  border-color: #404040;
+/* Bordered containers (password zone, danger zone) */
+.dashboard-bg.dark [class*="rounded-xl"] {
+  border-color: var(--dash-border);
 }
 
-.dashboard-bg.dark .text-gray-400 {
-  color: #BDBDBD;
+/* Text colors */
+.dashboard-bg.dark [class*="text-[#0a0a0a]"],
+.dashboard-bg.dark [class*="text-[#5c5c5a]"] {
+  color: var(--dash-text-primary);
 }
 
-.dashboard-bg.dark .text-gray-600 {
-  color: #E0E0E0;
+.dashboard-bg.dark [class*="text-[#9a9a97]"] {
+  color: var(--dash-text-muted);
 }
 
-.dashboard-bg.dark .text-gray-700 {
-  color: #E0E0E0;
+/* Backgrounds */
+.dashboard-bg.dark [class*="bg-[#fafaf8]"] {
+  background-color: var(--dash-bg-surface);
 }
 
-.dashboard-bg.dark .text-gray-800 {
-  color: #FFFFFF;
+.dashboard-bg.dark [class*="hover:bg-[#fafaf8]"]:hover {
+  background-color: var(--dash-bg-elevated);
 }
 
-.dashboard-bg.dark .text-gray-300 {
-  color: #BDBDBD;
+/* Borders */
+.dashboard-bg.dark [class*="border-[#ebebea]"],
+.dashboard-bg.dark [class*="border-[#d4d4d2]"] {
+  border-color: var(--dash-border);
 }
 
-.dashboard-bg.dark .hover\:bg-gray-50:hover {
-  background-color: #2a2a2a;
+.dashboard-bg.dark [class*="border-[#0a0a0a]"] {
+  border-color: var(--dash-text-primary);
 }
 
-.dashboard-bg.dark .ring-gray-800 {
-  --tw-ring-color: #e5e5e5;
+/* Active nav border */
+.dashboard-bg.dark nav button[class*="border-l-[#0a0a0a]"] {
+  border-left-color: var(--dash-text-primary);
 }
 
+/* Color swatch ring */
+.dashboard-bg.dark [class*="ring-[#0a0a0a]"] {
+  --tw-ring-color: var(--dash-text-primary);
+}
+
+/* Scrollbar */
 .dashboard-bg.dark ::-webkit-scrollbar-track {
-  background: #1e1e1e;
+  background: var(--dash-bg-surface);
 }
 
 .dashboard-bg.dark ::-webkit-scrollbar-thumb {
-  background: #424242;
+  background: #3a3a3e;
 }
 
 .dashboard-bg.dark ::-webkit-scrollbar-thumb:hover {
-  background: #616161;
-}
-
-.dashboard-bg.dark .dashboard-theme-toggle:hover {
-  background-color: #2a2a2a;
-}
-
-.dashboard-bg.dark .dashboard-mobile-menu {
-  background-color: #1e1e1e;
-  border-color: #333333;
-}
-
-.dark .dashboard-bg .bg-white {
-  background-color: #1e1e1e;
-}
-
-.dark .dashboard-bg .bg-gray-50 {
-  background-color: #2a2a2a;
-}
-
-.dark .dashboard-bg .bg-gray-100 {
-  background-color: #333333;
-}
-
-.dark .dashboard-bg .border-gray-100 {
-  border-color: #333333;
-}
-
-.dark .dashboard-bg .border-gray-200 {
-  border-color: #404040;
-}
-
-.dark .dashboard-bg .text-gray-400 {
-  color: #BDBDBD;
-}
-
-.dark .dashboard-bg .text-gray-600 {
-  color: #E0E0E0;
-}
-
-.dark .dashboard-bg .text-gray-700 {
-  color: #E0E0E0;
-}
-
-.dark .dashboard-bg .text-gray-800 {
-  color: #FFFFFF;
-}
-
-.dark .dashboard-bg .text-gray-300 {
-  color: #BDBDBD;
-}
-
-.dark .dashboard-bg .hover\:bg-gray-50:hover {
-  background-color: #2a2a2a;
-}
-
-.dark .dashboard-bg ::-webkit-scrollbar-track {
-  background: #1e1e1e;
-}
-
-.dark .dashboard-bg ::-webkit-scrollbar-thumb {
-  background: #424242;
-}
-
-.dark .dashboard-bg ::-webkit-scrollbar-thumb:hover {
-  background: #616161;
-}
-
-.dark .dashboard-bg .dashboard-theme-toggle:hover {
-  background-color: #2a2a2a;
-}
-
-.dark .dashboard-bg .dashboard-mobile-menu {
-  background-color: #1e1e1e;
-  border-color: #333333;
-}
-
-.dark .bg-white {
-  background-color: #1e1e1e;
-}
-
-.dark .bg-gray-50 {
-  background-color: #2a2a2a;
-}
-
-.dark .bg-gray-100 {
-  background-color: #333333;
-}
-
-.dark .border-gray-100 {
-  border-color: #2a2a2a;
-}
-
-.dark .border-gray-200 {
-  border-color: #404040;
-}
-
-.dark .text-gray-400 {
-  color: #a3a3a3;
-}
-
-.dark .text-gray-600 {
-  color: #E0E0E0;
-}
-
-.dark .text-gray-700 {
-  color: #E0E0E0;
-}
-
-.dark .text-gray-800 {
-  color: #FFFFFF;
-}
-
-.dark .text-gray-300 {
-  color: #BDBDBD;
-}
-
-.dark .hover\:bg-gray-50:hover {
-  background-color: #2a2a2a;
-}
-
-.dark .ring-gray-800 {
-  --tw-ring-color: #e5e5e5;
-}
-
-.dark ::-webkit-scrollbar-track {
-  background: #1e1e1e;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: #424242;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #616161;
+  background: #4a4a4e;
 }

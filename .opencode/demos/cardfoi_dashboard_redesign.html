@@ -1,0 +1,203 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.shell{display:flex;min-height:600px;background:var(--color-background-tertiary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);overflow:hidden}
+.sidebar{width:200px;flex-shrink:0;background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;padding:20px 0}
+.brand{padding:0 16px 20px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:12px}
+.brand-name{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.brand-handle{font-size:12px;color:var(--color-text-tertiary);margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 16px;font-size:13px;color:var(--color-text-secondary);cursor:pointer;border-radius:0;transition:background 0.1s;border-left:2px solid transparent}
+.nav-item:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
+.nav-item.active{color:#7c6dfa;border-left:2px solid #7c6dfa;background:var(--color-background-primary)}
+.nav-item i{font-size:15px}
+.nav-section{font-size:10px;letter-spacing:0.08em;color:var(--color-text-tertiary);padding:16px 16px 4px;text-transform:uppercase}
+.sidebar-footer{margin-top:auto;padding:16px;border-top:0.5px solid var(--color-border-tertiary)}
+.avatar{width:32px;height:32px;border-radius:50%;background:#7c6dfa22;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:#7c6dfa}
+.user-row{display:flex;align-items:center;gap:8px}
+.user-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.user-email{font-size:11px;color:var(--color-text-tertiary)}
+.main{flex:1;overflow-y:auto;padding:28px}
+.section{display:none}
+.section.active{display:block}
+.section-title{font-size:17px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.section-sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:24px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:20px;margin-bottom:16px}
+.card-label{font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:8px}
+.field-row{display:grid;gap:10px;margin-bottom:14px}
+.field-row.two{grid-template-columns:1fr 1fr}
+label{font-size:12px;color:var(--color-text-secondary);display:block;margin-bottom:4px}
+input,textarea{width:100%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 10px;font-size:13px;color:var(--color-text-primary);font-family:var(--font-sans);resize:none}
+textarea{line-height:1.5}
+input:focus,textarea:focus{outline:none;border-color:#7c6dfa}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{background:#7c6dfa18;color:#7c6dfa;font-size:11px;padding:3px 8px;border-radius:20px}
+.btn-row{display:flex;gap:8px;margin-top:20px}
+.btn{padding:7px 16px;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary);transition:background 0.1s}
+.btn:hover{background:var(--color-background-tertiary)}
+.btn-primary{background:#7c6dfa;color:#fff;border-color:#7c6dfa}
+.btn-primary:hover{background:#6a5de8}
+.btn-danger{color:var(--color-text-danger);border-color:var(--color-border-danger)}
+.btn-danger:hover{background:var(--color-background-danger)}
+.project-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.project-row:last-child{border-bottom:none}
+.dot{width:7px;height:7px;border-radius:50%;background:#7c6dfa;flex-shrink:0}
+.project-name{font-size:13px;font-weight:500;color:var(--color-text-primary);flex:1}
+.project-url{font-size:12px;color:var(--color-text-tertiary)}
+.project-actions{display:flex;gap:4px}
+.icon-btn{background:none;border:none;padding:4px;cursor:pointer;color:var(--color-text-tertiary);border-radius:4px}
+.icon-btn:hover{color:var(--color-text-primary);background:var(--color-background-secondary)}
+.add-btn{display:flex;align-items:center;gap:6px;font-size:12px;color:#7c6dfa;cursor:pointer;margin-top:12px;background:none;border:none;padding:0}
+.theme-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.swatch{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent}
+.swatch.active{border-color:var(--color-text-primary)}
+.social-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.social-row:last-child{border-bottom:none}
+.social-icon{width:28px;height:28px;border-radius:6px;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--color-text-secondary)}
+.social-name{font-size:13px;color:var(--color-text-primary);width:72px}
+.social-url{font-size:12px;color:var(--color-text-tertiary);flex:1}
+.danger-zone{border:0.5px solid var(--color-border-danger);border-radius:var(--border-radius-lg);padding:16px 20px}
+.danger-title{font-size:13px;font-weight:500;color:var(--color-text-danger);margin-bottom:4px}
+.danger-desc{font-size:12px;color:var(--color-text-secondary);margin-bottom:12px}
+.badge{font-size:10px;padding:2px 7px;border-radius:20px;background:var(--color-background-warning);color:var(--color-text-warning);margin-left:6px}
+</style>
+
+<h2 class="sr-only">Cardfoi settings dashboard redesign</h2>
+
+<div class="shell">
+  <div class="sidebar">
+    <div class="brand">
+      <div class="brand-name">Cardfoi</div>
+      <div class="brand-handle">carderfoi.vercel.app/andro</div>
+    </div>
+    <div class="nav-section">Profile</div>
+    <div class="nav-item active" onclick="show('identity',this)"><i class="ti ti-user" aria-hidden="true"></i> Identity</div>
+    <div class="nav-item" onclick="show('projects',this)"><i class="ti ti-layout-grid" aria-hidden="true"></i> Projects</div>
+    <div class="nav-item" onclick="show('socials',this)"><i class="ti ti-link" aria-hidden="true"></i> Social links</div>
+    <div class="nav-section">Appearance</div>
+    <div class="nav-item" onclick="show('theme',this)"><i class="ti ti-palette" aria-hidden="true"></i> Theme</div>
+    <div class="nav-section">Account</div>
+    <div class="nav-item" onclick="show('security',this)"><i class="ti ti-lock" aria-hidden="true"></i> Security</div>
+    <div class="nav-item" onclick="show('admin',this)"><i class="ti ti-shield" aria-hidden="true"></i> Admin <span class="badge">admin</span></div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="avatar">RM</div>
+        <div>
+          <div class="user-name">Rishabh Madhwal</div>
+          <div class="user-email">androkingdom@gmail.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="section active" id="s-identity">
+      <div class="section-title">Identity</div>
+      <div class="section-sub">How you appear on your public card</div>
+      <div class="card">
+        <div class="field-row two">
+          <div><label>Display name</label><input value="Rishabh Madhwal" /></div>
+          <div><label>Username</label><input value="andro" /></div>
+        </div>
+        <div><label>Bio</label><textarea rows="3">Focused on systems that are well-reasoned, not just working — architecture, tradeoffs, and the internals that matter.</textarea></div>
+        <div style="margin-top:14px"><label>Skills</label><input value="Next.js, TypeScript, PostgreSQL, Cloudinary, Better Auth" /><div class="tag-row"><span class="tag">Next.js</span><span class="tag">TypeScript</span><span class="tag">PostgreSQL</span><span class="tag">Cloudinary</span><span class="tag">Better Auth</span></div></div>
+        <div class="btn-row"><button class="btn btn-primary">Save changes</button><button class="btn">Preview card</button></div>
+      </div>
+      <div class="card">
+        <div class="card-label">Contact (card-only, not public)</div>
+        <div><label>Email on card</label><input value="androkingdom@gmail.com" /></div>
+        <div class="btn-row"><button class="btn btn-primary">Save</button></div>
+      </div>
+    </div>
+
+    <div class="section" id="s-projects">
+      <div class="section-title">Projects</div>
+      <div class="section-sub">Pinned work shown on your card</div>
+      <div class="card">
+        <div class="project-row"><div class="dot"></div><div class="project-name">CardFoi</div><div class="project-url">cardfoi.vercel.app</div><div class="project-actions"><button class="icon-btn"><i class="ti ti-edit" aria-hidden="true"></i></button><button class="icon-btn"><i class="ti ti-trash" aria-hidden="true"></i></button></div></div>
+        <div class="project-row"><div class="dot"></div><div class="project-name">JsonFlow</div><div class="project-url">json-flow-client.vercel.app</div><div class="project-actions"><button class="icon-btn"><i class="ti ti-edit" aria-hidden="true"></i></button><button class="icon-btn"><i class="ti ti-trash" aria-hidden="true"></i></button></div></div>
+        <button class="add-btn"><i class="ti ti-plus" aria-hidden="true"></i> Add project</button>
+      </div>
+    </div>
+
+    <div class="section" id="s-socials">
+      <div class="section-title">Social links</div>
+      <div class="section-sub">Links shown on your public card</div>
+      <div class="card">
+        <div class="social-row"><div class="social-icon"><i class="ti ti-brand-github" aria-hidden="true"></i></div><div class="social-name">GitHub</div><div class="social-url">github.com/androdotdev</div><button class="icon-btn"><i class="ti ti-edit" aria-hidden="true"></i></button></div>
+        <div class="social-row"><div class="social-icon"><i class="ti ti-brand-twitter" aria-hidden="true"></i></div><div class="social-name">Twitter</div><div class="social-url">x.com/androdotdev</div><button class="icon-btn"><i class="ti ti-edit" aria-hidden="true"></i></button></div>
+        <div class="social-row"><div class="social-icon"><i class="ti ti-brand-linkedin" aria-hidden="true"></i></div><div class="social-name">LinkedIn</div><div class="social-url">linkedin.com/in/...</div><button class="icon-btn"><i class="ti ti-edit" aria-hidden="true"></i></button></div>
+        <button class="add-btn"><i class="ti ti-plus" aria-hidden="true"></i> Add social link</button>
+      </div>
+    </div>
+
+    <div class="section" id="s-theme">
+      <div class="section-title">Theme</div>
+      <div class="section-sub">Pick the look of your public card</div>
+      <div class="card">
+        <div class="card-label">Color accent</div>
+        <div class="theme-row">
+          <div class="swatch active" style="background:#3b82f6"></div>
+          <div class="swatch" style="background:#111827"></div>
+          <div class="swatch" style="background:#7c6dfa"></div>
+          <div class="swatch" style="background:#ef4444"></div>
+          <div class="swatch" style="background:#8b5cf6"></div>
+          <div class="swatch" style="background:#10b981"></div>
+          <div class="swatch" style="background:#22d3ee"></div>
+        </div>
+        <div style="margin-top:20px"><div class="card-label">Layout style</div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <div style="flex:1;padding:12px;border:2px solid #7c6dfa;border-radius:var(--border-radius-md);font-size:12px;text-align:center;cursor:pointer;color:#7c6dfa">Minimal</div>
+          <div style="flex:1;padding:12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:12px;text-align:center;cursor:pointer;color:var(--color-text-secondary)">Detailed</div>
+          <div style="flex:1;padding:12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:12px;text-align:center;cursor:pointer;color:var(--color-text-secondary)">Grid</div>
+        </div></div>
+        <div class="btn-row"><button class="btn btn-primary">Save theme</button></div>
+      </div>
+    </div>
+
+    <div class="section" id="s-security">
+      <div class="section-title">Security</div>
+      <div class="section-sub">Manage your account credentials</div>
+      <div class="card">
+        <div class="card-label">Change password</div>
+        <div class="field-row"><label>Current password</label><input type="password" placeholder="••••••••" /></div>
+        <div class="field-row"><label>New password</label><input type="password" placeholder="••••••••" /></div>
+        <div class="field-row"><label>Confirm new password</label><input type="password" placeholder="••••••••" /></div>
+        <div class="btn-row"><button class="btn btn-primary">Update password</button></div>
+      </div>
+      <div class="danger-zone">
+        <div class="danger-title">Delete account</div>
+        <div class="danger-desc">Permanently removes your account, cards, works, sessions, and all associated data. This cannot be undone.</div>
+        <button class="btn btn-danger">Delete my account</button>
+      </div>
+    </div>
+
+    <div class="section" id="s-admin">
+      <div class="section-title">Admin panel</div>
+      <div class="section-sub">Manage user accounts — visible to admins only</div>
+      <div class="card">
+        <div class="card-label">Find user</div>
+        <input placeholder="Search by email or name..." style="margin-bottom:10px" />
+        <div style="font-size:13px;color:var(--color-text-tertiary);text-align:center;padding:16px 0">No users found</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Delete user by ID</div>
+        <div style="margin-bottom:10px"><label>User ID</label><input value="8HcLdRf6EyTfussIx86aXSbusIur2x1G" /></div>
+        <div class="danger-zone" style="border-radius:var(--border-radius-md)">
+          <div class="danger-title">Delete user account</div>
+          <div class="danger-desc">Permanently deletes user and all associated data.</div>
+          <button class="btn btn-danger">Delete user account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('s-' + id).classList.add('active');
+  el.classList.add('active');
+}
+</script>

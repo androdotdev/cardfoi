@@ -55,7 +55,7 @@ export default async function RootLayout({
       lang="en"
       className={`${instrumentSerif.variable} ${dmSans.variable}`}
     >
-      <body className="font-['DM_Sans','sans-serif']">
+      <body className="font-['DM_Sans','sans-serif'] preload">
         <Providers>{children}</Providers>
       </body>
     </html>
