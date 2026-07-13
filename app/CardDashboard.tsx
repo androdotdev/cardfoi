@@ -120,15 +120,15 @@ function NoCardsView() {
       if (result?.card?.id) {
         useDashboardStore.getState().setSelectedId(result.card.id);
       }
-    } catch (error: any) {
-      setMessage(error.message ?? "Failed to create card.");
+    } catch (error: unknown) {
+      setMessage(error instanceof Error ? error.message : "Failed to create card.");
     }
   }
 
   return (
     <div className="min-h-screen bg-[#fafaf8] flex items-center justify-center p-6">
       <div className="text-center max-w-md">
-        <p className="text-[#5c5c5a] mb-4">You don't have any cards yet.</p>
+        <p className="text-[#5c5c5a] mb-4">You don&apos;t have any cards yet.</p>
         <button
           onClick={handleCreateCard}
           disabled={isPending}

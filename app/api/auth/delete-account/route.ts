@@ -17,10 +17,11 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Delete account error:", error);
+    const message = error instanceof Error ? error.message : "Failed to delete account.";
     return NextResponse.json(
-      { error: error.message ?? "Failed to delete account." },
+      { error: message },
       { status: 500 }
     );
   }
