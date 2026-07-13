@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { authClient } from "@/lib/auth-client";
 
 type UserListItem = {
@@ -21,7 +21,7 @@ export default function AdminTile() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function fetchUsers() {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -39,11 +39,14 @@ export default function AdminTile() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [search]);
 
   useEffect(() => {
-    fetchUsers();
-  }, [search]);
+    const timer = setTimeout(() => {
+      fetchUsers();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [fetchUsers]);
 
   if (!isAdmin) return null;
 

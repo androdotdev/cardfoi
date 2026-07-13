@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 
 function ResetPasswordContent() {
@@ -55,7 +56,7 @@ function ResetPasswordContent() {
         <div className="rounded-box border border-base-300 bg-base-100 p-8 shadow-sm max-w-md w-full">
           <h1 className="text-2xl font-bold mb-4">Invalid Reset Link</h1>
           <p className="text-base-content/70">This password reset link is invalid or has expired.</p>
-          <a href="/dashboard" className="btn btn-primary mt-6 w-full">Back to Sign In</a>
+          <Link href="/dashboard" className="btn btn-primary mt-6 w-full">Back to Sign In</Link>
         </div>
       </main>
     );

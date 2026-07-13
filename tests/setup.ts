@@ -16,7 +16,7 @@ const storage = {
   key: (index: number) => Object.keys(store)[index] ?? null,
 };
 
-delete (globalThis as any).localStorage;
+delete (globalThis as unknown as { localStorage: unknown }).localStorage;
 Object.defineProperty(globalThis, "localStorage", {
   value: storage,
   writable: true,

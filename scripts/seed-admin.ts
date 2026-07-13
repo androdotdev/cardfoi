@@ -34,8 +34,9 @@ async function seedAdmin() {
     console.log("Role:", user.user.role);
     console.log("ID:", user.user.id);
     console.log("Email Verified: true");
-  } catch (error: any) {
-    if (error.message?.includes("already exists")) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "";
+    if (message.includes("already exists")) {
       console.log("Admin user already exists with email:", email);
       // Update existing user to ensure they're admin and verified
       const existingUsers = await db.select().from(schema.user).where(eq(schema.user.email, email));

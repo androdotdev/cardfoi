@@ -1,6 +1,7 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
 import { FiUser, FiLayout, FiLink, FiDroplet, FiLock, FiShield, FiSun, FiMoon } from "react-icons/fi";
 import type { IconType } from "react-icons";
 import { useThemeStore } from "@/lib/stores/useThemeStore";
@@ -81,15 +82,15 @@ export default function Sidebar({ activeSection, onSectionChange, slug }: Sideba
       >
         <div className="px-4 py-5 border-b border-[#ebebea] flex items-center justify-between">
           <div>
-            <a href="/" className="text-sm font-medium text-[#0a0a0a] no-underline">
+            <Link href="/" className="text-sm font-medium text-[#0a0a0a] no-underline">
               Cardfoi
-            </a>
-            <a
+            </Link>
+            <Link
               href={slug ? `/${slug}` : "/"}
               className="text-[11px] text-[#9a9a97] mt-0.5 hover:text-[#5c5c5a] transition-colors block truncate"
             >
               cardfoi.vercel.app/{slug ?? "..."}
-            </a>
+            </Link>
           </div>
           <button
             onClick={toggleDashboardTheme}

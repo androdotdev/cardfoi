@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url);
-  const query: Record<string, any> = {};
+  const query: Record<string, string | number> = {};
 
   const searchValue = searchParams.get("search");
   if (searchValue) {
@@ -37,10 +37,11 @@ export async function GET(request: Request) {
     });
 
     return NextResponse.json(result);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("List users error:", error);
+    const message = error instanceof Error ? error.message : "Failed to list users.";
     return NextResponse.json(
-      { error: error.message ?? "Failed to list users." },
+      { error: message },
       { status: 500 }
     );
   }

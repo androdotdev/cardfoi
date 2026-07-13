@@ -70,8 +70,8 @@ export default function ThemeTile({ selectedCard }: ThemeTileProps) {
         selectedCard,
       });
       setMessage("Theme saved.");
-    } catch (error: any) {
-      setMessage(error.message ?? "Unable to save theme.");
+    } catch (error: unknown) {
+      setMessage(error instanceof Error ? error.message : "Unable to save theme.");
     }
   }
 

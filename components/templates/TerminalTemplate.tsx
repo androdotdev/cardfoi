@@ -24,8 +24,10 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
   }
 
   useEffect(() => {
-    setLines([]);
-    setDone(false);
+    const resetTimer = setTimeout(() => {
+      setLines([]);
+      setDone(false);
+    }, 0);
 
     const skills = card.skills ?? [];
 
@@ -71,7 +73,10 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
       }
     }, 80);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(resetTimer);
+      clearInterval(interval);
+    };
   }, [card.id]);
 
   return (

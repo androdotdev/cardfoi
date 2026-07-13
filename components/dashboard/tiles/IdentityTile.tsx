@@ -61,7 +61,7 @@ export default function IdentityTile({ selectedCard }: IdentityTileProps) {
       if (data.name !== selectedCard.name) {
         try {
           await authClient.updateUser({ name: data.name });
-        } catch (syncError: any) {
+        } catch (syncError: unknown) {
           console.error("Failed to sync user name:", syncError);
         }
       }
@@ -76,8 +76,8 @@ export default function IdentityTile({ selectedCard }: IdentityTileProps) {
         }
       }
       setMessage("Card saved.");
-    } catch (error: any) {
-      setMessage(error.message ?? "Unable to save card.");
+    } catch (error: unknown) {
+      setMessage(error instanceof Error ? error.message : "Unable to save card.");
     }
   }
 

@@ -35,10 +35,11 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Admin delete user error:", error);
+    const message = error instanceof Error ? error.message : "Failed to delete user.";
     return NextResponse.json(
-      { error: error.message ?? "Failed to delete user." },
+      { error: message },
       { status: 500 }
     );
   }
