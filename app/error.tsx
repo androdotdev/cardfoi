@@ -7,6 +7,8 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  console.error("Route error:", error);
+
   return (
     <main className="min-h-screen bg-[#fafaf8] flex items-center justify-center p-4">
       <div className="text-center max-w-md">
