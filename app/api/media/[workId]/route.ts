@@ -31,51 +31,43 @@ export async function GET(
     expires_at: Math.floor(Date.now() / 1000) + 3600,
   });
 
-  // 3. Fetch from Cloudinary
-  const cloudinaryResponse = await fetch(signedUrl);
+  // 3. Forward Range header to Cloudinary (it supports range requests natively)
+  const range = request.headers.get("range");
+  const fetchHeaders: HeadersInit = {};
+  if (range) {
+    fetchHeaders["Range"] = range;
+  }
 
-  if (!cloudinaryResponse.ok) {
+  const cloudinaryResponse = await fetch(signedUrl, { headers: fetchHeaders });
+
+  if (!cloudinaryResponse.ok && cloudinaryResponse.status !== 206) {
     return NextResponse.json(
       { error: "Failed to fetch media" },
-      { status: 502 }
+      { status: 502 },
     );
   }
 
-  // 4. Handle Range requests for video seeking
-  const range = request.headers.get("range");
-  const contentLength = cloudinaryResponse.headers.get("content-length");
-  const contentType = cloudinaryResponse.headers.get("content-type") || "application/octet-stream";
-
-  const headers = new Headers({
-    "Content-Type": contentType,
+  // 4. Stream response headers
+  const responseHeaders = new Headers({
+    "Content-Type":
+      cloudinaryResponse.headers.get("content-type") || "application/octet-stream",
     "Accept-Ranges": "bytes",
     "Cache-Control": "private, max-age=3600",
   });
 
-  if (range && contentLength) {
-    // Parse Range header (e.g., "bytes=0-1023")
-    const rangeMatch = range.match(/bytes=(\d+)-(\d*)/);
-    if (rangeMatch) {
-      const start = parseInt(rangeMatch[1]);
-      const end = rangeMatch[2]
-        ? parseInt(rangeMatch[2])
-        : parseInt(contentLength) - 1;
-      const chunkSize = end - start + 1;
-
-      // Fetch full content and slice (Cloudinary doesn't support range requests directly)
-      const buffer = await cloudinaryResponse.arrayBuffer();
-      const slice = buffer.slice(start, end + 1);
-
-      headers.set("Content-Range", `bytes ${start}-${end}/${contentLength}`);
-      headers.set("Content-Length", chunkSize.toString());
-
-      return new NextResponse(slice, { status: 206, headers });
-    }
+  const contentLength = cloudinaryResponse.headers.get("content-length");
+  if (contentLength) {
+    responseHeaders.set("Content-Length", contentLength);
   }
 
-  // 5. Return full content
-  const buffer = await cloudinaryResponse.arrayBuffer();
-  headers.set("Content-Length", buffer.byteLength.toString());
+  const contentRange = cloudinaryResponse.headers.get("content-range");
+  if (contentRange) {
+    responseHeaders.set("Content-Range", contentRange);
+  }
 
-  return new NextResponse(buffer, { headers });
+  // 5. Stream the response body directly — no buffering
+  return new NextResponse(cloudinaryResponse.body, {
+    status: cloudinaryResponse.status,
+    headers: responseHeaders,
+  });
 }

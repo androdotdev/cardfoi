@@ -20,7 +20,7 @@ export default function WorkUploadButton({
 
   return (
     <CldUploadWidget
-      uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+      signatureEndpoint="/api/cloudinary/sign"
       options={{
         folder: `cardfoi/projects/${cardId}`,
         resourceType: type,
