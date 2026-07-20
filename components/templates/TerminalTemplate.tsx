@@ -4,6 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
+import {
+  useMediaModal,
+  mediaWorksOf,
+} from "@/components/templates/shared/primitives";
 
 export default function TerminalTemplate({ card }: { card: UserCard }) {
   useCardTheme(card.theme);
@@ -12,16 +16,9 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
   const terminalRef = useRef<HTMLDivElement>(null);
 
   const works = card.works ?? [];
-  const mediaWorks = works.filter(
-    (w) => w.type === "image" || w.type === "video",
-  );
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalIndex, setModalIndex] = useState(0);
-
-  function openModal(index: number) {
-    setModalIndex(index);
-    setModalOpen(true);
-  }
+  const mediaWorks = mediaWorksOf(works);
+  const { modalOpen, modalIndex, openModal, closeModal, setModalIndex } =
+    useMediaModal();
 
   useEffect(() => {
     const resetTimer = setTimeout(() => {
@@ -43,14 +40,11 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
       ``,
       `> cat contact.txt`,
       `  email: ${card.email ?? ""}`,
-      ...(card.socialLinks ?? []).map(
-        (s) => `  ${s.platform}: ${s.url}`,
-      ),
+      ...(card.socialLinks ?? []).map((s) => `  ${s.platform}: ${s.url}`),
       ``,
       `> ./works.sh`,
       ...works.map(
-        (w, i) =>
-          `  ${i + 1}. ${w?.title ?? "untitled"} — ${w?.type ?? "link"}`,
+        (w, i) => `  ${i + 1}. ${w?.title ?? "untitled"} — ${w?.type ?? "link"}`,
       ),
       ``,
       `> _`,
@@ -77,12 +71,10 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
       clearTimeout(resetTimer);
       clearInterval(interval);
     };
-  }, [card.id]);
+  }, [card.id, card.description, card.email, card.name, card.skills, card.socialLinks, works]);
 
   return (
-    <main
-      className="min-h-screen bg-[#0a0e14] p-4 font-mono text-[#a6e3a1]"
-    >
+    <main className="min-h-screen bg-[#0a0e14] p-4 font-mono text-[#a6e3a1]">
       <div className="mx-auto max-w-3xl">
         <div className="overflow-hidden rounded-lg border border-[#2a2f3a] bg-[#13171f] shadow-2xl">
           {/* Title bar */}
@@ -121,17 +113,22 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
                 return (
                   <span
                     key={index}
-                    className="inline-block mr-2 mb-1 rounded bg-[#2a2f3a] px-2 py-0.5 text-[#f9e2af]"
+                    className="mb-1 mr-2 inline-block rounded bg-[#2a2f3a] px-2 py-0.5 text-[#f9e2af]"
                   >
-                    {line.replace(/[\[\]]/g, "")}
+                    {line.replace(/[[\]]/g, "")}
                   </span>
                 );
               }
               if (line.startsWith("  ") && line.includes("://")) {
                 const url = line.trim().split(": ").slice(1).join(": ");
                 return (
-                  <a key={index} href={url} target="_blank" rel="noopener noreferrer"
-                     className="block text-[#cba6f7] hover:text-[#89b4fa] transition-colors">
+                  <a
+                    key={index}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-[#cba6f7] transition-colors hover:text-[#89b4fa]"
+                  >
                     {line}
                   </a>
                 );
@@ -152,15 +149,14 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
 
             {works.length > 0 && done && (
               <div className="mt-4 border-t border-[#2a2f3a] pt-4">
-                <div className="mb-2 text-xs text-[#6c7086]">
-                  # click to open:
-                </div>
-                {works.map((work, i) => (
+                <div className="mb-2 text-xs text-[#6c7086]"># click to open:</div>
+                {works.map((work) =>
                   work.type === "link" ? (
                     <a
                       key={work.id}
                       href={work.url}
-                      target="_blank" rel="noopener noreferrer"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="block rounded px-2 py-1 text-[#89b4fa] transition-colors hover:bg-[#2a2f3a]"
                     >
                       ► {work.title}
@@ -173,8 +169,8 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
                   ) : (
                     <div
                       key={work.id}
-                      className="block rounded px-2 py-1 text-[#89b4fa] transition-colors hover:bg-[#2a2f3a] cursor-pointer"
-                      onClick={() => openModal(i)}
+                      className="block cursor-pointer rounded px-2 py-1 text-[#89b4fa] transition-colors hover:bg-[#2a2f3a]"
+                      onClick={() => openModal(mediaWorks.indexOf(work))}
                     >
                       ► {work.title}
                       {work.description ? (
@@ -184,20 +180,19 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
                       ) : null}
                       <span className="ml-2 text-[#f9e2af]">[view media]</span>
                     </div>
-                  )
-                ))}
+                  ),
+                )}
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Media Modal */}
       <MediaModal
         works={mediaWorks}
         currentIndex={modalIndex}
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={closeModal}
         onNavigate={setModalIndex}
       />
     </main>

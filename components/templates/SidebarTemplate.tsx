@@ -1,38 +1,27 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Mail } from "lucide-react";
-import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaInstagram, FaGlobe } from "react-icons/fa";
 import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
 import Image from "next/image";
-
-const platformIcon: Record<string, React.ComponentType<{ className?: string }>> = {
-  github: FaGithub, twitter: FaTwitter, linkedin: FaLinkedin,
-  youtube: FaYoutube, instagram: FaInstagram, website: FaGlobe,
-};
+import {
+  SocialRow,
+  useMediaModal,
+  mediaWorksOf,
+} from "@/components/templates/shared/primitives";
 
 export default function SidebarTemplate({ card }: { card: UserCard }) {
   useCardTheme(card.theme);
   const skills = card.skills ?? [];
   const works = card.works ?? [];
-  const mediaWorks = works.filter(
-    (w) => w.type === "image" || w.type === "video",
-  );
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalIndex, setModalIndex] = useState(0);
-
-  function openModal(index: number) {
-    setModalIndex(index);
-    setModalOpen(true);
-  }
+  const mediaWorks = mediaWorksOf(works);
+  const { modalOpen, modalIndex, openModal, closeModal, setModalIndex } =
+    useMediaModal();
 
   return (
-    <main
-      className="min-h-screen bg-base-200 p-4 sm:p-6 lg:p-8"
-    >
+    <main className="card-theme-root min-h-screen bg-base-200 p-4 sm:p-6 lg:p-8">
       <motion.div
         className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-sm"
         initial={{ opacity: 0, y: 20 }}
@@ -81,7 +70,6 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                 <Mail size={13} />
                 <span className="truncate">{card.email}</span>
               </a>
-
             </motion.div>
 
             {skills.length > 0 && (
@@ -98,7 +86,7 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                   {skills.map((skill) => (
                     <span
                       key={skill}
-                      className="rounded-md bg-base-100/10 px-2.5 py-1 text-xs text-base-100/70"
+                      className="rounded-full bg-base-100/10 px-3 py-1 text-xs font-medium text-base-100/70"
                     >
                       {skill}
                     </span>
@@ -137,8 +125,10 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                       {work.type === "link" && (
                         <a
                           href={work.url}
-                          target="_blank" rel="noopener noreferrer"
+                          target="_blank"
+                          rel="noopener noreferrer"
                           className="btn btn-sm btn-ghost shrink-0"
+                          aria-label="Open project"
                         >
                           <ExternalLink size={14} />
                         </a>
@@ -150,9 +140,9 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                         alt=""
                         width={512}
                         height={384}
-                        className="mt-3 w-full max-w-lg cursor-pointer hover:opacity-90 transition-opacity"
-                        onClick={() => openModal(i)}
-                        draggable="false"
+                        className="mt-3 w-full max-w-lg cursor-pointer rounded-xl transition-opacity hover:opacity-90"
+                        onClick={() => openModal(mediaWorks.indexOf(work))}
+                        draggable={false}
                         onContextMenu={(e) => e.preventDefault()}
                       />
                     )}
@@ -162,15 +152,8 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                         className="mt-3 w-full max-w-lg rounded-xl"
                         controls
                         controlsList="nodownload"
-                        draggable="false"
+                        draggable={false}
                         onContextMenu={(e) => e.preventDefault()}
-                      />
-                    )}
-                    {work.type === "video" && (
-                      <video
-                        src={work.url}
-                        className="mt-3 w-full max-w-lg rounded-xl"
-                        controls
                       />
                     )}
                   </motion.div>
@@ -183,31 +166,13 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
         </div>
       </motion.div>
 
-      {/* Social */}
-      {card.socialLinks && card.socialLinks.length > 0 && (
-        <div className="mt-8 flex justify-center gap-4 border-t border-base-300 pt-6 text-base-content/60">
-          {card.socialLinks.map((link) => {
-            const Icon = platformIcon[link.platform] || FaGlobe;
-            return (
-              <a
-                key={link.id}
-                href={link.url}
-                target="_blank" rel="noopener noreferrer"
-                title={link.platform}
-                className="hover:opacity-70 transition-opacity"
-              >
-                {Icon && <Icon className="h-6 w-6" />}
-              </a>
-            );
-          })}
-        </div>
-      )}
+      <SocialRow links={card.socialLinks} />
 
       <MediaModal
         works={mediaWorks}
         currentIndex={modalIndex}
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={closeModal}
         onNavigate={setModalIndex}
       />
     </main>

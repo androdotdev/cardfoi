@@ -1,44 +1,41 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Mail } from "lucide-react";
-import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaInstagram, FaGlobe } from "react-icons/fa";
 import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
 import Image from "next/image";
+import {
+  SkillBadge,
+  SocialRow,
+  useMediaModal,
+  mediaWorksOf,
+} from "@/components/templates/shared/primitives";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-const platformIcon: Record<string, React.ComponentType<{ className?: string }>> = {
-  github: FaGithub, twitter: FaTwitter, linkedin: FaLinkedin,
-  youtube: FaYoutube, instagram: FaInstagram, website: FaGlobe,
-};
-
 export default function MinimalTemplate({ card }: { card: UserCard }) {
   useCardTheme(card.theme);
   const skills = card.skills ?? [];
   const works = card.works ?? [];
-  const mediaWorks = works.filter(w => w.type === "image" || w.type === "video");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalIndex, setModalIndex] = useState(0);
-
-  function openModal(index: number) {
-    setModalIndex(index);
-    setModalOpen(true);
-  }
+  const mediaWorks = mediaWorksOf(works);
+  const { modalOpen, modalIndex, openModal, closeModal, setModalIndex } =
+    useMediaModal();
 
   return (
-    <main
-      className="min-h-screen bg-base-100 px-6 py-16 md:px-12"
-    >
+    <main className="card-theme-root min-h-screen bg-base-100 px-6 py-16 md:px-12">
       <div className="mx-auto max-w-2xl">
         {/* Header */}
-        <motion.div variants={fadeUp} className="mb-12 flex items-start gap-6">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          className="mb-12 flex items-start gap-6"
+        >
           <div className="shrink-0">
             {card.avatar ? (
               <Image
@@ -58,64 +55,60 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
             <h1 className="text-3xl font-bold tracking-tight text-base-content">
               {card.name}
             </h1>
-            <p className="mt-2 text-base-content/60 leading-relaxed max-w-lg">
+            <p className="mt-2 max-w-lg leading-relaxed text-base-content/60">
               {card.description}
             </p>
           </div>
         </motion.div>
 
         {/* Divider */}
-        <motion.div variants={fadeUp} className="mb-8 h-px bg-base-200" />
+        <div className="mb-8 h-px bg-base-200" />
 
         {/* Skills */}
         {skills.length > 0 && (
-          <motion.div variants={fadeUp} className="mb-10">
+          <div className="mb-10">
             <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-base-content/40">
               Stack
             </p>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="rounded-md border border-base-300 bg-base-200 px-3 py-1 text-xs font-medium text-base-content/70"
-                >
-                  {skill}
-                </span>
+                <SkillBadge key={skill} label={skill} variant="outline" />
               ))}
             </div>
-          </motion.div>
+          </div>
         )}
 
         {/* Contact */}
-        <motion.div variants={fadeUp} className="mb-10 flex flex-wrap gap-4">
+        <div className="mb-10 flex flex-wrap gap-4">
           <a
             href={`mailto:${card.email}`}
-            className="inline-flex items-center gap-2 text-sm text-base-content/60 hover:text-primary transition-colors"
+            className="inline-flex items-center gap-2 text-sm text-base-content/60 transition-colors hover:text-primary"
           >
             <Mail size={14} />
             {card.email}
           </a>
-        </motion.div>
+        </div>
 
         {/* Works */}
         {works.length > 0 && (
-          <motion.div variants={fadeUp}>
+          <div>
             <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-base-content/40">
               Work
             </p>
             <div className="space-y-px">
-              {works.map((work, i) => (
+              {works.map((work, i) =>
                 work.type === "link" ? (
                   <motion.a
                     key={work.id}
                     href={work.url}
-                    target="_blank" rel="noopener noreferrer"
-                    className="group flex items-center justify-between py-4 border-b border-base-200 hover:border-primary/30 transition-colors"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between border-b border-base-200 py-4 transition-colors hover:border-primary/30"
                     whileHover={{ x: 4 }}
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   >
                     <div>
-                      <p className="font-medium text-base-content group-hover:text-primary transition-colors">
+                      <p className="font-medium text-base-content transition-colors group-hover:text-primary">
                         {work.title}
                       </p>
                       {work.description && (
@@ -126,19 +119,19 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
                     </div>
                     <ExternalLink
                       size={14}
-                      className="shrink-0 text-base-content/30 group-hover:text-primary transition-colors"
+                      className="shrink-0 text-base-content/30 transition-colors group-hover:text-primary"
                     />
                   </motion.a>
                 ) : (
                   <motion.div
                     key={work.id}
-                    className="group flex items-center justify-between py-4 border-b border-base-200 hover:border-primary/30 transition-colors cursor-pointer"
+                    className="group flex cursor-pointer items-center justify-between border-b border-base-200 py-4 transition-colors hover:border-primary/30"
                     whileHover={{ x: 4 }}
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                    onClick={() => openModal(i)}
+                    onClick={() => openModal(mediaWorks.indexOf(work))}
                   >
                     <div>
-                      <p className="font-medium text-base-content group-hover:text-primary transition-colors">
+                      <p className="font-medium text-base-content transition-colors group-hover:text-primary">
                         {work.title}
                       </p>
                       {work.description && (
@@ -146,7 +139,6 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
                           {work.description}
                         </p>
                       )}
-                      {/* Thumbnail for image/video */}
                       {work.type === "image" && (
                         <Image
                           src={work.url}
@@ -154,7 +146,7 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
                           width={64}
                           height={64}
                           className="mt-2 h-16 w-16 rounded object-cover"
-                          draggable="false"
+                          draggable={false}
                           onContextMenu={(e) => e.preventDefault()}
                         />
                       )}
@@ -164,41 +156,24 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
                         </div>
                       )}
                     </div>
-                    <span className="text-xs text-base-content/50">Media uploaded ✓</span>
+                    <span className="text-xs text-base-content/50">
+                      Media uploaded ✓
+                    </span>
                   </motion.div>
-                )
-              ))}
+                ),
+              )}
             </div>
-          </motion.div>
+          </div>
         )}
       </div>
 
-      {/* Social */}
-      {card.socialLinks && card.socialLinks.length > 0 && (
-        <div className="mt-8 flex justify-center gap-4 border-t border-base-300 pt-6 text-base-content/60">
-          {card.socialLinks.map((link) => {
-            const Icon = platformIcon[link.platform] || FaGlobe;
-            return (
-              <a
-                key={link.id}
-                href={link.url}
-                target="_blank" rel="noopener noreferrer"
-                title={link.platform}
-                className="hover:opacity-70 transition-opacity"
-              >
-                {Icon && <Icon className="h-6 w-6" />}
-              </a>
-            );
-          })}
-        </div>
-      )}
+      <SocialRow links={card.socialLinks} />
 
-      {/* Media Modal */}
       <MediaModal
         works={mediaWorks}
         currentIndex={modalIndex}
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={closeModal}
         onNavigate={setModalIndex}
       />
     </main>

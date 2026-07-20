@@ -10,6 +10,9 @@ import SidebarTemplate from "@/components/templates/SidebarTemplate";
 import TerminalTemplate from "@/components/templates/TerminalTemplate";
 import GlassTemplate from "@/components/templates/GlassTemplate";
 import TimelineTemplate from "@/components/templates/TimelineTemplate";
+import ModernTemplate from "@/components/templates/ModernTemplate";
+import ProfessionalTemplate from "@/components/templates/ProfessionalTemplate";
+import CreativeTemplate from "@/components/templates/CreativeTemplate";
 import StructuredData from "@/components/shared/StructuredData";
 
 type Props = {
@@ -22,8 +25,11 @@ const templateMap: Record<string, React.ComponentType<{ card: UserCard }>> = {
   sidebar: SidebarTemplate,
   terminal: TerminalTemplate,
   glass: GlassTemplate,
-  timeline: TimelineTemplate
-  };
+  timeline: TimelineTemplate,
+  modern: ModernTemplate,
+  professional: ProfessionalTemplate,
+  creative: CreativeTemplate,
+};
  
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
