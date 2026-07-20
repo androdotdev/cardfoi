@@ -82,6 +82,18 @@ select:focus {
   transition: none !important;
 }
 
+/* Smooth, reduced-motion-aware theme transition for public card pages.
+   Applied to the card's root <main> so switching themes/cards eases in
+   instead of hard-flashing. */
+@media (prefers-reduced-motion: no-preference) {
+  .card-theme-root,
+  .card-theme-root * {
+    transition: background-color 0.2s ease,
+                color 0.2s ease,
+                border-color 0.2s ease;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .dashboard-bg.dark,
   .dashboard-bg.dark * {

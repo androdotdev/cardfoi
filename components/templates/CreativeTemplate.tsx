@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ExternalLink, Mail } from "lucide-react";
 import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaInstagram, FaGlobe } from "react-icons/fa";
 import gsap from "gsap";
@@ -8,6 +8,10 @@ import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
 import Image from "next/image";
+import {
+  useMediaModal,
+  mediaWorksOf,
+} from "@/components/templates/shared/primitives";
 
 const platformIcon: Record<string, React.ComponentType<{ className?: string }>> = {
   github: FaGithub, twitter: FaTwitter, linkedin: FaLinkedin,
@@ -19,16 +23,9 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const skills = card.skills ?? [];
   const works = card.works ?? [];
-  const mediaWorks = works.filter(
-    (w) => w.type === "image" || w.type === "video",
-  );
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalIndex, setModalIndex] = useState(0);
-
-  function openModal(index: number) {
-    setModalIndex(index);
-    setModalOpen(true);
-  }
+  const mediaWorks = mediaWorksOf(works);
+  const { modalOpen, modalIndex, openModal, closeModal, setModalIndex } =
+    useMediaModal();
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -69,7 +66,7 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
   return (
     <main
       ref={containerRef}
-      className="min-h-screen bg-base-200 px-4 py-10 md:px-10"
+      className="card-theme-root min-h-screen bg-base-200 px-4 py-10 md:px-10"
     >
       <div className="mx-auto max-w-4xl">
         {/* Hero */}
@@ -105,7 +102,6 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
                   <Mail size={13} />
                   {card.email}
                 </a>
-
               </div>
             </div>
           </div>
@@ -117,7 +113,7 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
             {skills.map((skill) => (
               <span
                 key={skill}
-                className="c-skill badge badge-primary badge-lg font-medium"
+                className="c-skill inline-flex items-center rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-content"
               >
                 {skill}
               </span>
@@ -132,7 +128,7 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
               Selected Work
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
-              {works.map((work, i) => (
+              {works.map((work) => (
                 <article
                   key={work.id}
                   className="c-work group rounded-2xl border border-base-300 bg-base-100 p-5 transition-shadow hover:shadow-md"
@@ -143,30 +139,20 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
                       alt=""
                       width={1280}
                       height={720}
-                      className="mb-3 aspect-video w-full rounded-xl object-cover cursor-pointer hover:opacity-90 transition-opacity"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openModal(i);
-                      }}
-                      draggable="false"
+                      className="mb-3 aspect-video w-full cursor-pointer rounded-xl object-cover transition-opacity hover:opacity-90"
+                      onClick={() => openModal(mediaWorks.indexOf(work))}
+                      draggable={false}
                       onContextMenu={(e) => e.preventDefault()}
                     />
                   )}
                   {work.type === "video" && (
                     <video
                       src={work.url}
-                      className="mb-3 aspect-video w-full rounded-xl bg-base-300"
+                      className="mb-3 aspect-video w-full rounded-xl"
                       controls
                       controlsList="nodownload"
-                      draggable="false"
+                      draggable={false}
                       onContextMenu={(e) => e.preventDefault()}
-                    />
-                  )}
-                  {work.type === "video" && (
-                    <video
-                      src={work.url}
-                      className="mb-4 aspect-video w-full rounded-xl bg-base-300"
-                      controls
                     />
                   )}
                   <h3 className="font-semibold text-base-content">
@@ -180,7 +166,8 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
                   {work.type === "link" && (
                     <a
                       href={work.url}
-                      target="_blank" rel="noopener noreferrer"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="btn btn-sm btn-primary mt-4 gap-1.5"
                     >
                       <ExternalLink size={13} />
@@ -188,7 +175,7 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
                     </a>
                   )}
                   {work.type !== "link" && (
-                    <span className="inline-block mt-4 text-xs text-base-content/50">
+                    <span className="mt-4 inline-block text-xs text-base-content/50">
                       Media uploaded ✓
                     </span>
                   )}
@@ -208,9 +195,10 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
               <a
                 key={link.id}
                 href={link.url}
-                target="_blank" rel="noopener noreferrer"
+                target="_blank"
+                rel="noopener noreferrer"
                 title={link.platform}
-                className="hover:opacity-70 transition-opacity"
+                className="transition-opacity hover:opacity-70"
               >
                 {Icon && <Icon className="h-6 w-6" />}
               </a>
@@ -223,7 +211,7 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
         works={mediaWorks}
         currentIndex={modalIndex}
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={closeModal}
         onNavigate={setModalIndex}
       />
     </main>

@@ -1,38 +1,28 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Mail } from "lucide-react";
-import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaInstagram, FaGlobe } from "react-icons/fa";
 import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
 import Image from "next/image";
-
-const platformIcon: Record<string, React.ComponentType<{ className?: string }>> = {
-  github: FaGithub, twitter: FaTwitter, linkedin: FaLinkedin,
-  youtube: FaYoutube, instagram: FaInstagram, website: FaGlobe,
-};
+import {
+  SkillBadge,
+  SocialRow,
+  useMediaModal,
+  mediaWorksOf,
+} from "@/components/templates/shared/primitives";
 
 export default function GlassTemplate({ card }: { card: UserCard }) {
   useCardTheme(card.theme);
   const skills = card.skills ?? [];
   const works = card.works ?? [];
-  const mediaWorks = works.filter(
-    (w) => w.type === "image" || w.type === "video",
-  );
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalIndex, setModalIndex] = useState(0);
-
-  function openModal(index: number) {
-    setModalIndex(index);
-    setModalOpen(true);
-  }
+  const mediaWorks = mediaWorksOf(works);
+  const { modalOpen, modalIndex, openModal, closeModal, setModalIndex } =
+    useMediaModal();
 
   return (
-      <main
-        className="min-h-screen bg-base-200 p-4 sm:p-8"
-      >
+    <main className="card-theme-root min-h-screen bg-base-200 p-4 sm:p-8">
       <div className="mx-auto max-w-4xl">
         {/* Glass hero card */}
         <motion.div
@@ -82,7 +72,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                 {card.name}
               </motion.h1>
               <motion.p
-                className="mt-2 text-base-content/60 leading-relaxed"
+                className="mt-2 leading-relaxed text-base-content/60"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
@@ -98,12 +88,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                   transition={{ delay: 0.5 }}
                 >
                   {skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
-                    >
-                      {skill}
-                    </span>
+                    <SkillBadge key={skill} label={skill} variant="soft" />
                   ))}
                 </motion.div>
               )}
@@ -124,7 +109,6 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
               <Mail size={14} />
               {card.email}
             </a>
-
           </motion.div>
         </motion.div>
 
@@ -154,9 +138,9 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                       alt=""
                       width={1280}
                       height={720}
-                      className="mb-3 aspect-video w-full rounded-xl object-cover cursor-pointer hover:opacity-90 transition-opacity"
-                      onClick={() => openModal(i)}
-                      draggable="false"
+                      className="mb-3 aspect-video w-full cursor-pointer rounded-xl object-cover transition-opacity hover:opacity-90"
+                      onClick={() => openModal(mediaWorks.indexOf(work))}
+                      draggable={false}
                       onContextMenu={(e) => e.preventDefault()}
                     />
                   )}
@@ -166,7 +150,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                       className="mb-3 aspect-video w-full rounded-xl"
                       controls
                       controlsList="nodownload"
-                      draggable="false"
+                      draggable={false}
                       onContextMenu={(e) => e.preventDefault()}
                     />
                   )}
@@ -181,7 +165,8 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                   {work.type === "link" && (
                     <a
                       href={work.url}
-                      target="_blank" rel="noopener noreferrer"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
                     >
                       View project <ExternalLink size={12} />
@@ -199,32 +184,13 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
         )}
       </div>
 
-      {/* Social */}
-      {card.socialLinks && card.socialLinks.length > 0 && (
-        <div className="mt-8 flex justify-center gap-4 border-t border-base-300 pt-6 text-base-content/60">
-          {card.socialLinks.map((link) => {
-            const Icon = platformIcon[link.platform] || FaGlobe;
-            return (
-              <a
-                key={link.id}
-                href={link.url}
-                target="_blank" rel="noopener noreferrer"
-                title={link.platform}
-                className="hover:opacity-70 transition-opacity"
-              >
-                {Icon && <Icon className="h-6 w-6" />}
-              </a>
-            );
-          })}
-        </div>
-      )}
+      <SocialRow links={card.socialLinks} />
 
-      {/* Media Modal */}
       <MediaModal
         works={mediaWorks}
         currentIndex={modalIndex}
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={closeModal}
         onNavigate={setModalIndex}
       />
     </main>

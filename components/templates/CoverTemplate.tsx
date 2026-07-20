@@ -1,38 +1,28 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Mail } from "lucide-react";
-import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaInstagram, FaGlobe } from "react-icons/fa";
 import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
-import Image from "next/image"
-
-const platformIcon: Record<string, React.ComponentType<{ className?: string }>> = {
-  github: FaGithub, twitter: FaTwitter, linkedin: FaLinkedin,
-  youtube: FaYoutube, instagram: FaInstagram, website: FaGlobe,
-};
+import Image from "next/image";
+import {
+  SkillBadge,
+  SocialRow,
+  useMediaModal,
+  mediaWorksOf,
+} from "@/components/templates/shared/primitives";
 
 export default function CoverTemplate({ card }: { card: UserCard }) {
   useCardTheme(card.theme);
   const skills = card.skills ?? [];
   const works = card.works ?? [];
-  const mediaWorks = works.filter(
-    (w) => w.type === "image" || w.type === "video",
-  );
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalIndex, setModalIndex] = useState(0);
-
-  function openModal(index: number) {
-    setModalIndex(index);
-    setModalOpen(true);
-  }
+  const mediaWorks = mediaWorksOf(works);
+  const { modalOpen, modalIndex, openModal, closeModal, setModalIndex } =
+    useMediaModal();
 
   return (
-    <main
-      className="min-h-screen bg-base-200 flex items-start justify-center p-4 pt-0 md:p-8 md:pt-0"
-    >
+    <main className="card-theme-root flex min-h-screen items-start justify-center bg-base-200 p-4 pt-0 md:p-8 md:pt-0">
       <div className="w-full max-w-md">
         {/* Full-bleed cover */}
         <motion.div
@@ -95,9 +85,7 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
           {skills.length > 0 && (
             <div className="mb-5 flex flex-wrap justify-center gap-1.5">
               {skills.map((skill) => (
-                <span key={skill} className="badge badge-outline badge-sm">
-                  {skill}
-                </span>
+                <SkillBadge key={skill} label={skill} variant="outline" />
               ))}
             </div>
           )}
@@ -111,11 +99,8 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <Mail size={15} />
               </div>
-              <span className="truncate text-base-content/70">
-                {card.email}
-              </span>
+              <span className="truncate text-base-content/70">{card.email}</span>
             </a>
-
           </div>
 
           {/* Works */}
@@ -125,12 +110,13 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                 Projects
               </p>
               <div className="space-y-2">
-                {works.map((work, i) => (
+                {works.map((work) =>
                   work.type === "link" ? (
                     <a
                       key={work.id}
                       href={work.url}
-                      target="_blank" rel="noopener noreferrer"
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="group flex items-center justify-between rounded-xl bg-base-200 px-4 py-3 transition-colors hover:bg-base-300"
                     >
                       <div className="min-w-0">
@@ -143,15 +129,15 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                           </p>
                         )}
                       </div>
-                      <span className="ml-2 shrink-0 text-base-content/30 group-hover:text-primary transition-colors">
+                      <span className="ml-2 shrink-0 text-base-content/30 transition-colors group-hover:text-primary">
                         <ExternalLink size={13} />
                       </span>
                     </a>
                   ) : (
                     <div
                       key={work.id}
-                      className="group flex items-center justify-between rounded-xl bg-base-200 px-4 py-3 transition-colors hover:bg-base-300 cursor-pointer"
-                      onClick={() => openModal(i)}
+                      className="group flex cursor-pointer items-center justify-between rounded-xl bg-base-200 px-4 py-3 transition-colors hover:bg-base-300"
+                      onClick={() => openModal(mediaWorks.indexOf(work))}
                     >
                       <div className="min-w-0">
                         <p className="truncate text-sm font-medium text-base-content">
@@ -163,7 +149,6 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                           </p>
                         )}
                       </div>
-                      {/* Show thumbnail for image/video */}
                       {work.type === "image" && (
                         <Image
                           src={work.url}
@@ -171,7 +156,7 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                           width={40}
                           height={40}
                           className="ml-2 h-10 w-10 rounded object-cover"
-                          draggable="false"
+                          draggable={false}
                           onContextMenu={(e) => e.preventDefault()}
                         />
                       )}
@@ -181,40 +166,21 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                         </div>
                       )}
                     </div>
-                  )
-                ))}
+                  ),
+                )}
               </div>
             </div>
           )}
         </motion.div>
       </div>
 
-      {/* Social */}
-      {card.socialLinks && card.socialLinks.length > 0 && (
-        <div className="mt-8 flex justify-center gap-4 border-t border-base-300 pt-6 text-base-content/60">
-          {card.socialLinks.map((link) => {
-            const Icon = platformIcon[link.platform] || FaGlobe;
-            return (
-              <a
-                key={link.id}
-                href={link.url}
-                target="_blank" rel="noopener noreferrer"
-                title={link.platform}
-                className="hover:opacity-70 transition-opacity"
-              >
-                {Icon && <Icon className="h-6 w-6" />}
-              </a>
-            );
-          })}
-        </div>
-      )}
+      <SocialRow links={card.socialLinks} />
 
-      {/* Media Modal */}
       <MediaModal
         works={mediaWorks}
         currentIndex={modalIndex}
         isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={closeModal}
         onNavigate={setModalIndex}
       />
     </main>
