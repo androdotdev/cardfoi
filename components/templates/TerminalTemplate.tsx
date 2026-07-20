@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { UserCard } from "@/lib/cards";
 import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
@@ -15,7 +15,7 @@ export default function TerminalTemplate({ card }: { card: UserCard }) {
   const [done, setDone] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
 
-  const works = card.works ?? [];
+  const works = useMemo(() => card.works ?? [], [card.works]);
   const mediaWorks = mediaWorksOf(works);
   const { modalOpen, modalIndex, openModal, closeModal, setModalIndex } =
     useMediaModal();

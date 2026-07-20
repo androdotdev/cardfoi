@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { ExternalLink, Mail } from "lucide-react";
 import { FaGithub, FaTwitter, FaLinkedin, FaYoutube, FaInstagram, FaGlobe } from "react-icons/fa";
 import gsap from "gsap";
@@ -9,7 +9,6 @@ import MediaModal from "@/components/shared/MediaModal";
 import { useCardTheme } from "@/lib/hooks/useCardTheme";
 import Image from "next/image";
 import {
-  SkillBadge,
   useMediaModal,
   mediaWorksOf,
 } from "@/components/templates/shared/primitives";
@@ -129,7 +128,7 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
               Selected Work
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
-              {works.map((work, i) => (
+              {works.map((work) => (
                 <article
                   key={work.id}
                   className="c-work group rounded-2xl border border-base-300 bg-base-100 p-5 transition-shadow hover:shadow-md"

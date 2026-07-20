@@ -96,7 +96,7 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
               Work
             </p>
             <div className="space-y-px">
-              {works.map((work, i) =>
+              {works.map((work) =>
                 work.type === "link" ? (
                   <motion.a
                     key={work.id}
