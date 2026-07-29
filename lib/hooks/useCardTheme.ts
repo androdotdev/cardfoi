@@ -5,7 +5,7 @@ import { useEffect } from "react";
 const DEFAULT_THEME = "corporate";
 
 /**
- * Applies a card's daisyUI theme to <html data-theme="…"> while the card
+ * Applies a card's theme to <html data-theme="…"> while the card
  * page is mounted, then restores the previous theme on unmount.
  *
  * - Falls back to a sensible default when the card has no theme set.

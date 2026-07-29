@@ -22,18 +22,18 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
     useMediaModal();
 
   return (
-    <main className="card-theme-root flex min-h-screen items-start justify-center bg-base-200 p-4 pt-0 md:p-8 md:pt-0">
+    <main className="card-theme-root flex min-h-screen items-start justify-center bg-muted p-4 pt-0 md:p-8 md:pt-0">
       <div className="w-full max-w-md">
         {/* Full-bleed cover */}
         <motion.div
-          className="relative overflow-hidden rounded-b-3xl bg-primary px-6 pb-24 pt-12 text-primary-content"
+          className="relative overflow-hidden rounded-b-3xl bg-accent px-6 pb-24 pt-12 text-accent-content"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
           {/* Decorative circles */}
-          <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-primary-content/5" />
-          <div className="absolute -left-8 bottom-0 h-32 w-32 rounded-full bg-primary-content/5" />
+          <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-accent-content opacity-5" />
+          <div className="absolute -left-8 bottom-0 h-32 w-32 rounded-full bg-accent-content opacity-5" />
 
           <div className="relative text-center">
             <motion.div
@@ -47,10 +47,10 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                   alt=""
                   width={96}
                   height={96}
-                  className="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-primary-content/30"
+                  className="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-accent-content/30"
                 />
               ) : (
-                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-primary-content/20 text-4xl font-bold ring-4 ring-primary-content/30">
+                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-accent-content opacity-20 text-4xl font-bold ring-4 ring-accent-content/30">
                   {card.name?.slice(0, 1)}
                 </div>
               )}
@@ -76,7 +76,7 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
 
         {/* Floating card body */}
         <motion.div
-          className="relative -mt-16 mx-4 rounded-2xl border border-base-300 bg-base-100 p-6 shadow-xl"
+          className="relative -mt-16 mx-4 rounded-2xl border border-muted bg-surface p-6 shadow-xl"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.5 }}
@@ -94,19 +94,19 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
           <div className="space-y-2">
             <a
               href={`mailto:${card.email}`}
-              className="flex items-center gap-3 rounded-xl bg-base-200 px-4 py-3 text-sm transition-colors hover:bg-base-300"
+              className="flex items-center gap-3 rounded-xl bg-muted px-4 py-3 text-sm transition-colors hover:bg-border"
             >
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-10 text-accent">
                 <Mail size={15} />
               </div>
-              <span className="truncate text-base-content/70">{card.email}</span>
+              <span className="truncate text-content-70">{card.email}</span>
             </a>
           </div>
 
           {/* Works */}
           {works.length > 0 && (
-            <div className="mt-6 border-t border-base-200 pt-5">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-base-content/40">
+            <div className="mt-6 border-t border-muted pt-5">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-content-40">
                 Projects
               </p>
               <div className="space-y-2">
@@ -117,34 +117,34 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                       href={work.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center justify-between rounded-xl bg-base-200 px-4 py-3 transition-colors hover:bg-base-300"
+                      className="group flex items-center justify-between rounded-xl bg-muted px-4 py-3 transition-colors hover:bg-border"
                     >
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-medium text-base-content">
+                        <p className="truncate text-sm font-medium text-content">
                           {work.title}
                         </p>
                         {work.description && (
-                          <p className="truncate text-xs text-base-content/50">
+                          <p className="truncate text-xs text-content-50">
                             {work.description}
                           </p>
                         )}
                       </div>
-                      <span className="ml-2 shrink-0 text-base-content/30 transition-colors group-hover:text-primary">
+                      <span className="ml-2 shrink-0 text-content-30 transition-colors group-hover:text-accent">
                         <ExternalLink size={13} />
                       </span>
                     </a>
                   ) : (
                     <div
                       key={work.id}
-                      className="group flex cursor-pointer items-center justify-between rounded-xl bg-base-200 px-4 py-3 transition-colors hover:bg-base-300"
+                      className="group flex cursor-pointer items-center justify-between rounded-xl bg-muted px-4 py-3 transition-colors hover:bg-border"
                       onClick={() => openModal(mediaWorks.indexOf(work))}
                     >
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-medium text-base-content">
+                        <p className="truncate text-sm font-medium text-content">
                           {work.title}
                         </p>
                         {work.description && (
-                          <p className="truncate text-xs text-base-content/50">
+                          <p className="truncate text-xs text-content-50">
                             {work.description}
                           </p>
                         )}
@@ -161,7 +161,7 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                         />
                       )}
                       {work.type === "video" && (
-                        <div className="ml-2 flex h-10 w-10 items-center justify-center rounded bg-base-300">
+                        <div className="ml-2 flex h-10 w-10 items-center justify-center rounded bg-border">
                           ▶
                         </div>
                       )}

@@ -22,7 +22,7 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
     useMediaModal();
 
   return (
-    <main className="card-theme-root min-h-screen bg-base-200 p-4 sm:p-8">
+    <main className="card-theme-root min-h-screen bg-muted p-4 sm:p-8">
       <div className="mx-auto max-w-3xl">
         {/* Header */}
         <motion.div
@@ -37,15 +37,15 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
               alt=""
               width={96}
               height={96}
-              className="mx-auto mb-4 h-24 w-24 rounded-full object-cover ring-4 ring-base-300"
+              className="mx-auto mb-4 h-24 w-24 rounded-full object-cover ring-4 ring-border"
             />
           ) : (
-            <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-base-300 text-3xl font-bold text-base-content/50">
+            <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-border text-3xl font-bold text-content-50">
               {card.name?.slice(0, 1)}
             </div>
           )}
-          <h1 className="text-3xl font-bold text-base-content">{card.name}</h1>
-          <p className="mt-2 text-base-content/60">{card.description}</p>
+          <h1 className="text-3xl font-bold text-content">{card.name}</h1>
+          <p className="mt-2 text-content-60">{card.description}</p>
 
           {skills.length > 0 && (
             <div className="mt-4 flex flex-wrap justify-center gap-2">
@@ -58,7 +58,7 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
           <div className="mt-4 flex justify-center gap-3">
             <a
               href={`mailto:${card.email}`}
-              className="btn btn-sm btn-ghost gap-2"
+              className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-content-60 transition-colors hover:bg-muted"
             >
               <Mail size={14} />
               {card.email}
@@ -69,13 +69,13 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
         {/* Timeline */}
         {works.length > 0 && (
           <div>
-            <p className="mb-8 text-center text-xs font-semibold uppercase tracking-widest text-base-content/40">
+            <p className="mb-8 text-center text-xs font-semibold uppercase tracking-widest text-content-40">
               Projects & Work
             </p>
 
             <div className="relative">
               {/* Vertical line */}
-              <div className="absolute left-5 top-0 h-full w-px bg-base-300" />
+              <div className="absolute left-5 top-0 h-full w-px bg-border" />
 
               <div className="space-y-6">
                 {works.map((work, i) => (
@@ -87,14 +87,14 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
                     transition={{ delay: 0.1 + i * 0.1, duration: 0.4 }}
                   >
                     {/* Node */}
-                    <div className="absolute left-3.5 top-4 flex h-3 w-3 items-center justify-center rounded-full border-2 border-primary bg-base-100">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                    <div className="absolute left-3.5 top-4 flex h-3 w-3 items-center justify-center rounded-full border-2 border-accent bg-surface">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
                     </div>
 
                     {/* Card */}
-                    <div className="rounded-2xl border border-base-300 bg-base-100 p-5 transition-shadow hover:shadow-md">
+                    <div className="rounded-2xl border border-muted bg-surface p-5 transition-shadow hover:shadow-md">
                       <div className="flex items-start justify-between gap-3">
-                        <h3 className="font-semibold text-base-content">
+                        <h3 className="font-semibold text-content">
                           {work.title}
                         </h3>
                         {work.type === "link" && (
@@ -102,7 +102,7 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
                             href={work.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="btn btn-xs btn-ghost shrink-0"
+                            className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs text-content-60 transition-colors hover:bg-muted shrink-0"
                             aria-label="Open project"
                           >
                             <ExternalLink size={12} />
@@ -110,7 +110,7 @@ export default function TimelineTemplate({ card }: { card: UserCard }) {
                         )}
                       </div>
                       {work.description && (
-                        <p className="mt-1.5 text-sm text-base-content/55">
+                        <p className="mt-1.5 text-sm text-content-55">
                           {work.description}
                         </p>
                       )}

@@ -96,7 +96,7 @@ export default function ProjectsTile({ works, cardId }: ProjectsTileProps) {
                     disabled={deletingId === work.id}
                   >
                     {deletingId === work.id ? (
-                      <span className="loading loading-spinner loading-xs" />
+                      <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
                     ) : (
                       <Trash2 size={14} />
                     )}

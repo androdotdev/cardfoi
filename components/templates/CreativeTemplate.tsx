@@ -66,11 +66,11 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
   return (
     <main
       ref={containerRef}
-      className="card-theme-root min-h-screen bg-base-200 px-4 py-10 md:px-10"
+      className="card-theme-root min-h-screen bg-muted px-4 py-10 md:px-10"
     >
       <div className="mx-auto max-w-4xl">
         {/* Hero */}
-        <div className="c-hero mb-8 overflow-hidden rounded-3xl bg-base-content px-6 py-8 md:px-10 md:py-10">
+        <div className="c-hero mb-8 overflow-hidden rounded-3xl bg-content px-6 py-8 md:px-10 md:py-10">
           <div className="flex flex-col gap-6 md:flex-row md:items-center">
             <div className="shrink-0">
               {card.avatar ? (
@@ -79,25 +79,25 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
                   alt=""
                   width={112}
                   height={112}
-                  className="h-28 w-28 rounded-2xl object-cover ring-4 ring-base-100/10"
+                  className="h-28 w-28 rounded-2xl object-cover ring-4 ring-surface-10"
                 />
               ) : (
-                <div className="flex h-28 w-28 items-center justify-center rounded-2xl bg-base-100/10 text-5xl font-bold text-base-100">
+                <div className="flex h-28 w-28 items-center justify-center rounded-2xl bg-surface-10 text-5xl font-bold text-accent-content">
                   {card.name?.slice(0, 1)}
                 </div>
               )}
             </div>
             <div className="flex-1">
-              <h1 className="text-4xl font-extrabold leading-none tracking-tight text-base-100 md:text-5xl">
+              <h1 className="text-4xl font-extrabold leading-none tracking-tight text-accent-content md:text-5xl">
                 {card.name}
               </h1>
-              <p className="mt-3 max-w-xl leading-relaxed text-base-100/60">
+              <p className="mt-3 max-w-xl leading-relaxed text-accent-content/60">
                 {card.description}
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
                 <a
                   href={`mailto:${card.email}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-base-100/10 px-4 py-2 text-xs font-medium text-base-100 transition-colors hover:bg-base-100/20"
+                  className="inline-flex items-center gap-2 rounded-full bg-surface-10 px-4 py-2 text-xs font-medium text-accent-content transition-colors hover-bg-surface-20"
                 >
                   <Mail size={13} />
                   {card.email}
@@ -113,7 +113,7 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
             {skills.map((skill) => (
               <span
                 key={skill}
-                className="c-skill inline-flex items-center rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-content"
+                className="c-skill inline-flex items-center rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-content"
               >
                 {skill}
               </span>
@@ -124,14 +124,14 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
         {/* Works */}
         {works.length > 0 && (
           <>
-            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-base-content/40">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-content-40">
               Selected Work
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
               {works.map((work) => (
                 <article
                   key={work.id}
-                  className="c-work group rounded-2xl border border-base-300 bg-base-100 p-5 transition-shadow hover:shadow-md"
+                  className="c-work group rounded-2xl border border-muted bg-surface p-5 transition-shadow hover:shadow-md"
                 >
                   {work.type === "image" && (
                     <Image
@@ -155,11 +155,11 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
                       onContextMenu={(e) => e.preventDefault()}
                     />
                   )}
-                  <h3 className="font-semibold text-base-content">
+                  <h3 className="font-semibold text-content">
                     {work.title}
                   </h3>
                   {work.description && (
-                    <p className="mt-1 text-sm text-base-content/55">
+                    <p className="mt-1 text-sm text-content-55">
                       {work.description}
                     </p>
                   )}
@@ -168,14 +168,14 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
                       href={work.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn-sm btn-primary mt-4 gap-1.5"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-accent-content transition-colors hover:opacity-90 mt-4"
                     >
                       <ExternalLink size={13} />
                       Open
                     </a>
                   )}
                   {work.type !== "link" && (
-                    <span className="mt-4 inline-block text-xs text-base-content/50">
+                    <span className="mt-4 inline-block text-xs text-content-50">
                       Media uploaded ✓
                     </span>
                   )}
@@ -188,7 +188,7 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
 
       {/* Social */}
       {card.socialLinks && card.socialLinks.length > 0 && (
-        <div className="mt-8 flex justify-center gap-4 border-t border-base-300 pt-6 text-base-content/60">
+        <div className="mt-8 flex justify-center gap-4 border-t border-muted pt-6 text-content-60">
           {card.socialLinks.map((link) => {
             const Icon = platformIcon[link.platform] || FaGlobe;
             return (

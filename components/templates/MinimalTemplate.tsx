@@ -27,7 +27,7 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
     useMediaModal();
 
   return (
-    <main className="card-theme-root min-h-screen bg-base-100 px-6 py-16 md:px-12">
+    <main className="card-theme-root min-h-screen bg-surface px-6 py-16 md:px-12">
       <div className="mx-auto max-w-2xl">
         {/* Header */}
         <motion.div
@@ -43,31 +43,31 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
                 alt=""
                 width={64}
                 height={64}
-                className="h-16 w-16 rounded-full object-cover ring-1 ring-base-300"
+                className="h-16 w-16 rounded-full object-cover ring-1 ring-border"
               />
             ) : (
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-base-200 text-xl font-semibold text-base-content">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted text-xl font-semibold text-content">
                 {card.name?.slice(0, 1)}
               </div>
             )}
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-base-content">
+            <h1 className="text-3xl font-bold tracking-tight text-content">
               {card.name}
             </h1>
-            <p className="mt-2 max-w-lg leading-relaxed text-base-content/60">
+            <p className="mt-2 max-w-lg leading-relaxed text-content-60">
               {card.description}
             </p>
           </div>
         </motion.div>
 
         {/* Divider */}
-        <div className="mb-8 h-px bg-base-200" />
+        <div className="mb-8 h-px bg-muted" />
 
         {/* Skills */}
         {skills.length > 0 && (
           <div className="mb-10">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-base-content/40">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-content-40">
               Stack
             </p>
             <div className="flex flex-wrap gap-2">
@@ -82,7 +82,7 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
         <div className="mb-10 flex flex-wrap gap-4">
           <a
             href={`mailto:${card.email}`}
-            className="inline-flex items-center gap-2 text-sm text-base-content/60 transition-colors hover:text-primary"
+            className="inline-flex items-center gap-2 text-sm text-content-60 transition-colors hover:text-accent"
           >
             <Mail size={14} />
             {card.email}
@@ -92,7 +92,7 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
         {/* Works */}
         {works.length > 0 && (
           <div>
-            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-base-content/40">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-content-40">
               Work
             </p>
             <div className="space-y-px">
@@ -103,39 +103,39 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
                     href={work.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-between border-b border-base-200 py-4 transition-colors hover:border-primary/30"
+                    className="group flex items-center justify-between border-b border-muted py-4 transition-colors hover-border-accent-30"
                     whileHover={{ x: 4 }}
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   >
                     <div>
-                      <p className="font-medium text-base-content transition-colors group-hover:text-primary">
+                      <p className="font-medium text-content transition-colors group-hover:text-accent">
                         {work.title}
                       </p>
                       {work.description && (
-                        <p className="mt-0.5 text-sm text-base-content/50">
+                        <p className="mt-0.5 text-sm text-content-50">
                           {work.description}
                         </p>
                       )}
                     </div>
                     <ExternalLink
                       size={14}
-                      className="shrink-0 text-base-content/30 transition-colors group-hover:text-primary"
+                      className="shrink-0 text-content-30 transition-colors group-hover:text-accent"
                     />
                   </motion.a>
                 ) : (
                   <motion.div
                     key={work.id}
-                    className="group flex cursor-pointer items-center justify-between border-b border-base-200 py-4 transition-colors hover:border-primary/30"
+                    className="group flex cursor-pointer items-center justify-between border-b border-muted py-4 transition-colors hover-border-accent-30"
                     whileHover={{ x: 4 }}
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                     onClick={() => openModal(mediaWorks.indexOf(work))}
                   >
                     <div>
-                      <p className="font-medium text-base-content transition-colors group-hover:text-primary">
+                      <p className="font-medium text-content transition-colors group-hover:text-accent">
                         {work.title}
                       </p>
                       {work.description && (
-                        <p className="mt-0.5 text-sm text-base-content/50">
+                        <p className="mt-0.5 text-sm text-content-50">
                           {work.description}
                         </p>
                       )}
@@ -151,12 +151,12 @@ export default function MinimalTemplate({ card }: { card: UserCard }) {
                         />
                       )}
                       {work.type === "video" && (
-                        <div className="mt-2 inline-flex items-center gap-1 text-xs text-base-content/50">
+                        <div className="mt-2 inline-flex items-center gap-1 text-xs text-content-50">
                           ▶ Watch video
                         </div>
                       )}
                     </div>
-                    <span className="text-xs text-base-content/50">
+                    <span className="text-xs text-content-50">
                       Media uploaded ✓
                     </span>
                   </motion.div>

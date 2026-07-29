@@ -1,8 +1,189 @@
 @import "tailwindcss";
-@plugin "daisyui" {
-  themes: corporate --default, night, business, luxury,
-          dracula, synthwave, cmyk, emerald;
+
+/* =============================
+   Custom Theme System
+   (custom themes)
+   ============================= */
+
+/* Corporate (default light) */
+[data-theme="corporate"] {
+  --clr-surface: #ffffff;
+  --clr-muted: #f5f5f4;
+  --clr-border: #e5e5e4;
+  --clr-content: #1c1917;
+  --clr-content-dim: #78716c;
+  --clr-accent: #1d4ed8;
+  --clr-accent-content: #ffffff;
 }
+
+[data-theme="night"] {
+  --clr-surface: #1e293b;
+  --clr-muted: #0f172a;
+  --clr-border: #334155;
+  --clr-content: #f1f5f9;
+  --clr-content-dim: #94a3b8;
+  --clr-accent: #818cf8;
+  --clr-accent-content: #0f172a;
+}
+
+[data-theme="business"] {
+  --clr-surface: #1e293b;
+  --clr-muted: #0f172a;
+  --clr-border: #334155;
+  --clr-content: #f1f5f9;
+  --clr-content-dim: #94a3b8;
+  --clr-accent: #2563eb;
+  --clr-accent-content: #ffffff;
+}
+
+[data-theme="luxury"] {
+  --clr-surface: #1a1a2e;
+  --clr-muted: #0f0f23;
+  --clr-border: #2a2a3e;
+  --clr-content: #e8dcc8;
+  --clr-content-dim: #8a7e6a;
+  --clr-accent: #d85a30;
+  --clr-accent-content: #ffffff;
+}
+
+[data-theme="dracula"] {
+  --clr-surface: #282a36;
+  --clr-muted: #1e1f29;
+  --clr-border: #44475a;
+  --clr-content: #f8f8f2;
+  --clr-content-dim: #6272a4;
+  --clr-accent: #bd93f9;
+  --clr-accent-content: #1e1f29;
+}
+
+[data-theme="synthwave"] {
+  --clr-surface: #2d1b69;
+  --clr-muted: #1a0f3c;
+  --clr-border: #4a2c8a;
+  --clr-content: #e0e0ff;
+  --clr-content-dim: #8888cc;
+  --clr-accent: #e94597;
+  --clr-accent-content: #ffffff;
+}
+
+[data-theme="cmyk"] {
+  --clr-surface: #ffffff;
+  --clr-muted: #f5f5f4;
+  --clr-border: #e5e5e4;
+  --clr-content: #1c1917;
+  --clr-content-dim: #78716c;
+  --clr-accent: #1d9e75;
+  --clr-accent-content: #ffffff;
+}
+
+[data-theme="emerald"] {
+  --clr-surface: #ffffff;
+  --clr-muted: #ecfdf5;
+  --clr-border: #a7f3d0;
+  --clr-content: #022c22;
+  --clr-content-dim: #047857;
+  --clr-accent: #059669;
+  --clr-accent-content: #ffffff;
+}
+
+/* Default fallback (corporate) */
+:root {
+  --clr-surface: #ffffff;
+  --clr-muted: #f5f5f4;
+  --clr-border: #e5e5e4;
+  --clr-content: #1c1917;
+  --clr-content-dim: #78716c;
+  --clr-accent: #1d4ed8;
+  --clr-accent-content: #ffffff;
+}
+
+/* =============================
+   Theme Utility Classes
+   ============================= */
+
+/* Backgrounds */
+.bg-surface { background-color: var(--clr-surface); }
+.bg-muted { background-color: var(--clr-muted); }
+.bg-border { background-color: var(--clr-border); }
+.bg-accent { background-color: var(--clr-accent); }
+
+.bg-surface-5  { background-color: color-mix(in srgb, var(--clr-surface) 5%, transparent); }
+.bg-surface-10 { background-color: color-mix(in srgb, var(--clr-surface) 10%, transparent); }
+.bg-surface-20 { background-color: color-mix(in srgb, var(--clr-surface) 20%, transparent); }
+.bg-surface-30 { background-color: color-mix(in srgb, var(--clr-surface) 30%, transparent); }
+.bg-surface-40 { background-color: color-mix(in srgb, var(--clr-surface) 40%, transparent); }
+.bg-surface-50 { background-color: color-mix(in srgb, var(--clr-surface) 50%, transparent); }
+.bg-surface-60 { background-color: color-mix(in srgb, var(--clr-surface) 60%, transparent); }
+.bg-surface-70 { background-color: color-mix(in srgb, var(--clr-surface) 70%, transparent); }
+
+.bg-accent-10 { background-color: color-mix(in srgb, var(--clr-accent) 10%, transparent); }
+.bg-accent-20 { background-color: color-mix(in srgb, var(--clr-accent) 20%, transparent); }
+.bg-accent-30 { background-color: color-mix(in srgb, var(--clr-accent) 30%, transparent); }
+
+/* Text */
+.text-content { color: var(--clr-content); }
+.text-content-dim { color: var(--clr-content-dim); }
+.text-accent { color: var(--clr-accent); }
+.text-accent-content { color: var(--clr-accent-content); }
+
+.text-content-30 { color: var(--clr-content); opacity: 0.3; }
+.text-content-40 { color: var(--clr-content); opacity: 0.4; }
+.text-content-50 { color: var(--clr-content); opacity: 0.5; }
+.text-content-55 { color: var(--clr-content); opacity: 0.55; }
+.text-content-60 { color: var(--clr-content); opacity: 0.6; }
+.text-content-70 { color: var(--clr-content); opacity: 0.7; }
+
+/* Borders */
+.border-muted { border-color: var(--clr-border); }
+.border-accent { border-color: var(--clr-accent); }
+.border-accent-20 { border-color: color-mix(in srgb, var(--clr-accent) 20%, transparent); }
+.border-accent-30 { border-color: color-mix(in srgb, var(--clr-accent) 30%, transparent); }
+
+/* Rings */
+.ring-border { --tw-ring-color: var(--clr-border); }
+.ring-surface { --tw-ring-color: var(--clr-surface); }
+.ring-surface-10 { --tw-ring-color: color-mix(in srgb, var(--clr-surface) 10%, transparent); }
+.ring-surface-20 { --tw-ring-color: color-mix(in srgb, var(--clr-surface) 20%, transparent); }
+.ring-accent-20 { --tw-ring-color: color-mix(in srgb, var(--clr-accent) 20%, transparent); }
+
+/* Hover states */
+.hover\:bg-muted:hover { background-color: var(--clr-muted); }
+.hover\:bg-border:hover { background-color: var(--clr-border); }
+.hover\:text-accent:hover { color: var(--clr-accent); }
+.hover\:text-accent-content:hover { color: var(--clr-accent-content); }
+.group:hover .group-hover\:text-accent { color: var(--clr-accent); }
+.hover-bg-surface-10:hover { background-color: color-mix(in srgb, var(--clr-surface) 10%, transparent); }
+.hover-bg-surface-20:hover { background-color: color-mix(in srgb, var(--clr-surface) 20%, transparent); }
+.hover-bg-surface-70:hover { background-color: color-mix(in srgb, var(--clr-surface) 70%, transparent); }
+.hover-border-accent-30:hover { border-color: color-mix(in srgb, var(--clr-accent) 30%, transparent); }
+.hover-border-accent-20:hover { border-color: color-mix(in srgb, var(--clr-accent) 20%, transparent); }
+.hover\:shadow-md:hover { box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); }
+.hover\:shadow-lg:hover { box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); }
+
+/* Modal utility classes (replacing DaisyUI modal) */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(0 0 0 / 0.6);
+}
+
+.modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 48rem;
+  margin: 1rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+/* =============================
+   Base Styles
+   ============================= */
 
 html {
   min-height: 100%;
@@ -19,17 +200,18 @@ video {
 }
 
 /* Smooth transitions for interactive elements */
-.btn,
-.card,
-.badge {
-  transition: all 0.2s ease;
+button,
+a {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
+
+
 
 /* Better focus styles */
 input:focus,
 textarea:focus,
 select:focus {
-  outline: 2px solid hsl(var(--p) / 0.3);
+  outline: 2px solid color-mix(in srgb, var(--clr-accent) 30%, transparent);
   outline-offset: 2px;
 }
 
@@ -40,16 +222,16 @@ select:focus {
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(var(--b2));
+  background: var(--clr-muted);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(var(--bc) / 0.3);
+  background: color-mix(in srgb, var(--clr-content) 30%, transparent);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--bc) / 0.5);
+  background: color-mix(in srgb, var(--clr-content) 50%, transparent);
 }
 
 @keyframes float {
@@ -82,9 +264,7 @@ select:focus {
   transition: none !important;
 }
 
-/* Smooth, reduced-motion-aware theme transition for public card pages.
-   Applied to the card's root <main> so switching themes/cards eases in
-   instead of hard-flashing. */
+/* Smooth, reduced-motion-aware theme transition for public card pages */
 @media (prefers-reduced-motion: no-preference) {
   .card-theme-root,
   .card-theme-root * {

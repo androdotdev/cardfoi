@@ -70,7 +70,7 @@ export function SocialRow({
   if (!links || links.length === 0) return null;
   return (
     <div
-      className={`mt-8 flex justify-center gap-4 border-t border-base-300 pt-6 text-base-content/60 ${className}`}
+      className={`mt-8 flex justify-center gap-4 border-t border-muted pt-6 text-content-60 ${className}`}
     >
       {links.map((link) => {
         const Icon = platformIcon[link.platform] || FaGlobe;
@@ -105,9 +105,9 @@ export function SkillBadge({
   const base =
     "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium";
   const styles: Record<BadgeVariant, string> = {
-    soft: "border border-primary/20 bg-primary/10 text-primary",
-    outline: "border border-base-300 bg-base-200 text-base-content/70",
-    ghost: "bg-base-100/10 text-base-100/70",
+    soft: "border border-accent-20 bg-accent-10 text-accent",
+    outline: "border border-muted bg-muted text-content-70",
+    ghost: "bg-surface-10 text-accent-content/70",
   };
   return <span className={`${base} ${styles[variant]}`}>{label}</span>;
 }

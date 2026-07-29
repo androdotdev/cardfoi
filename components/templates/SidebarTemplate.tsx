@@ -21,16 +21,16 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
     useMediaModal();
 
   return (
-    <main className="card-theme-root min-h-screen bg-base-200 p-4 sm:p-6 lg:p-8">
+    <main className="card-theme-root min-h-screen bg-muted p-4 sm:p-6 lg:p-8">
       <motion.div
-        className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-base-300 bg-base-100 shadow-sm"
+        className="mx-auto max-w-5xl overflow-hidden rounded-2xl border border-muted bg-surface shadow-sm"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <div className="flex flex-col lg:flex-row">
           {/* Dark sidebar */}
-          <aside className="bg-base-content px-6 py-8 lg:w-72 lg:shrink-0">
+          <aside className="bg-content px-6 py-8 lg:w-72 lg:shrink-0">
             <motion.div
               initial={{ opacity: 0, x: -16 }}
               animate={{ opacity: 1, x: 0 }}
@@ -42,17 +42,17 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                   alt=""
                   width={80}
                   height={80}
-                  className="h-20 w-20 rounded-xl object-cover ring-2 ring-base-100/20"
+                  className="h-20 w-20 rounded-xl object-cover ring-2 ring-surface-20"
                 />
               ) : (
-                <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-base-100/10 text-3xl font-bold text-base-100">
+                <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-surface-10 text-3xl font-bold text-accent-content">
                   {card.name?.slice(0, 1)}
                 </div>
               )}
-              <h1 className="mt-4 text-xl font-bold text-base-100">
+              <h1 className="mt-4 text-xl font-bold text-accent-content">
                 {card.name}
               </h1>
-              <p className="mt-2 text-sm leading-relaxed text-base-100/55">
+              <p className="mt-2 text-sm leading-relaxed text-accent-content opacity-55">
                 {card.description}
               </p>
             </motion.div>
@@ -65,7 +65,7 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
             >
               <a
                 href={`mailto:${card.email}`}
-                className="flex items-center gap-2.5 text-sm text-base-100/60 transition-colors hover:text-base-100"
+                className="flex items-center gap-2.5 text-sm text-accent-content opacity-60 transition-colors hover:text-accent-content"
               >
                 <Mail size={13} />
                 <span className="truncate">{card.email}</span>
@@ -79,14 +79,14 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-base-100/30">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-accent-content opacity-30">
                   Skills
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {skills.map((skill) => (
                     <span
                       key={skill}
-                      className="rounded-full bg-base-100/10 px-3 py-1 text-xs font-medium text-base-100/70"
+                      className="rounded-full bg-surface-10 px-3 py-1 text-xs font-medium text-accent-content opacity-70"
                     >
                       {skill}
                     </span>
@@ -98,11 +98,11 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
 
           {/* Main content */}
           <div className="flex-1 p-6">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-base-content/40">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-content-40">
               Projects & Work
             </p>
             {works.length > 0 ? (
-              <div className="divide-y divide-base-200">
+              <div className="divide-y divide-muted">
                 {works.map((work, i) => (
                   <motion.div
                     key={work.id}
@@ -113,11 +113,11 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
-                        <h3 className="font-semibold text-base-content">
+                        <h3 className="font-semibold text-content">
                           {work.title}
                         </h3>
                         {work.description && (
-                          <p className="mt-1 text-sm text-base-content/55">
+                          <p className="mt-1 text-sm text-content-55">
                             {work.description}
                           </p>
                         )}
@@ -127,7 +127,7 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                           href={work.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="btn btn-sm btn-ghost shrink-0"
+                          className="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-content-60 transition-colors hover:bg-muted shrink-0"
                           aria-label="Open project"
                         >
                           <ExternalLink size={14} />
@@ -160,7 +160,7 @@ export default function SidebarTemplate({ card }: { card: UserCard }) {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-base-content/40">No projects yet.</p>
+              <p className="text-sm text-content-40">No projects yet.</p>
             )}
           </div>
         </div>

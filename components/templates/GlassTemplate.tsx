@@ -22,11 +22,11 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
     useMediaModal();
 
   return (
-    <main className="card-theme-root min-h-screen bg-base-200 p-4 sm:p-8">
+    <main className="card-theme-root min-h-screen bg-muted p-4 sm:p-8">
       <div className="mx-auto max-w-4xl">
         {/* Glass hero card */}
         <motion.div
-          className="rounded-3xl border border-base-300/50 bg-base-100/60 p-6 shadow-xl backdrop-blur-xl sm:p-8"
+          className="rounded-3xl border border-muted/50 bg-surface-60 p-6 shadow-xl backdrop-blur-xl sm:p-8"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
@@ -44,8 +44,8 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                 damping: 18,
               }}
             >
-              <div className="absolute -inset-1 rounded-full bg-primary/20 blur-sm" />
-              <div className="relative h-28 w-28 overflow-hidden rounded-full border-2 border-base-300/50">
+              <div className="absolute -inset-1 rounded-full bg-accent-20 blur-sm" />
+              <div className="relative h-28 w-28 overflow-hidden rounded-full border-2 border-muted/50">
                 {card.avatar ? (
                   <Image
                     src={card.avatar}
@@ -55,7 +55,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center bg-primary/20 text-4xl font-bold text-primary">
+                  <div className="flex h-full items-center justify-center bg-accent-20 text-4xl font-bold text-accent">
                     {card.name?.slice(0, 1)}
                   </div>
                 )}
@@ -64,7 +64,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
 
             <div className="min-w-0 text-center sm:text-left">
               <motion.h1
-                className="text-3xl font-bold text-base-content"
+                className="text-3xl font-bold text-content"
                 initial={{ opacity: 0, x: -16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
@@ -72,7 +72,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                 {card.name}
               </motion.h1>
               <motion.p
-                className="mt-2 leading-relaxed text-base-content/60"
+                className="mt-2 leading-relaxed text-content-60"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
@@ -104,7 +104,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
           >
             <a
               href={`mailto:${card.email}`}
-              className="inline-flex items-center gap-2 rounded-full border border-base-300/60 bg-base-100/40 px-5 py-2.5 text-sm font-medium text-base-content backdrop-blur transition-colors hover:bg-base-100/70"
+              className="inline-flex items-center gap-2 rounded-full border border-muted/60 bg-surface-40 px-5 py-2.5 text-sm font-medium text-content backdrop-blur transition-colors hover-bg-surface-70"
             >
               <Mail size={14} />
               {card.email}
@@ -120,14 +120,14 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.65 }}
           >
-            <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-base-content/40">
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-widest text-content-40">
               Projects
             </h2>
             <div className="grid gap-4 sm:grid-cols-2">
               {works.map((work, i) => (
                 <motion.div
                   key={work.id}
-                  className="group rounded-2xl border border-base-300/50 bg-base-100/50 p-5 backdrop-blur-lg transition-all hover:bg-base-100/70"
+                  className="group rounded-2xl border border-muted/50 bg-surface-50 p-5 backdrop-blur-lg transition-all hover-bg-surface-70"
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 + i * 0.08 }}
@@ -154,11 +154,11 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                       onContextMenu={(e) => e.preventDefault()}
                     />
                   )}
-                  <h3 className="font-semibold text-base-content">
+                  <h3 className="font-semibold text-content">
                     {work.title}
                   </h3>
                   {work.description && (
-                    <p className="mt-1 text-sm text-base-content/55">
+                    <p className="mt-1 text-sm text-content-55">
                       {work.description}
                     </p>
                   )}
@@ -167,13 +167,13 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
                       href={work.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                      className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
                     >
                       View project <ExternalLink size={12} />
                     </a>
                   )}
                   {work.type !== "link" && (
-                    <span className="mt-3 inline-block text-xs text-base-content/50">
+                    <span className="mt-3 inline-block text-xs text-content-50">
                       Media uploaded ✓
                     </span>
                   )}

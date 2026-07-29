@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import type { WorkMedia } from "@/lib/cards";
 import Image from "next/image";
 
@@ -19,9 +19,8 @@ export default function MediaModal({
     onClose,
     onNavigate,
 }: MediaModalProps) {
-    // ✅ all hooks before any early return
-    useEffect(() => {
-        function handleKeyDown(e: KeyboardEvent) {
+    const handleKeyDown = useCallback(
+        (e: KeyboardEvent) => {
             if (e.key === "Escape") onClose();
             if (e.key === "ArrowRight" && currentIndex < works.length - 1) {
                 onNavigate(currentIndex + 1);
@@ -29,20 +28,21 @@ export default function MediaModal({
             if (e.key === "ArrowLeft" && currentIndex > 0) {
                 onNavigate(currentIndex - 1);
             }
-        }
+        },
+        [currentIndex, works.length, onClose, onNavigate],
+    );
 
+    useEffect(() => {
         if (isOpen) {
             window.addEventListener("keydown", handleKeyDown);
             document.body.style.overflow = "hidden";
         }
-
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
             document.body.style.overflow = "";
         };
-    }, [isOpen, currentIndex, works.length, onClose, onNavigate]);
+    }, [isOpen, handleKeyDown]);
 
-    // ✅ guards after hooks
     const work = works[currentIndex];
     if (!isOpen || !work) return null;
 
@@ -50,15 +50,15 @@ export default function MediaModal({
     const hasNext = currentIndex < works.length - 1;
 
     return (
-        <dialog className="modal modal-open" onClick={onClose}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={onClose}>
             <div
-                className="modal-box relative max-w-3xl overflow-hidden bg-base-100 p-0"
+                className="relative w-full max-w-3xl mx-4 rounded-2xl overflow-hidden shadow-2xl bg-surface"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Close — top right */}
                 <button
                     onClick={onClose}
-                    className="btn btn-circle btn-sm absolute right-2 top-2 z-10"
+                    className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white text-sm hover:bg-black/60 transition-colors"
                     type="button"
                 >
                     ✕
@@ -68,18 +68,18 @@ export default function MediaModal({
                 {hasPrev && (
                     <button
                         onClick={() => onNavigate(currentIndex - 1)}
-                        className="btn btn-circle btn-sm absolute left-2 top-1/2 z-10 -translate-y-1/2"
+                        className="absolute left-2 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white text-lg hover:bg-black/60 transition-colors"
                         type="button"
                     >
                         ‹
                     </button>
                 )}
 
-                {/* Next — right center, doesn't overlap close (top-2 vs top-1/2) */}
+                {/* Next — right center */}
                 {hasNext && (
                     <button
                         onClick={() => onNavigate(currentIndex + 1)}
-                        className="btn btn-circle btn-sm absolute right-2 top-1/2 z-10 -translate-y-1/2"
+                        className="absolute right-2 top-1/2 z-10 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-white text-lg hover:bg-black/60 transition-colors"
                         type="button"
                     >
                         ›
@@ -87,7 +87,7 @@ export default function MediaModal({
                 )}
 
                 {/* Media */}
-                <div className="flex items-center justify-center bg-base-300 p-4">
+                <div className="flex items-center justify-center bg-muted p-4">
                     {work.type === "image" && (
                         <Image
                             src={`/api/media/${work.id}`}
@@ -114,7 +114,7 @@ export default function MediaModal({
                 {/* Counter */}
                 {works.length > 1 && (
                     <div className="absolute bottom-16 left-1/2 -translate-x-1/2">
-                        <span className="rounded-full bg-base-content/40 px-3 py-1 text-xs text-base-100">
+                        <span className="rounded-full bg-black/40 px-3 py-1 text-xs text-white">
                             {currentIndex + 1} / {works.length}
                         </span>
                     </div>
@@ -123,21 +123,17 @@ export default function MediaModal({
                 {/* Info */}
                 {(work.title || work.description) && (
                     <div className="p-4">
-                        <h3 className="font-semibold text-base-content">
+                        <h3 className="font-semibold text-content">
                             {work.title}
                         </h3>
                         {work.description && (
-                            <p className="mt-1 text-sm text-base-content/60">
+                            <p className="mt-1 text-sm text-content-60">
                                 {work.description}
                             </p>
                         )}
                     </div>
                 )}
             </div>
-
-            <form method="dialog" className="modal-backdrop">
-                <button onClick={onClose}>close</button>
-            </form>
-        </dialog>
+        </div>
     );
 }

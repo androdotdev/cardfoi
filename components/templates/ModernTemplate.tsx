@@ -46,14 +46,14 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
                 className="h-24 w-24 rounded-2xl object-cover shadow-lg"
               />
             ) : (
-              <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary text-3xl font-bold text-white shadow-lg">
+              <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-secondary text-3xl font-bold text-white shadow-lg">
                 {card.name?.slice(0, 1)}
               </div>
             )}
           </motion.div>
           <div>
             <motion.h1
-              className="text-4xl font-extrabold tracking-tight text-base-content"
+              className="text-4xl font-extrabold tracking-tight text-content"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
@@ -61,7 +61,7 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
               {card.name}
             </motion.h1>
             <motion.p
-              className="mt-2 max-w-xl text-base-content/60"
+              className="mt-2 max-w-xl text-content-60"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
@@ -70,7 +70,7 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
             </motion.p>
             <motion.a
               href={`mailto:${card.email}`}
-              className="mt-4 inline-flex items-center gap-2 rounded-full bg-base-100 px-4 py-2 text-sm font-medium text-base-content shadow-sm transition-colors hover:bg-base-200"
+              className="mt-4 inline-flex items-center gap-2 rounded-full bg-surface px-4 py-2 text-sm font-medium text-content shadow-sm transition-colors hover:bg-muted"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
@@ -96,7 +96,7 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
             {works.map((work, i) => (
               <motion.div
                 key={work.id}
-                className="group overflow-hidden rounded-2xl bg-base-100 shadow-sm transition-shadow hover:shadow-lg"
+                className="group overflow-hidden rounded-2xl bg-surface shadow-sm transition-shadow hover:shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 + i * 0.08 }}
@@ -124,11 +124,11 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
                   />
                 )}
                 <div className="p-4">
-                  <h3 className="font-semibold text-base-content">
+                  <h3 className="font-semibold text-content">
                     {work.title}
                   </h3>
                   {work.description && (
-                    <p className="mt-1 text-sm text-base-content/55">
+                    <p className="mt-1 text-sm text-content-55">
                       {work.description}
                     </p>
                   )}
@@ -137,12 +137,12 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
                       href={work.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                      className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:underline"
                     >
                       View project <ExternalLink size={12} />
                     </a>
                   ) : (
-                    <span className="mt-3 inline-block text-xs text-base-content/50">
+                    <span className="mt-3 inline-block text-xs text-content-50">
                       Media uploaded ✓
                     </span>
                   )}
