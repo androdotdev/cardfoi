@@ -26,7 +26,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
       <div className="mx-auto max-w-4xl">
         {/* Glass hero card */}
         <motion.div
-          className="rounded-3xl border border-muted/50 bg-surface-60 p-6 shadow-xl backdrop-blur-xl sm:p-8"
+          className="rounded-3xl border border-[color:var(--clr-border)]/50 bg-surface-60 p-6 shadow-xl backdrop-blur-xl sm:p-8"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
@@ -45,7 +45,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
               }}
             >
               <div className="absolute -inset-1 rounded-full bg-accent-20 blur-sm" />
-              <div className="relative h-28 w-28 overflow-hidden rounded-full border-2 border-muted/50">
+              <div className="relative h-28 w-28 overflow-hidden rounded-full border-2 border-[color:var(--clr-border)]/50">
                 {card.avatar ? (
                   <Image
                     src={card.avatar}
@@ -104,7 +104,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
           >
             <a
               href={`mailto:${card.email}`}
-              className="inline-flex items-center gap-2 rounded-full border border-muted/60 bg-surface-40 px-5 py-2.5 text-sm font-medium text-content backdrop-blur transition-colors hover-bg-surface-70"
+              className="inline-flex items-center gap-2 rounded-full border border-[color:var(--clr-border)]/60 bg-surface-40 px-5 py-2.5 text-sm font-medium text-content backdrop-blur transition-colors hover-bg-surface-70"
             >
               <Mail size={14} />
               {card.email}
@@ -127,7 +127,7 @@ export default function GlassTemplate({ card }: { card: UserCard }) {
               {works.map((work, i) => (
                 <motion.div
                   key={work.id}
-                  className="group rounded-2xl border border-muted/50 bg-surface-50 p-5 backdrop-blur-lg transition-all hover-bg-surface-70"
+                  className="group rounded-2xl border border-[color:var(--clr-border)]/50 bg-surface-50 p-5 backdrop-blur-lg transition-all hover-bg-surface-70"
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 + i * 0.08 }}

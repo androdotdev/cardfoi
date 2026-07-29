@@ -91,7 +91,7 @@ export default function CreativeTemplate({ card }: { card: UserCard }) {
               <h1 className="text-4xl font-extrabold leading-none tracking-tight text-accent-content md:text-5xl">
                 {card.name}
               </h1>
-              <p className="mt-3 max-w-xl leading-relaxed text-accent-content/60">
+              <p className="mt-3 max-w-xl leading-relaxed text-[color:var(--clr-accent-content)]/60">
                 {card.description}
               </p>
               <div className="mt-5 flex flex-wrap gap-3">

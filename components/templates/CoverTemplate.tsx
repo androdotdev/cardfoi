@@ -47,10 +47,10 @@ export default function CoverTemplate({ card }: { card: UserCard }) {
                   alt=""
                   width={96}
                   height={96}
-                  className="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-accent-content/30"
+                  className="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-[color:var(--clr-accent-content)]/30"
                 />
               ) : (
-                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-accent-content opacity-20 text-4xl font-bold ring-4 ring-accent-content/30">
+                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-accent-content opacity-20 text-4xl font-bold ring-4 ring-[color:var(--clr-accent-content)]/30">
                   {card.name?.slice(0, 1)}
                 </div>
               )}

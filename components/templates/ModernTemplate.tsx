@@ -46,7 +46,7 @@ export default function ModernTemplate({ card }: { card: UserCard }) {
                 className="h-24 w-24 rounded-2xl object-cover shadow-lg"
               />
             ) : (
-              <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-secondary text-3xl font-bold text-white shadow-lg">
+              <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-[color:var(--clr-accent)]/60 text-3xl font-bold text-white shadow-lg">
                 {card.name?.slice(0, 1)}
               </div>
             )}

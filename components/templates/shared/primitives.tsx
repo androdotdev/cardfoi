@@ -107,7 +107,7 @@ export function SkillBadge({
   const styles: Record<BadgeVariant, string> = {
     soft: "border border-accent-20 bg-accent-10 text-accent",
     outline: "border border-muted bg-muted text-content-70",
-    ghost: "bg-surface-10 text-accent-content/70",
+    ghost: "bg-surface-10 text-[color:var(--clr-accent-content)]/70",
   };
   return <span className={`${base} ${styles[variant]}`}>{label}</span>;
 }
