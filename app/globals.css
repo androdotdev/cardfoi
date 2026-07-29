@@ -86,8 +86,8 @@
   --clr-accent-content: #ffffff;
 }
 
-/* Default fallback (corporate) */
-:root {
+/* Default fallback (corporate) when no data-theme is set */
+:root:not([data-theme]) {
   --clr-surface: #ffffff;
   --clr-muted: #f5f5f4;
   --clr-border: #e5e5e4;
