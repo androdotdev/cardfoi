@@ -1,0 +1,245 @@
+# AGENTS.md — Cardfoi Compact Agent Memory
+
+Quick reference for AI agents continuing development. Read this FIRST.
+
+---
+
+## Project Overview
+
+**Cardfoi** — Developer portfolio card platform. Users create shareable profile cards at `cardfoi.vercel.app/{slug}`.
+
+**Stack:** Next.js 16 (Turbopack) · TypeScript · Tailwind CSS · DaisyUI · Better Auth · Neon PostgreSQL · Drizzle ORM · Cloudinary · React Query · Zustand · Vitest
+
+---
+
+## Recent Critical Changes
+
+### May 6, 2026 — Auth & Dashboard Restructuring
+
+1. **Separate auth pages**: `/login` and `/sign-up` (replacing combined auth in `/dashboard`)
+2. **Email verification enabled**: `requireEmailVerification: true` in `lib/auth.ts`
+3. **Password reset flow**: "Forgot password?" → email → `/reset-password?token=xxx`
+4. **Nanostore auth state**: `lib/stores/authStore.ts` (authMode, signingOut, authMessage)
+5. **Bento grid merged tiles**:
+   - `ContactSkillsTile.tsx` (Contact + Skills)
+   - `SecurityTile.tsx` (Password + DangerZone)
+6. **Database cleanup**: Removed all non-admin users via `scripts/clean-db.ts`
+7. **Slug system**: Format `name-nanoid` (6-char random), rate-limited once/month
+
+### May 8, 2026 — SEO, Media Proxy, Theme Fixes
+
+1. **Media proxy to hide Cloudinary URLs**:
+   - `normalizeCard()` in `lib/cards.ts` returns `/api/media/${work.id}` for image/video types
+   - `cloudinaryPublicId` hidden from API responses for media types
+   - All 8 templates updated to use `work.url` directly (single source of truth)
+
+2. **SEO infrastructure**:
+   - Created `app/robots.ts` — prevents indexing of private pages
+   - Created `app/sitemap.ts` — auto-generates sitemap with all public card pages
+   - Created `app/not-found.tsx` — custom 404 page with helpful links
+   - Updated `app/layout.tsx` — longer title/description, `metadataBase`, OG/Twitter defaults, canonical
+   - Enhanced `app/[id]/page.tsx` — per-card OG/Twitter metadata, canonical URLs
+   - Created `components/shared/StructuredData.tsx` — JSON-LD Person schema on card pages
+   - Created metadata files for private pages (`login`, `sign-up`, `reset-password`)
+   - Added `rel="noopener noreferrer"` to all `target="_blank"` links across 9 templates
+
+3. **Card theme applied globally**:
+   - Created `lib/hooks/useCardTheme.ts` — applies theme to `<html>` via `useEffect`
+   - Updated all 8 templates to use the hook instead of `data-theme` on `<main>`
+   - Fixes modal backdrop white flash issue
+
+4. **Dashboard fixes**:
+   - Removed duplicate theme toggle button in `BentoTopbar.tsx`
+   - Added `initDashboardTheme()` call in `CardDashboard.tsx` (was imported but never called — fixes theme reset on refresh)
+   - Slug rate limit errors now caught with try/catch in API route (prevents raw error exposure)
+   - Added delete loading state (skeleton + spinner) in `ProjectsTile.tsx`
+
+5. **Landing nav auth state**:
+   - `LandingNav.tsx` now checks `authClient.useSession()`
+   - Shows "Dashboard" instead of "Sign in" when user is logged in
+
+6. **Public OG image**: `public/og-image.png` (1200×630, ~222KB)
+
+### June 18, 2026 — Dark Mode Transition + Responsive Sidebar
+
+1. **Smooth dark mode transitions**:
+   - Added `@media (prefers-reduced-motion: no-preference)` guard with `transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease` on `.dashboard-bg.dark, .dashboard-bg.dark *`
+   - Removed all `!important` from dark mode CSS rules (attribute selectors at 0,3,0 beat Tailwind's 0,1,0 without it)
+   - Added `.preload * { transition: none !important; }` to prevent flash before JS hydrates, removed in `CardDashboard.tsx:useEffect`
+
+2. **Responsive sidebar**:
+   - Added `mobileSidebarOpen` state + `setMobileSidebarOpen`/`toggleMobileSidebar` to `useDashboardStore`
+   - Sidebar: fixed overlay on mobile (`translate-x` transform), invisible at lg+
+   - Backdrop: semi-transparent overlay, dismisses sidebar on click
+   - Hamburger: `Menu` icon from `lucide-react` in `DashboardShell` header, visible below lg
+   - Route change: `useEffect` with `usePathname()` resets `mobileSidebarOpen` to false
+   - Nav item click automatically closes sidebar on mobile
+
+### June 18, 2026 — Zustand Migration, Vitest, Image & AdminTile Fixes
+
+1. **Nanostores → Zustand migration**:
+   - Created 3 zustand stores: `useAuthStore`, `useDashboardStore`, `useThemeStore` (with persist middleware)
+   - Deleted 4 old files: `lib/stores/authStore.ts`, `dashboardStore.ts`, `dashboardThemeStore.ts`, `lib/hooks/useDashboardState.ts`
+   - Updated 5 consumer files: `BentoTopbar.tsx`, `AuthSection.tsx`, `sign-up/page.tsx`, `login/page.tsx`, `CardDashboard.tsx`
+   - Uninstalled `nanostores` and `@nanostores/react`
+
+2. **Testing with Vitest**:
+   - Created `vitest.config.ts` (jsdom + `@` alias)
+   - Added `tests/setup.ts` (localStorage mock for persist middleware)
+   - Added `"test": "vitest run"` script
+   - Wrote 3 test files (17 tests) for all zustand stores — all passing
+
+3. **Image width/height compliance**:
+   - Added explicit `width`/`height` props to all 16 `<Image>` tags across 8 templates (was relying on CSS classes only)
+   - Avatar images: matched CSS dimensions (64×64 up to 112×112)
+   - Work images: 1280×720 for 16:9, 800×600 for flexible, 512×384 for `max-w-lg`, 64×64 for thumbnails
+   - `MediaModal.tsx` already uses `fill` — no change needed
+
+4. **AdminTile cleanup**:
+   - Moved all hooks before the `if (!isAdmin) return null` guard (fixes Rules of Hooks violation)
+   - Changed `loading` initial state to `false`
+   - Added minimum 2-char search requirement before API call (prevents empty-string fetch on mount)
+   - Removed stale users when search is cleared
+
+---
+
+## Key Files (Read These First)
+
+| File | Purpose |
+|------|---------|
+| `app/CardDashboard.tsx` | Main dashboard with sidebar navigation |
+| `app/login/page.tsx` | Sign in page |
+| `app/sign-up/page.tsx` | Sign up page |
+| `app/reset-password/page.tsx` | Password reset (token-based) |
+| `lib/auth.ts` | Better Auth config (email verification, Resend) |
+| `lib/stores/useAuthStore.ts` | Auth state (zustand) |
+| `lib/stores/useDashboardStore.ts` | Dashboard UI state (zustand) |
+| `components/dashboard/AuthSection.tsx` | Shared auth form (login/signup/forgot) |
+| `components/dashboard/Sidebar.tsx` | Navigation sidebar with section groups |
+| `components/dashboard/DashboardShell.tsx` | Flex layout (sidebar + main panel) |
+| `db/schema.ts` | DB schema (user, cards, works, verification) |
+
+---
+
+## State Management Architecture
+
+**Zustand** (UI State) — `lib/stores/`:
+- `useAuthStore.ts`: `authMode`, `signingOut`, `authMessage`
+- `useDashboardStore.ts`: `selectedId`, `activeSection`, `mobileSidebarOpen`, `message`
+- `useThemeStore.ts`: `dashboardTheme` (persisted to localStorage)
+
+**React Query** (Server State) — `lib/hooks/useDashboardQuery.ts`:
+- `useCards()`, `useSaveCard()`, `useSaveWork()`, `useDeleteWork()`, `useChangePassword()`
+
+**Usage**: Components import store hooks and use selectors — no prop drilling.
+
+---
+
+## URL Structure
+
+| URL | Purpose |
+|-----|---------|
+| `/` | Landing page (Instrument Serif + DM Sans) |
+| `/:slug` | Public card view (e.g., `/john-doe-x7k2m3`) |
+| `/login` | Sign in |
+| `/sign-up` | Create account |
+| `/reset-password?token=xxx` | Reset password |
+| `/dashboard` | Manage cards (requires auth, redirects to `/login` if not signed in) |
+
+---
+
+## Dashboard Layout
+
+**Layout**: Sidebar nav (`200px`) + single scrollable panel (`max-w-[720px]`). One section visible at a time, toggled via `activeSection` in `useDashboardStore`.
+
+| Section | File | Notes |
+|---------|------|-------|
+| Identity | `tiles/IdentityTile.tsx` | Avatar, name, slug editing, bio, skills, email on card |
+| Projects | `tiles/ProjectsTile.tsx` | Work history entries (links + media uploads) |
+| Social links | `tiles/SocialLinksTile.tsx` | Platform links (GitHub, Twitter, etc.) |
+| Theme | `tiles/ThemeTile.tsx` | 8 daisyUI themes, 6 layout style selectors |
+| Security | `tiles/SecurityTile.tsx` | Change password + Delete account |
+| Admin | `tiles/AdminTile.tsx` | User search + delete (admin only) |
+
+**Background**: `#fafaf8` (landing page design system)
+
+---
+
+## Auth Flow
+
+1. **Sign up**: `/sign-up` → Better Auth → verification email via Resend → user clicks link
+2. **Sign in**: `/login` → must verify email first → dashboard
+3. **Forgot password**: "Forgot password?" → email → `/reset-password?token=xxx` → new password
+4. **Sign out**: Sidebar footer → loading spinner → redirects to `/`
+
+**Resend emails**: Configured in `lib/auth.ts` (`sendVerificationEmail`, `sendResetEmail`)
+
+---
+
+## Critical Gotchas
+
+| Issue | Solution |
+|-------|----------|
+| `formProvider` (capital F) | Correct import from react-hook-form, not `form.Provider` |
+| DaisyUI theme names in `ThemeTile.tsx` | Must match `globals.css` exactly |
+| `py-0.5` arbitrary values | May not work in all Tailwind versions → use `py-1` |
+| Slug `nanoid` generation | 6-char random suffix, rate-limited once/month |
+| Reserved slug words | "api", "dashboard", "www", "admin", "andro" |
+| Cloudinary unsigned preset | Exposed to browser (`NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET`) |
+| Better Auth email verification | `requireEmailVerification: true` in `lib/auth.ts` |
+| `lib/db.ts` lazy-loads | Allows dotenv to load first (important for scripts) |
+
+---
+
+## Build & Test Commands
+
+```bash
+npm run dev          # Start dev server (Turbopack)
+npm run build        # Production build (MUST pass before committing)
+npm run start        # Production server
+npm run test         # Run vitest (18 tests across 3 store files)
+npm run db:push      # Push schema to Neon
+npm run db:studio    # Drizzle Studio (DB GUI)
+```
+
+**Build status**: ✅ Passes (last verified June 18, 2026, post dark-mode + sidebar)
+
+---
+
+## Environment Variables
+
+```env
+# Better Auth
+BETTER_AUTH_SECRET="..."
+BETTER_AUTH_URL="http://localhost:3000"
+
+# Resend (email verification + password reset)
+RESEND_API_KEY="re_..."
+
+# Cloudinary
+CLOUDINARY_CLOUD_NAME="..."
+CLOUDINARY_API_KEY="..."
+CLOUDINARY_API_SECRET="..."
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="..."
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET="..."
+
+# Database
+DATABASE_URL="postgresql://..."
+```
+
+---
+
+## For Continuing Agents
+
+1. **Read this file first** — contains essential context
+2. **Run `npm run build`** — verify current state before changes
+3. **Check `lib/stores/`** — understand zustand state management
+4. **Review `components/dashboard/tiles/`** — bento grid structure
+5. **Test auth flow** — sign up → verify email → sign in → dashboard
+6. **Run `npm run test`** — verify store tests pass after changes
+
+**Current mode:** Build mode — you can make file changes directly.
+
+---
+
+*Last updated: June 18, 2026 (2nd revision)*
