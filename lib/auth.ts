@@ -3,6 +3,12 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 
+const appEnvironment =
+  process.env.VERCEL_ENV ??
+  (process.env.NODE_ENV === "development" ? "development" : "production");
+
+const allowEmailPassword = appEnvironment !== "production";
+
 export const auth = betterAuth({
   appName: "Cardfoi",
   baseURL: process.env.BETTER_AUTH_URL,
@@ -12,7 +18,7 @@ export const auth = betterAuth({
     schema,
   }),
   emailAndPassword: {
-    enabled: true,
+    enabled: allowEmailPassword,
     requireEmailVerification: false,
   },
   socialProviders: {
@@ -30,7 +36,6 @@ export const auth = betterAuth({
   account: {
     accountLinking: {
       enabled: true,
-      // Only link an existing account when the OAuth provider confirms the email.
     },
   },
 });
