@@ -21,7 +21,6 @@ export const metadata: Metadata = {
     description:
       "Make an instant shareable card for your skills, projects, and links.",
     type: "website",
-    url: "https://cardfoi.vercel.app",
   },
 };
 

@@ -16,7 +16,7 @@ export default function Hero() {
         </Link>
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
           {navLinks.map((link) => <Link key={link.href} href={link.href} className="text-xs text-[#73786d] transition hover:text-[#25291f]">{link.label}</Link>)}
-          <a href="https://cardfoi.vercel.app/andro" className="rounded-full border border-[#dfe1d8] px-4 py-2.5 text-xs font-medium text-[#394032] transition hover:border-[#aeb69f] hover:bg-white">See an example <span aria-hidden="true">↗</span></a>
+          <Link href="#how-it-works" className="rounded-full border border-[#dfe1d8] px-4 py-2.5 text-xs font-medium text-[#394032] transition hover:border-[#aeb69f] hover:bg-white">See how it works <span aria-hidden="true">↗</span></Link>
         </nav>
         <a href="#get-started" className="rounded-full bg-[#283321] px-4 py-2.5 text-xs font-medium text-white transition hover:bg-[#3b4a30] sm:px-5">Make your card <span aria-hidden="true">↗</span></a>
       </header>
@@ -34,9 +34,9 @@ export default function Hero() {
             Make an instant shareable card for your skills, projects, and links. One page that makes it easy to show what you do.
           </p>
           <div id="get-started" className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <a href="https://cardfoi.vercel.app/dashboard" className="inline-flex items-center justify-center gap-3 rounded-full bg-[#283321] px-6 py-3.5 text-sm font-medium text-white shadow-[0_8px_24px_-12px_rgba(40,51,33,0.7)] transition hover:-translate-y-0.5 hover:bg-[#3b4a30]">
+            <Link href="/sign-up" className="inline-flex items-center justify-center gap-3 rounded-full bg-[#283321] px-6 py-3.5 text-sm font-medium text-white shadow-[0_8px_24px_-12px_rgba(40,51,33,0.7)] transition hover:-translate-y-0.5 hover:bg-[#3b4a30]">
               Create your card <span aria-hidden="true">↗</span>
-            </a>
+            </Link>
             <a href="#features" className="inline-flex items-center justify-center rounded-full border border-[#dfe1d8] px-6 py-3.5 text-sm font-medium text-[#394032] transition hover:bg-white">See what you can add</a>
           </div>
           <div className="mt-8 flex items-center gap-3 text-[11px] text-[#85897f]">

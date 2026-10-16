@@ -17,7 +17,7 @@ export default function HeroCard() {
       <article className="relative rounded-[26px] border border-[#e8e9e2] bg-white p-6 shadow-[0_30px_90px_-38px_rgba(38,46,29,0.32)] sm:p-8">
         <div className="flex items-start justify-between">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#dce5c9] font-serif text-2xl text-[#425232]">a.</div>
-          <span className="rounded-full bg-[#f4f5f0] px-3 py-1.5 font-mono text-[10px] text-[#62695b]">cardfoi.me/andro</span>
+          <span className="rounded-full bg-[#f4f5f0] px-3 py-1.5 font-mono text-[10px] text-[#62695b]">cardfoi.me/your-name</span>
         </div>
 
         <div className="mt-6">

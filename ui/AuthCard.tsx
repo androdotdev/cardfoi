@@ -80,7 +80,7 @@ export function AuthCard({
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f6f7f2] px-5 py-12 text-[#25291f] sm:px-8">
-      <section className="grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-[#e6e9df] bg-white shadow-[0_24px_80px_-40px_rgba(38,47,31,0.25)] md:grid-cols-[0.9fr_1.1fr]">
+      <section className="grid min-h-[680px] w-full max-w-5xl overflow-hidden rounded-[2rem] border border-[#e6e9df] bg-white shadow-[0_24px_80px_-40px_rgba(38,47,31,0.25)] md:grid-cols-[0.9fr_1.1fr]">
         <div className="relative hidden flex-col justify-between overflow-hidden bg-[#283321] p-10 text-white md:flex lg:p-14">
           <div aria-hidden="true" className="absolute -right-24 -top-20 h-72 w-72 rounded-full border border-white/10" />
           <div aria-hidden="true" className="absolute -bottom-28 -left-24 h-80 w-80 rounded-full bg-[#3b4a30]" />
