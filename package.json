@@ -11,9 +11,10 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
-    "@better-auth/drizzle-adapter": "^1.7.9",
+    "@better-auth/drizzle-adapter": "^1.7.10",
     "@neondatabase/serverless": "^1.2.0",
     "better-auth": "^1.7.9",
+    "dotenv": "^18.0.8",
     "drizzle-orm": "^0.45.4",
     "next": "16.4.0",
     "react": "19.3.0",
