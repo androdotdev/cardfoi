@@ -6,7 +6,7 @@ export async function proxy(request: NextRequest) {
   
   // TODO: auth checks in each page/route
 	if (!sessionCookie) {
-		return NextResponse.redirect(new URL("/", request.url));
+		return NextResponse.redirect(new URL("/sign-in", request.url));
 	}
 
 	return NextResponse.next();

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
@@ -85,7 +86,7 @@ export function AuthCard({
           <div aria-hidden="true" className="absolute -right-24 -top-20 h-72 w-72 rounded-full border border-white/10" />
           <div aria-hidden="true" className="absolute -bottom-28 -left-24 h-80 w-80 rounded-full bg-[#3b4a30]" />
           <Link href="/" className="relative z-10 flex items-center gap-3 text-sm font-semibold tracking-tight" aria-label="Cardfoi home">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 font-serif text-xl">C</span>
+            <Image src="/icon.svg" alt="" width={36} height={36} />
             cardfoi
           </Link>
           <div className="relative z-10 py-12">
@@ -102,7 +103,7 @@ export function AuthCard({
 
         <div className="px-6 py-9 sm:px-10 sm:py-12 lg:px-14 lg:py-14">
           <Link href="/" className="mb-9 inline-flex items-center gap-2 text-sm font-semibold tracking-tight text-[#283321] md:hidden">
-            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#283321] font-serif text-lg text-white">C</span>
+            <Image src="/icon.svg" alt="" width={32} height={32} />
             cardfoi
           </Link>
 

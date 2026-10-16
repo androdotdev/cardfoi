@@ -1,9 +1,17 @@
-const skills = ["TypeScript", "Next.js", "PostgreSQL", "Product design"];
+const skills = ["Your skills", "Your craft", "Your interests"];
 
 const projects = [
-  { name: "Cardfoi", detail: "A little corner of the internet", mark: "C", color: "bg-[#e8edce]" },
-  { name: "Open source", detail: "Tools for people who build", mark: "↗", color: "bg-[#e6e8e3]" },
+  { name: "Featured project", detail: "A project you are proud of", mark: "✳", color: "bg-[#e8edce]" },
+  { name: "Another project", detail: "Something you are working on", mark: "↗", color: "bg-[#e6e8e3]" },
 ];
+
+const appHost = (
+  process.env.APP_URL ??
+  process.env.BETTER_AUTH_URL ??
+  "http://localhost:3000"
+)
+  .replace(/^https?:\/\//, "")
+  .replace(/\/+$/, "");
 
 export default function HeroCard() {
   return (
@@ -16,15 +24,15 @@ export default function HeroCard() {
 
       <article className="relative rounded-[26px] border border-[#e8e9e2] bg-white p-6 shadow-[0_30px_90px_-38px_rgba(38,46,29,0.32)] sm:p-8">
         <div className="flex items-start justify-between">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#dce5c9] font-serif text-2xl text-[#425232]">a.</div>
-          <span className="rounded-full bg-[#f4f5f0] px-3 py-1.5 font-mono text-[10px] text-[#62695b]">cardfoi.me/your-name</span>
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#dce5c9] font-serif text-2xl text-[#425232]">YN</div>
+          <span className="rounded-full bg-[#f4f5f0] px-3 py-1.5 font-mono text-[10px] text-[#62695b]">{appHost}/your-name</span>
         </div>
 
         <div className="mt-6">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a806f]">Developer · Bengaluru, IN</p>
-          <h2 className="mt-2 font-serif text-4xl tracking-[-0.04em] text-[#20231d]">Andro Dev</h2>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a806f]">Your role · Your location</p>
+          <h2 className="mt-2 font-serif text-4xl tracking-[-0.04em] text-[#20231d]">Your Name</h2>
           <p className="mt-3 max-w-[330px] text-sm leading-6 text-[#6b7065]">
-            I build thoughtful web products, useful tools, and the systems that bring them to life.
+            A short introduction about what you do and what you enjoy creating.
           </p>
         </div>
 
