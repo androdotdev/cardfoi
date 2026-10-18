@@ -15,6 +15,20 @@
       "when": 1792129709549,
       "tag": "0001_free_hydra",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792323568939,
+      "tag": "0002_dizzy_speed",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792323612732,
+      "tag": "0003_quiet_wong",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,2 @@
+ALTER TABLE "project_assets" ADD CONSTRAINT "project_assets_https_url_check" CHECK ("project_assets"."url" ~ '^https://');--> statement-breakpoint
+ALTER TABLE "social_link" ADD CONSTRAINT "social_link_https_url_check" CHECK ("social_link"."url" ~ '^https://');

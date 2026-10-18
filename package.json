@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "jobs:requeue-deletions": "bun --env-file=.env.local scripts/requeue-deletions.ts"
   },
   "dependencies": {
     "@better-auth/drizzle-adapter": "^1.7.10",
@@ -19,7 +20,8 @@
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "ws": "^8.22.0"
+    "ws": "^8.22.0",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
