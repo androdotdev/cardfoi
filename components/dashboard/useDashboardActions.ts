@@ -5,27 +5,37 @@ export type SocialLinkDraft = { id?: string; platform: "github" | "linkedin" | "
 export type ProjectDraft = { id: string; title: string; description: string; assets: DashboardBootstrapResponse["projects"][number]["assets"] };
 type Notify = Dispatch<SetStateAction<string>>;
 
-export function useCardActions(input: {
-  name: string; bio: string; email: string; skills: string[]; theme: string; socialLinks: SocialLinkDraft[];
-  setSkills: Dispatch<SetStateAction<string[]>>; newSkill: string; setNewSkill: Dispatch<SetStateAction<string>>;
-  socialDraft: SocialLinkDraft; setSocialDraft: Dispatch<SetStateAction<SocialLinkDraft>>;
-  setSocialLinks: Dispatch<SetStateAction<SocialLinkDraft[]>>;
-  setSaving: Dispatch<SetStateAction<boolean>>; setError: Notify; setNotice: Notify;
-}) {
-  async function saveCard() {
-    input.setSaving(true); input.setError(""); input.setNotice("");
-    try {
-      const response = await fetch("/api/dashboard/card", {
-        method: "PATCH", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: input.name, bio: input.bio, email: input.email, skills: input.skills, theme: input.theme, socialLinks: input.socialLinks }),
-      });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error ?? "Could not save your card.");
-      input.setNotice("Your card is saved.");
-    } catch (error) { input.setError(error instanceof Error ? error.message : "Could not save your card."); }
-    finally { input.setSaving(false); }
-  }
+export type CardSaveSnapshot = Pick<
+  import("@/components/dashboard/dashboardEditorStore").DashboardEditorState,
+  "name" | "bio" | "email" | "skills" | "themeId" | "socialLinks"
+>;
 
+export async function saveCardSnapshot(snapshot: CardSaveSnapshot) {
+  const response = await fetch("/api/dashboard/card", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: snapshot.name,
+      bio: snapshot.bio,
+      email: snapshot.email,
+      skills: snapshot.skills,
+      theme: snapshot.themeId,
+      socialLinks: snapshot.socialLinks,
+    }),
+  });
+  if (response.ok) return;
+
+  const result = await response.json().catch(() => ({}));
+  throw new Error(typeof result.error === "string" ? result.error : "Could not save your card.");
+}
+
+export function useCardActions(input: {
+  skills: string[]; newSkill: string; setNewSkill: Dispatch<SetStateAction<string>>;
+  setSkills: Dispatch<SetStateAction<string[]>>;
+  socialLinks: SocialLinkDraft[]; socialDraft: SocialLinkDraft;
+  setSocialDraft: Dispatch<SetStateAction<SocialLinkDraft>>;
+  setSocialLinks: Dispatch<SetStateAction<SocialLinkDraft[]>>;
+}) {
   function addSkill(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const skill = input.newSkill.trim();
@@ -42,7 +52,7 @@ export function useCardActions(input: {
     input.setSocialDraft({ platform: "github", label: "", url: "" });
   }
 
-  return { saveCard, addSkill, addSocial };
+  return { addSkill, addSocial };
 }
 
 export function useProjectActions(input: {
@@ -83,7 +93,7 @@ export function useProjectActions(input: {
       if (!response.ok) throw new Error(result.error ?? "Could not queue project deletion.");
       const remaining = input.projects.filter((item) => item.id !== projectId);
       input.setProjects(remaining); input.setSelectedProjectId(remaining[0]?.id ?? "");
-      input.setNotice("Project removed. Media cleanup is queued.");
+      input.setNotice("Project removed.");
     } catch (error) { input.setError(error instanceof Error ? error.message : "Could not remove project."); }
   }
 

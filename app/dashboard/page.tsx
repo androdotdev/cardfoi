@@ -11,6 +11,7 @@ import { card, project, projectAsset, socialLink } from "@/lib/db/schema";
 import { normalizeSlug } from "@/lib/utils/normalize";
 import { randomUUID } from "node:crypto";
 import type { DashboardBootstrapResponse } from "@/types/project";
+import { getAppUrl } from "@/lib/environment";
 
 export const metadata: Metadata = {
   title: "Your card | Cardfoi",
@@ -71,7 +72,7 @@ async function DashboardPageContent() {
     selectedProjectId: firstProject.id,
     socialLinks: links,
   };
-  const appUrl = (process.env.APP_URL ?? "http://localhost:3000").replace(/\/+$/, "");
+  const appUrl = getAppUrl();
 
   return (
     <DashboardEditor

@@ -1,3 +1,5 @@
+import { getAppUrl } from "@/lib/environment";
+
 const skills = ["Your skills", "Your craft", "Your interests"];
 
 const projects = [
@@ -5,11 +7,7 @@ const projects = [
   { name: "Another project", detail: "Something you are working on", mark: "↗", color: "bg-[#e6e8e3]" },
 ];
 
-const appHost = (
-  process.env.APP_URL ??
-  process.env.BETTER_AUTH_URL ??
-  "http://localhost:3000"
-)
+const appHost = getAppUrl()
   .replace(/^https?:\/\//, "")
   .replace(/\/+$/, "");
 

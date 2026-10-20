@@ -4,6 +4,9 @@ import type { Dispatch, SetStateAction } from "react";
 import type { DashboardBootstrapResponse } from "@/types/project";
 import type { ProjectDraft, SocialLinkDraft } from "@/components/dashboard/useDashboardActions";
 
+export type EditorSection = "profile" | "projects" | "appearance" | "settings";
+export type CardSaveStatus = "saved" | "dirty" | "saving" | "failed";
+
 type DashboardEditorState = {
   workspace: DashboardBootstrapResponse;
   name: string;
@@ -17,7 +20,11 @@ type DashboardEditorState = {
   newSkill: string;
   newProjectTitle: string;
   copied: boolean;
-  saving: boolean;
+  activeSection: EditorSection;
+  mobileNavigationOpen: boolean;
+  cardSaveStatus: CardSaveStatus;
+  cardRevision: number;
+  dirtySections: Record<"profile" | "appearance", boolean>;
   pageError: string;
   notice: string;
   socialDraft: SocialLinkDraft;
@@ -32,7 +39,11 @@ type DashboardEditorState = {
   setNewSkill: Dispatch<SetStateAction<string>>;
   setNewProjectTitle: Dispatch<SetStateAction<string>>;
   setCopied: Dispatch<SetStateAction<boolean>>;
-  setSaving: Dispatch<SetStateAction<boolean>>;
+  setActiveSection: Dispatch<SetStateAction<EditorSection>>;
+  setMobileNavigationOpen: Dispatch<SetStateAction<boolean>>;
+  setCardSaveStatus: Dispatch<SetStateAction<CardSaveStatus>>;
+  markCardDirty: (section: "profile" | "appearance") => void;
+  markCardSaved: (revision: number) => boolean;
   setPageError: Dispatch<SetStateAction<string>>;
   setNotice: Dispatch<SetStateAction<string>>;
   setSocialDraft: Dispatch<SetStateAction<SocialLinkDraft>>;
@@ -60,7 +71,11 @@ function createDashboardEditorStore(workspace: DashboardBootstrapResponse) {
       newSkill: "",
       newProjectTitle: "",
       copied: false,
-      saving: false,
+      activeSection: "profile",
+      mobileNavigationOpen: false,
+      cardSaveStatus: "saved",
+      cardRevision: 0,
+      dirtySections: { profile: false, appearance: false },
       pageError: "",
       notice: "",
       socialDraft: { platform: "github", label: "", url: "" },
@@ -75,7 +90,23 @@ function createDashboardEditorStore(workspace: DashboardBootstrapResponse) {
       setNewSkill: setter("newSkill"),
       setNewProjectTitle: setter("newProjectTitle"),
       setCopied: setter("copied"),
-      setSaving: setter("saving"),
+      setActiveSection: setter("activeSection"),
+      setMobileNavigationOpen: setter("mobileNavigationOpen"),
+      setCardSaveStatus: setter("cardSaveStatus"),
+      markCardDirty: (section) => set((state) => ({
+        cardSaveStatus: "dirty",
+        cardRevision: state.cardRevision + 1,
+        dirtySections: { ...state.dirtySections, [section]: true },
+      })),
+      markCardSaved: (revision) => {
+        let saved = false;
+        set((state) => {
+          if (state.cardRevision !== revision) return {};
+          saved = true;
+          return { cardSaveStatus: "saved", dirtySections: { profile: false, appearance: false } };
+        });
+        return saved;
+      },
       setPageError: setter("pageError"),
       setNotice: setter("notice"),
       setSocialDraft: setter("socialDraft"),

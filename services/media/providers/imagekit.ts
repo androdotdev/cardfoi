@@ -1,7 +1,8 @@
 import "server-only";
 
 import { createHmac } from "node:crypto";
-import { MEDIA_LIMITS, MEDIA_ROOT_FOLDER } from "@/lib/constants";
+import { MEDIA_LIMITS } from "@/lib/constants";
+import { mediaRootFolder } from "@/lib/environment";
 import type {
   MediaKind,
   MediaStorageProvider,
@@ -66,9 +67,9 @@ function safePathSegment(value: string): string {
 
 function folderForTarget(target: UploadTarget): string {
   if (target.kind === "avatar") {
-    return `${MEDIA_ROOT_FOLDER}/avatars/${safePathSegment(target.ownerId)}`;
+    return `${mediaRootFolder}/avatars/${safePathSegment(target.ownerId)}`;
   }
-  return `${MEDIA_ROOT_FOLDER}/project-assets/${safePathSegment(target.ownerId)}/${target.projectId}`;
+  return `${mediaRootFolder}/project-assets/${safePathSegment(target.ownerId)}/${target.projectId}`;
 }
 
 function validateUploadId(uploadId: string): void {

@@ -94,7 +94,7 @@ export default function ProjectAssetUploader({
       const result = await response.json();
       if (!response.ok) throw new Error(result.error ?? "Could not queue asset deletion.");
       setAssets((current) => current.filter((asset) => asset.id !== assetId));
-      setMessage("Asset removed. File cleanup is queued.");
+      setMessage("Asset removed.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Could not queue asset deletion.");
     }

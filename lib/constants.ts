@@ -1,5 +1,3 @@
-export const MEDIA_ROOT_FOLDER = process.env.NODE_ENV === "development" ? "/cardfoi-dev" : "/cardfoi";
-
 export const CARD_LIMITS = {
   skills: 10,
   projects: 5,

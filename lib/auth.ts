@@ -2,10 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
-
-const appEnvironment =
-  process.env.VERCEL_ENV ??
-  (process.env.NODE_ENV === "development" ? "development" : "production");
+import { appEnvironment } from "@/lib/environment";
 
 const allowEmailPassword = appEnvironment !== "production";
 
